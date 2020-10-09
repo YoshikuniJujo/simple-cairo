@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4f5ca430eb71483f4696e1c0d5432ab0599c93324577796c9f2d2232b3d94905
+-- hash: c3ed365f1d359aa8f865f90f9c2ae03ba18c9d9d5c7ca88600c1628a2752556a
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -27,25 +27,25 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Graphics.Cairo
+      Graphics.Cairo.CairoPatternT
+      Graphics.Cairo.CairoT
+      Graphics.Cairo.ImageSurfaces
+      Graphics.Cairo.Paths
+      Graphics.Cairo.PngSupport
+      Graphics.Cairo.Text
+      Graphics.Cairo.Types
+      Graphics.Cairo.Values
   other-modules:
       Paths_simple_cairo
   hs-source-dirs:
       src
+  pkgconfig-depends:
+      cairo
   build-depends:
       base >=4.7 && <5
-  default-language: Haskell2010
-
-executable simple-cairo-exe
-  main-is: Main.hs
-  other-modules:
-      Paths_simple_cairo
-  hs-source-dirs:
-      app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      base >=4.7 && <5
-    , simple-cairo
+    , bytestring
+    , text
   default-language: Haskell2010
 
 test-suite simple-cairo-test
@@ -58,5 +58,7 @@ test-suite simple-cairo-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , bytestring
     , simple-cairo
+    , text
   default-language: Haskell2010
