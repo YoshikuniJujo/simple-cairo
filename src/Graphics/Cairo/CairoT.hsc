@@ -67,17 +67,17 @@ cairoPaintWithAlpha :: CairoT s -> #{type double} -> IO ()
 cairoPaintWithAlpha (CairoT fcr) a = withForeignPtr fcr \cr -> c_cairo_paint_with_alpha cr a
 
 foreign import ccall "cairo_set_source" c_cairo_set_source ::
-	Ptr (CairoT s) -> Ptr CairoPatternT -> IO ()
+	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
 
-cairoSetSource :: CairoT s -> CairoPatternT -> IO ()
+cairoSetSource :: CairoT s -> CairoPatternT s -> IO ()
 cairoSetSource (CairoT fcr) (CairoPatternT fpt) =
 	withForeignPtr fcr \cr -> withForeignPtr fpt \pt ->
 		c_cairo_set_source cr pt
 
 foreign import ccall "cairo_mask" c_cairo_mask ::
-	Ptr (CairoT s) -> Ptr CairoPatternT -> IO ()
+	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
 
-cairoMask :: CairoT s -> CairoPatternT -> IO ()
+cairoMask :: CairoT s -> CairoPatternT s -> IO ()
 cairoMask (CairoT fcr) (CairoPatternT fpt) =
 	withForeignPtr fcr \cr -> withForeignPtr fpt \pt ->
 		c_cairo_mask cr pt
@@ -95,7 +95,7 @@ cairoPopGroupToSource :: CairoT s -> IO ()
 cairoPopGroupToSource (CairoT fcr) = withForeignPtr fcr c_cairo_pop_group_to_source
 
 foreign import ccall "cairo_pop_group" c_cairo_pop_group ::
-	Ptr (CairoT s) -> IO (Ptr CairoPatternT)
+	Ptr (CairoT s) -> IO (Ptr (CairoPatternT s))
 
-cairoPopGroup :: CairoT s -> IO CairoPatternT
+cairoPopGroup :: CairoT s -> IO (CairoPatternT s)
 cairoPopGroup (CairoT fcr) = makeCairoPatternT =<< withForeignPtr fcr c_cairo_pop_group

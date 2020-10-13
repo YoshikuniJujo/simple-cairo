@@ -22,18 +22,24 @@ class CairoMonad s m where
 	argCairoT :: (Ptr (CairoT s) -> IO a) -> CairoT s -> m a
 	returnCairoSurfaceT :: IO (Ptr (CairoSurfaceT s)) -> m (CairoSurfaceT s)
 	argCairoSurfaceT :: (Ptr (CairoSurfaceT s) -> IO a) -> CairoSurfaceT s -> m a
+	returnCairoPatternT :: IO (Ptr (CairoPatternT s)) -> m (CairoPatternT s)
+	argCairoPatternT :: (Ptr (CairoPatternT s) -> IO a) -> CairoPatternT s -> m a
 
 instance CairoMonad s IO where
 	returnCairoT io = makeCairoT =<< io
 	argCairoT io (CairoT fcr) = withForeignPtr fcr io
 	returnCairoSurfaceT io = makeCairoSurfaceT =<< io
 	argCairoSurfaceT io (CairoSurfaceT fs) = withForeignPtr fs io
+	returnCairoPatternT io = makeCairoPatternT =<< io
+	argCairoPatternT io (CairoPatternT p) = withForeignPtr p io
 
 instance CairoMonad s (ST s) where
 	returnCairoT io = unsafeIOToST $ returnCairoT io
 	argCairoT io cr = unsafeIOToST $ argCairoT io cr
 	returnCairoSurfaceT io = unsafeIOToST $ returnCairoSurfaceT io
 	argCairoSurfaceT io s = unsafeIOToST $ argCairoSurfaceT io s
+	returnCairoPatternT io = unsafeIOToST $ returnCairoPatternT io
+	argCairoPatternT io p = unsafeIOToST $ argCairoPatternT io p
 
 foreign import ccall "cairo_create" c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
 

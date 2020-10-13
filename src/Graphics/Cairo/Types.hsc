@@ -30,13 +30,13 @@ newtype CairoStatusT = CairoStatusT #{type cairo_status_t} deriving Show
 #enum CairoStatusT, CairoStatusT, CAIRO_STATUS_SUCCESS, \
 	CAIRO_STATUS_NO_MEMORY, CAIRO_STATUS_INVALID_RESTORE
 
-newtype CairoPatternT = CairoPatternT (ForeignPtr CairoPatternT) deriving Show
+newtype CairoPatternT s = CairoPatternT (ForeignPtr (CairoPatternT s)) deriving Show
 
-makeCairoPatternT :: Ptr CairoPatternT -> IO CairoPatternT
+makeCairoPatternT :: Ptr (CairoPatternT s) -> IO (CairoPatternT s)
 makeCairoPatternT p = CairoPatternT <$> newForeignPtr p (c_cairo_pattern_destroy p)
 
 foreign import ccall "cairo_pattern_destroy" c_cairo_pattern_destroy ::
-	Ptr CairoPatternT -> IO ()
+	Ptr (CairoPatternT s) -> IO ()
 
 data CairoTextExtentsT = CairoTextExtentsT {
 	cairoTextExtentsTXBearing :: #{type double},
