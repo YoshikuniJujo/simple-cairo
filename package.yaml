@@ -25,6 +25,7 @@ dependencies:
 - text
 - vector
 - exception-hierarchy
+- JuicyPixels
 
 library:
   source-dirs: src
