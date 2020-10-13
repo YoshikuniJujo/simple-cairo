@@ -10,7 +10,7 @@ import Foreign.ForeignPtr
 import Foreign.C
 import Data.Word
 
-import Graphics.Cairo
+import Graphics.Cairo.Exception
 import Graphics.Cairo.Types
 
 #include <cairo.h>

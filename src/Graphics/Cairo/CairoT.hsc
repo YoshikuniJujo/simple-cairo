@@ -18,6 +18,7 @@ module Graphics.Cairo.CairoT (
 
 import Foreign.Ptr
 
+import Graphics.Cairo.Exception
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 
@@ -90,7 +91,7 @@ foreign import ccall "cairo_pop_group_to_source" c_cairo_pop_group_to_source ::
 	Ptr (CairoT s) -> IO ()
 
 cairoPopGroupToSource :: CairoMonad s m => CairoT s -> m ()
-cairoPopGroupToSource = argCairoT c_cairo_pop_group_to_source
+cairoPopGroupToSource cr = argCairoT c_cairo_pop_group_to_source cr <* raiseIfError cr
 
 foreign import ccall "cairo_pop_group" c_cairo_pop_group ::
 	Ptr (CairoT s) -> IO (Ptr (CairoPatternT s))

@@ -6,7 +6,6 @@ module Graphics.Cairo.Text (
 	) where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr
 import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C

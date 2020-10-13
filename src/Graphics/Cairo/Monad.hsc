@@ -15,7 +15,7 @@ import Graphics.Cairo.Types
 
 #include <cairo.h>
 
-class CairoMonad s m where
+class Monad m => CairoMonad s m where
 	returnCairoT :: IO (Ptr (CairoT s)) -> m (CairoT s)
 	argCairoT :: (Ptr (CairoT s) -> IO a) -> CairoT s -> m a
 	returnCairoSurfaceT :: IO (Ptr (CairoSurfaceT s)) -> m (CairoSurfaceT s)

@@ -7,7 +7,6 @@ module Graphics.Cairo (
 	cairoSetSourceRgb, cairoCreate, cairoFormatArgb32, cairoImageSurfaceCreate,
 	cairoPaintWithAlpha, cairoPaint,
 
-	cairoStatusSuccess, cairoStatusNoMemory, cairoStatusInvalidRestore, cairoFormatInvalid
 	) where
 
 #include <cairo.h>
@@ -15,5 +14,6 @@ module Graphics.Cairo (
 import Graphics.Cairo.CairoT
 import Graphics.Cairo.Paths
 import Graphics.Cairo.ImageSurfaces
+import Graphics.Cairo.Exception
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values

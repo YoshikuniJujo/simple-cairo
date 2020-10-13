@@ -3,11 +3,14 @@
 
 module Graphics.Cairo.Paths (
 	cairoClosePath, cairoArc, cairoLineTo, cairoMoveTo, cairoRectangle,
-	cairoRelCurveTo, cairoRelLineTo
+	cairoRelCurveTo, cairoRelLineTo,
+
+	cairoNewPath
 	) where
 
 import Foreign.Ptr
 
+import Graphics.Cairo.Exception
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 
@@ -15,7 +18,7 @@ import Graphics.Cairo.Types
 
 cairoMoveTo, cairoLineTo, cairoRelLineTo :: CairoMonad s m => CairoT s -> #{type double} -> #{type double} -> m ()
 cairoMoveTo cr x y = (`argCairoT` cr) \pcr -> c_cairo_move_to pcr x y
-cairoLineTo cr x y = (`argCairoT` cr) \pcr -> c_cairo_line_to pcr x y
+cairoLineTo cr x y = argCairoT (\pcr -> c_cairo_line_to pcr x y) cr <* raiseIfError cr
 cairoRelLineTo cr x y = (`argCairoT` cr) \pcr -> c_cairo_rel_line_to pcr x y
 
 foreign import ccall "cairo_move_to" c_cairo_move_to ::
@@ -58,3 +61,8 @@ foreign import ccall "cairo_rectangle" c_cairo_rectangle ::
 
 cairoRectangle :: CairoMonad s m => CairoT s -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> m ()
 cairoRectangle cr x y w h = (`argCairoT` cr) \pcr -> c_cairo_rectangle pcr x y w h
+
+foreign import ccall "cairo_new_path" c_cairo_new_path :: Ptr (CairoT s) -> IO ()
+
+cairoNewPath :: CairoMonad s m => CairoT s -> m ()
+cairoNewPath = argCairoT c_cairo_new_path

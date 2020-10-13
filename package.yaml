@@ -24,6 +24,7 @@ dependencies:
 - bytestring
 - text
 - vector
+- exception-hierarchy
 
 library:
   source-dirs: src
@@ -31,7 +32,16 @@ library:
 
 tests:
   simple-cairo-test:
-    main:                Spec.hs
+    main:                spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - simple-cairo
+  exception-test:
+    main:                exception.hs
     source-dirs:         test
     ghc-options:
     - -threaded

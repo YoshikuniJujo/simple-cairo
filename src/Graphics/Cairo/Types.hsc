@@ -6,7 +6,6 @@ import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
 import Foreign.Storable
-import Data.Word
 
 #include <cairo.h>
 
@@ -24,11 +23,6 @@ makeCairoSurfaceT p = CairoSurfaceT <$> newForeignPtr p (c_cairo_surface_destroy
 
 foreign import ccall "cairo_surface_destroy" c_cairo_surface_destroy ::
 	Ptr (CairoSurfaceT s) -> IO ()
-
-newtype CairoStatusT = CairoStatusT #{type cairo_status_t} deriving Show
-
-#enum CairoStatusT, CairoStatusT, CAIRO_STATUS_SUCCESS, \
-	CAIRO_STATUS_NO_MEMORY, CAIRO_STATUS_INVALID_RESTORE
 
 newtype CairoPatternT s = CairoPatternT (ForeignPtr (CairoPatternT s)) deriving Show
 
