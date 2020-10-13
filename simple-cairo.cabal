@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c3ed365f1d359aa8f865f90f9c2ae03ba18c9d9d5c7ca88600c1628a2752556a
+-- hash: d9609e0830ec98ba081a303d0c5012a9bd0585470c0cf48ad5b1179058d19ae8
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -31,6 +31,7 @@ library
       Graphics.Cairo.CairoPatternT
       Graphics.Cairo.CairoT
       Graphics.Cairo.ImageSurfaces
+      Graphics.Cairo.Monad
       Graphics.Cairo.Paths
       Graphics.Cairo.PngSupport
       Graphics.Cairo.Text
@@ -46,6 +47,7 @@ library
       base >=4.7 && <5
     , bytestring
     , text
+    , vector
   default-language: Haskell2010
 
 test-suite simple-cairo-test
@@ -61,4 +63,5 @@ test-suite simple-cairo-test
     , bytestring
     , simple-cairo
     , text
+    , vector
   default-language: Haskell2010

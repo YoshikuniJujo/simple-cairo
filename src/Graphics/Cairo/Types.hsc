@@ -10,20 +10,20 @@ import Data.Word
 
 #include <cairo.h>
 
-newtype CairoT = CairoT (ForeignPtr CairoT) deriving Show
+newtype CairoT s = CairoT (ForeignPtr (CairoT s)) deriving Show
 
-makeCairoT :: Ptr CairoT -> IO CairoT
+makeCairoT :: Ptr (CairoT s) -> IO (CairoT s)
 makeCairoT p = CairoT <$> newForeignPtr p (c_cairo_destroy p)
 
-foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr CairoT -> IO ()
+foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr (CairoT s) -> IO ()
 
-newtype CairoSurfaceT = CairoSurfaceT (ForeignPtr CairoSurfaceT) deriving Show
+newtype CairoSurfaceT s = CairoSurfaceT (ForeignPtr (CairoSurfaceT s)) deriving Show
 
-makeCairoSurfaceT :: Ptr CairoSurfaceT -> IO CairoSurfaceT
+makeCairoSurfaceT :: Ptr (CairoSurfaceT s) -> IO (CairoSurfaceT s)
 makeCairoSurfaceT p = CairoSurfaceT <$> newForeignPtr p (c_cairo_surface_destroy p)
 
 foreign import ccall "cairo_surface_destroy" c_cairo_surface_destroy ::
-	Ptr CairoSurfaceT -> IO ()
+	Ptr (CairoSurfaceT s) -> IO ()
 
 newtype CairoStatusT = CairoStatusT #{type cairo_status_t} deriving Show
 

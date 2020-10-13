@@ -16,15 +16,15 @@ import Graphics.Cairo.Types
 #include <cairo.h>
 
 foreign import ccall "cairo_surface_write_to_png" c_cairo_surface_write_to_png ::
-	Ptr CairoSurfaceT -> CString -> IO #type cairo_status_t
+	Ptr (CairoSurfaceT s) -> CString -> IO #type cairo_status_t
 
-cairoSurfaceWriteToPng :: CairoSurfaceT -> FilePath -> IO CairoStatusT
+cairoSurfaceWriteToPng :: CairoSurfaceT s -> FilePath -> IO CairoStatusT
 cairoSurfaceWriteToPng (CairoSurfaceT s) fp = withCString fp \cs -> CairoStatusT
 	<$> (withForeignPtr s \p -> c_cairo_surface_write_to_png p cs)
 
 foreign import ccall "cairo_image_surface_create_from_png" c_cairo_surface_create_from_png ::
-	CString -> IO (Ptr CairoSurfaceT)
+	CString -> IO (Ptr (CairoSurfaceT s))
 
-cairoSurfaceCreateFromPng :: FilePath -> IO CairoSurfaceT
+cairoSurfaceCreateFromPng :: FilePath -> IO (CairoSurfaceT s)
 cairoSurfaceCreateFromPng fp = withCString fp \cs ->
 	makeCairoSurfaceT =<< c_cairo_surface_create_from_png cs
