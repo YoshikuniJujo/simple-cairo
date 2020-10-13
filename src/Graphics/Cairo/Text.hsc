@@ -16,7 +16,7 @@ import qualified Data.ByteString as BS
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 
-import Graphics.Cairo
+import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
@@ -26,25 +26,24 @@ foreign import ccall "cairo_select_font_face" c_cairo_select_font_face ::
 	Ptr (CairoT s) -> CString ->
 	#{type cairo_font_slant_t} -> #{type cairo_font_weight_t} -> IO ()
 
-cairoSelectFontFace ::
-	CairoT s -> T.Text -> CairoFontSlantT -> CairoFontWeightT -> IO ()
-cairoSelectFontFace (CairoT fcr) ff (CairoFontSlantT sl) (CairoFontWeightT wt) =
-	withForeignPtr fcr \cr -> encode ff \cs ->
-		c_cairo_select_font_face cr cs sl wt
+cairoSelectFontFace :: CairoMonad s m =>
+	CairoT s -> T.Text -> CairoFontSlantT -> CairoFontWeightT -> m ()
+cairoSelectFontFace cr ff (CairoFontSlantT sl) (CairoFontWeightT wt) =
+	(`argCairoT` cr) \pcr -> encode ff \cs ->
+		c_cairo_select_font_face pcr cs sl wt
 
 foreign import ccall "cairo_set_font_size" c_cairo_set_font_size ::
 	Ptr (CairoT s) -> #{type double} -> IO ()
 
-cairoSetFontSize :: CairoT s -> #{type double} -> IO ()
-cairoSetFontSize (CairoT fcr) = withForeignPtr fcr . flip c_cairo_set_font_size
+cairoSetFontSize :: CairoMonad s m => CairoT s -> #{type double} -> m ()
+cairoSetFontSize cr fs = (`argCairoT` cr) \pcr -> c_cairo_set_font_size pcr fs
 
 foreign import ccall "cairo_text_extents" c_cairo_text_extents ::
 	Ptr (CairoT s) -> CString -> Ptr CairoTextExtentsT -> IO ()
 
-cairoTextExtents :: CairoT s -> T.Text -> IO CairoTextExtentsT
-cairoTextExtents (CairoT fcr) t =
-	withForeignPtr fcr \cr -> encode t \cs -> alloca \p ->
-		c_cairo_text_extents cr cs p *> peek p
+cairoTextExtents :: CairoMonad s m => CairoT s -> T.Text -> m CairoTextExtentsT
+cairoTextExtents cr t = (`argCairoT` cr) \pcr ->
+	encode t \cs -> alloca \p -> c_cairo_text_extents pcr cs p *> peek p
 
 encode :: T.Text -> (CString -> IO a) -> IO a
 encode t = BS.useAsCString $ T.encodeUtf8 t
@@ -52,6 +51,5 @@ encode t = BS.useAsCString $ T.encodeUtf8 t
 foreign import ccall "cairo_show_text" c_cairo_show_text ::
 	Ptr (CairoT s) -> CString -> IO ()
 
-cairoShowText :: CairoT s -> T.Text -> IO ()
-cairoShowText (CairoT fcr) t = withForeignPtr fcr \cr -> encode t \cs ->
-	c_cairo_show_text cr cs
+cairoShowText :: CairoMonad s m => CairoT s -> T.Text -> m ()
+cairoShowText cr t = (`argCairoT` cr) \pcr -> encode t \cs -> c_cairo_show_text pcr cs
