@@ -17,7 +17,6 @@ module Graphics.Cairo.CairoT (
 #include <cairo.h>
 
 import Foreign.Ptr
-import Foreign.ForeignPtr hiding (newForeignPtr)
 
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
