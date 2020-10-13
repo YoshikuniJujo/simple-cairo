@@ -10,10 +10,8 @@ import Foreign.Storable
 import Control.Monad.ST
 import Control.Monad.ST.Unsafe
 import Data.Word
-import Data.Int
 import Data.Vector.Storable
 import Graphics.Cairo.Types
-import Graphics.Cairo.Values
 
 #include <cairo.h>
 
@@ -40,30 +38,6 @@ instance CairoMonad s (ST s) where
 	argCairoSurfaceT io s = unsafeIOToST $ argCairoSurfaceT io s
 	returnCairoPatternT io = unsafeIOToST $ returnCairoPatternT io
 	argCairoPatternT io p = unsafeIOToST $ argCairoPatternT io p
-
-foreign import ccall "cairo_create" c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
-
-cairoCreate :: CairoMonad s m => CairoSurfaceT s -> m (CairoT s)
-cairoCreate s = returnCairoT $ argCairoSurfaceT c_cairo_create s
-
-foreign import ccall "cairo_image_surface_create" c_cairo_image_surface_create ::
-	#{type cairo_format_t} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
-
-cairoImageSurfaceCreate ::
-	CairoMonad s m => CairoFormatT -> #{type int} -> #{type int} -> m (CairoSurfaceT s)
-cairoImageSurfaceCreate (CairoFormatT f) w h = returnCairoSurfaceT $ c_cairo_image_surface_create f w h
-
-foreign import ccall "cairo_set_source_rgb" c_cairo_set_source_rgb ::
-	Ptr (CairoT s) -> #{type double} -> #{type double} -> #{type double} -> IO ()
-
-cairoSetSourceRgb ::
-	CairoMonad s m => CairoT s -> #{type double} -> #{type double} -> #{type double} -> m ()
-cairoSetSourceRgb cr r g b = argCairoT (\pcr -> c_cairo_set_source_rgb pcr r g b) cr
-
-foreign import ccall "cairo_paint" c_cairo_paint :: Ptr (CairoT s) -> IO ()
-
-cairoPaint :: CairoMonad s m => CairoT s -> m ()
-cairoPaint = argCairoT c_cairo_paint
 
 foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_data ::
 	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})

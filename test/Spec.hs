@@ -5,6 +5,8 @@
 import Control.Monad.ST
 import Data.Word
 import Data.Vector.Storable
+import Graphics.Cairo.CairoT
+import Graphics.Cairo.ImageSurfaces
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Values
 
