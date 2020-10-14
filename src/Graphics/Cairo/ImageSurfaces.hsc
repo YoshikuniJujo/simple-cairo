@@ -85,9 +85,13 @@ argb32ToRgba8 (Argb32 w) = PixelRGBA8
 	(fromIntegral a)
 	where
 	a = w `shiftR` 24
-	r = (w `shiftR` 16 .&. 0xff) * 0xff `div` a
-	g = (w `shiftR` 8 .&. 0xff) * 0xff `div` a
-	b = (w .&. 0xff) * 0xff `div` a
+	r = (w `shiftR` 16 .&. 0xff) * 0xff `div'` a
+	g = (w `shiftR` 8 .&. 0xff) * 0xff `div'` a
+	b = (w .&. 0xff) * 0xff `div'` a
+
+div' :: Integral n => n -> n -> n
+_ `div'` 0 = 0
+n `div'` m = n `div` m
 
 generateImageIo :: Pixel px => (Int -> Int -> IO px) -> Int -> Int -> IO (Image px)
 generateImageIo f w h = do
