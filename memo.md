@@ -12,5 +12,7 @@ memo
 	+ [ ] CAIRO\_FORMAT\_RGB16\_565 -> ImageRGB8
 	+ [ ] CAIRO\_FORMAT\_RGB30 -> ImageRGB16
 * [ ] input image data
+	+ [ ] ImageRGBA8 -> CAIRO\_FORMAT\_ARGB32
+	+ [ ]
 * [ ] throw exception from functions
 * [ ] clean 'stack test'

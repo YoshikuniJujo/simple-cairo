@@ -79,15 +79,15 @@ newtype Argb32 = Argb32 Word32 deriving (Show, Storable)
 
 argb32ToRgba8 :: Argb32 -> PixelRGBA8
 argb32ToRgba8 (Argb32 w) = PixelRGBA8
-	(r * 0xff `div` a)
-	(g * 0xff `div` a)
-	(b * 0xff `div` a)
-	a
+	(fromIntegral r)
+	(fromIntegral g)
+	(fromIntegral b)
+	(fromIntegral a)
 	where
-	a = fromIntegral $ w `shiftR` 24
-	r = fromIntegral $ w `shiftR` 16 .&. 0xff
-	g = fromIntegral $ w `shiftR` 8 .&. 0xff
-	b = fromIntegral $ w .&. 0xff
+	a = w `shiftR` 24
+	r = (w `shiftR` 16 .&. 0xff) * 0xff `div` a
+	g = (w `shiftR` 8 .&. 0xff) * 0xff `div` a
+	b = (w .&. 0xff) * 0xff `div` a
 
 generateImageIo :: Pixel px => (Int -> Int -> IO px) -> Int -> Int -> IO (Image px)
 generateImageIo f w h = do
