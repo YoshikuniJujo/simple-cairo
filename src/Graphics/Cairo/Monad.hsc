@@ -28,6 +28,11 @@ argCairoT io (CairoT fcr) = ioToCairoMonad @s $ withForeignPtr fcr io
 returnCairoSurfaceT :: forall s m . CairoMonad s m => IO (Ptr (CairoSurfaceT s)) -> m (CairoSurfaceT s)
 returnCairoSurfaceT io = ioToCairoMonad @s $ makeCairoSurfaceT =<< io
 
+returnCairoSurfaceT' :: forall s m a . CairoMonad s m => IO (Ptr (CairoSurfaceT s), Ptr a) -> m (CairoSurfaceT s)
+returnCairoSurfaceT' io = ioToCairoMonad @s do
+	(ps, p) <- io
+	makeCairoSurfaceT' ps p
+
 argCairoSurfaceT :: forall s m a . CairoMonad s m => (Ptr (CairoSurfaceT s) -> IO a) -> CairoSurfaceT s -> m a
 argCairoSurfaceT io (CairoSurfaceT fs) = ioToCairoMonad @s $ withForeignPtr fs io
 
