@@ -1,5 +1,6 @@
 {-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE ScopedTypeVariables, TypeApplications #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, AllowAmbiguousTypes #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Monad where
@@ -16,28 +17,29 @@ import Graphics.Cairo.Types
 #include <cairo.h>
 
 class Monad m => CairoMonad s m where
-	returnCairoT :: IO (Ptr (CairoT s)) -> m (CairoT s)
-	argCairoT :: (Ptr (CairoT s) -> IO a) -> CairoT s -> m a
-	returnCairoSurfaceT :: IO (Ptr (CairoSurfaceT s)) -> m (CairoSurfaceT s)
-	argCairoSurfaceT :: (Ptr (CairoSurfaceT s) -> IO a) -> CairoSurfaceT s -> m a
-	returnCairoPatternT :: IO (Ptr (CairoPatternT s)) -> m (CairoPatternT s)
-	argCairoPatternT :: (Ptr (CairoPatternT s) -> IO a) -> CairoPatternT s -> m a
+	ioToCairoMonad :: IO a -> m a
 
-instance CairoMonad s IO where
-	returnCairoT io = makeCairoT =<< io
-	argCairoT io (CairoT fcr) = withForeignPtr fcr io
-	returnCairoSurfaceT io = makeCairoSurfaceT =<< io
-	argCairoSurfaceT io (CairoSurfaceT fs) = withForeignPtr fs io
-	returnCairoPatternT io = makeCairoPatternT =<< io
-	argCairoPatternT io (CairoPatternT p) = withForeignPtr p io
+returnCairoT :: forall s m . CairoMonad s m => IO (Ptr (CairoT s)) -> m (CairoT s)
+returnCairoT io = ioToCairoMonad @s $ makeCairoT =<< io
 
-instance CairoMonad s (ST s) where
-	returnCairoT io = unsafeIOToST $ returnCairoT io
-	argCairoT io cr = unsafeIOToST $ argCairoT io cr
-	returnCairoSurfaceT io = unsafeIOToST $ returnCairoSurfaceT io
-	argCairoSurfaceT io s = unsafeIOToST $ argCairoSurfaceT io s
-	returnCairoPatternT io = unsafeIOToST $ returnCairoPatternT io
-	argCairoPatternT io p = unsafeIOToST $ argCairoPatternT io p
+argCairoT :: forall s m a . CairoMonad s m => (Ptr (CairoT s) -> IO a) -> CairoT s -> m a
+argCairoT io (CairoT fcr) = ioToCairoMonad @s $ withForeignPtr fcr io
+
+returnCairoSurfaceT :: forall s m . CairoMonad s m => IO (Ptr (CairoSurfaceT s)) -> m (CairoSurfaceT s)
+returnCairoSurfaceT io = ioToCairoMonad @s $ makeCairoSurfaceT =<< io
+
+argCairoSurfaceT :: forall s m a . CairoMonad s m => (Ptr (CairoSurfaceT s) -> IO a) -> CairoSurfaceT s -> m a
+argCairoSurfaceT io (CairoSurfaceT fs) = ioToCairoMonad @s $ withForeignPtr fs io
+
+returnCairoPatternT :: forall s m . CairoMonad s m => IO (Ptr (CairoPatternT s)) -> m (CairoPatternT s)
+returnCairoPatternT io = ioToCairoMonad @s $ makeCairoPatternT =<< io
+
+argCairoPatternT :: forall s m a . CairoMonad s m => (Ptr (CairoPatternT s) -> IO a) -> CairoPatternT s -> m a
+argCairoPatternT io (CairoPatternT fpt) = ioToCairoMonad @s $ withForeignPtr fpt io
+
+instance CairoMonad s IO where ioToCairoMonad = id
+
+instance CairoMonad s (ST s) where ioToCairoMonad = unsafeIOToST
 
 foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_data ::
 	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})

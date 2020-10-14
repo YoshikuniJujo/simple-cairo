@@ -22,7 +22,7 @@ memo
 	+ [ ] ImageYA8
 	+ [ ] ImageY16
 	+ [ ] ImageY8
-* [ ] repair class CairoMonad
+* [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
 * [ ] throw exception from functions
 * [ ] clean 'stack test'
