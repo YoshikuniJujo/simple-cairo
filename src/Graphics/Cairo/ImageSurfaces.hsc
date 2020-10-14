@@ -98,3 +98,33 @@ generateImageIo f w h = do
 	mi <- newMutableImage w h
 	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> writePixel mi x y =<< f x y
 	freezeImage mi
+
+{-
+cairoFormatStrideForImageRgba8 :: CairoMonad s m =>
+	Image PixelRGBA8 -> m (CairoSurfaceT s)
+cairoFormatStrideForImageRgba8 img = do
+	argCairoSurfaceT do	s <- c_cairo_format_stride_from_width w
+		
+	where
+	w = fromIntegral $ imageWidth img
+	h = fromIntegral $ imageWidth img
+	-}
+
+foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
+	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
+
+foreign import ccall "cairo_format_stride_from_width" c_cairo_format_stride_from_width ::
+	#{type cairo_format_t} -> #{type int} -> IO #{type int}
+
+imageRgba8ToFormatArgb32 :: #{type int} -> #{type int} -> #{type int} ->
+	Image PixelRGBA8 -> Ptr #{type unsigned char} -> IO ()
+imageRgba8ToFormatArgb32 (fromIntegral -> w) (fromIntegral -> h) (fromIntegral -> s) img (castPtr -> p) =
+	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> poke (calcPtr 4 s p x y) (rgba8ToArgb32 $ pixelAt img x y)
+
+rgba8ToArgb32 :: PixelRGBA8 -> Argb32
+rgba8ToArgb32 (PixelRGBA8 (fromIntegral -> r_) (fromIntegral -> g_) (fromIntegral -> b_) (fromIntegral -> a)) =
+	Argb32 $ a `shiftL` 24 .|. r `shiftL` 16 .|.  g `shiftL` 8 .|. b
+	where
+	r = r_ * a `div` 0xff
+	g = g_ * a `div` 0xff
+	b = b_ * a `div` 0xff
