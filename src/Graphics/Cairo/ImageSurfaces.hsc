@@ -1,16 +1,18 @@
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments, TupleSections #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.ImageSurfaces (
 	cairoImageSurfaceCreate,
+	cairoImageSurfaceCreateForImageRgba8,
 	cairoImageSurfaceGetImage,
 	cairoImageSurfaceGetFormat,
 	cairoImageSurfaceGetStride
 	) where
 
 import Foreign.Ptr
+import Foreign.Marshal
 import Foreign.Storable
 import Data.Foldable
 import Data.Bits
@@ -99,16 +101,16 @@ generateImageIo f w h = do
 	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> writePixel mi x y =<< f x y
 	freezeImage mi
 
-{-
-cairoFormatStrideForImageRgba8 :: CairoMonad s m =>
+cairoImageSurfaceCreateForImageRgba8 :: CairoMonad s m =>
 	Image PixelRGBA8 -> m (CairoSurfaceT s)
-cairoFormatStrideForImageRgba8 img = do
-	argCairoSurfaceT do	s <- c_cairo_format_stride_from_width w
-		
+cairoImageSurfaceCreateForImageRgba8 img = returnCairoSurfaceT' do
+	s <- c_cairo_format_stride_from_width #{const CAIRO_FORMAT_ARGB32} w
+	d <- mallocBytes . fromIntegral $ s * h
+	imageRgba8ToFormatArgb32 w h s img d
+	(, d) <$> c_cairo_image_surface_create_for_data d #{const CAIRO_FORMAT_ARGB32} w h s
 	where
 	w = fromIntegral $ imageWidth img
 	h = fromIntegral $ imageWidth img
-	-}
 
 foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
 	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))

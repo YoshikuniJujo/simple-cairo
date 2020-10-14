@@ -12,9 +12,9 @@ memo
 	+ [ ] CAIRO\_FORMAT\_RGB16\_565 -> ImageRGB8
 	+ [ ] CAIRO\_FORMAT\_RGB30 -> ImageRGB16
 * [ ] input image data
-	+ [ ] ImageRGBA8 -> CAIRO\_FORMAT\_ARGB32
+	+ [x] ImageRGBA8 -> CAIRO\_FORMAT\_ARGB32
 		- [x] imageRgba8ToFormatArgb32
-		- [ ] others
+		- [x] others
 	+ [ ] ImageRGBA16
 	+ [ ] ImageRGB8 -> CAIRO\_FORMAT\_RGB24
 	+ [ ] ImageRGB16 -> CAIRO\_FORMAT\_RGB30
