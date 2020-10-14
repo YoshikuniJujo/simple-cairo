@@ -78,7 +78,11 @@ calcPtr byts s p x y = p `plusPtr` (x * byts + y * s)
 newtype Argb32 = Argb32 Word32 deriving (Show, Storable)
 
 argb32ToRgba8 :: Argb32 -> PixelRGBA8
-argb32ToRgba8 (Argb32 w) = PixelRGBA8 r g b a
+argb32ToRgba8 (Argb32 w) = PixelRGBA8
+	(r * 0xff `div` a)
+	(g * 0xff `div` a)
+	(b * 0xff `div` a)
+	a
 	where
 	a = fromIntegral $ w `shiftR` 24
 	r = fromIntegral $ w `shiftR` 16 .&. 0xff
