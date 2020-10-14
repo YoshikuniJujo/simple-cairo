@@ -7,29 +7,45 @@ import Data.Vector.Storable
 import Data.Word
 import Data.Int
 import Graphics.Cairo.CairoT
+import Graphics.Cairo.Paths
 import Graphics.Cairo.ImageSurfaces
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
+import Codec.Picture
+
 main :: IO ()
 main = do
-	print $ runST red
+	let	(i, f, s) = runST red
+	print (f, s)
 	putStrLn ""
 	print =<< redIo
 
-red :: forall s . ST s (Vector Word8, CairoFormatT, Int32)
+red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, CairoFormatT, Int32)
 red = do
-	s <- cairoImageSurfaceCreate @s cairoFormatArgb32 500 500
+	s <- cairoImageSurfaceCreate @s cairoFormatArgb32 50 50
 	cr <- cairoCreate s
 	cairoSetSourceRgb cr 1 0 0
 	cairoPaint cr
-	(,,) <$> cairoImageSurfaceGetData s <*> cairoImageSurfaceGetFormat s <*> cairoImageSurfaceGetStride s
+	(,,) <$> cairoImageSurfaceGetImage s <*> cairoImageSurfaceGetFormat s <*> cairoImageSurfaceGetStride s
 
-redIo :: IO (Vector Word8)
+redIo :: IO (Either String Bool) -- DynamicImage -- (Vector Word8)
 redIo = do
-	s <- cairoImageSurfaceCreate cairoFormatArgb32 500 500
+	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
 	cr <- cairoCreate s
 	cairoSetSourceRgb cr 1 0 0
-	cairoPaint cr
-	cairoImageSurfaceGetData s
+	cairoRectangle cr 0 0 25 25
+	cairoFill cr
+	cairoSetSourceRgb cr 0 1 0
+	cairoRectangle cr 25 0 25 25
+	cairoFill cr
+	cairoSetSourceRgb cr 0.5 0.5 1
+--	cairoSetSourceRgb cr 1 0 0
+	cairoRectangle cr 0 25 25 25
+	cairoFill cr
+	cairoSetSourceRgb cr 1 1 0
+--	cairoSetSourceRgb cr 1 0 0
+	cairoRectangle cr 25 25 25 25
+	cairoFill cr
+	writeDynamicPng "tmp.png" =<< cairoImageSurfaceGetImage s
