@@ -3,7 +3,7 @@
 
 module Graphics.Cairo.CairoImage where
 
-import Foreign.Ptr
+-- import Foreign.Ptr
 import Data.Vector
 import Data.Word
 

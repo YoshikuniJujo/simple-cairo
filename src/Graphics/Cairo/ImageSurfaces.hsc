@@ -14,6 +14,7 @@ module Graphics.Cairo.ImageSurfaces (
 import Foreign.Ptr
 import Foreign.Marshal
 import Foreign.Storable
+import Control.Monad.Primitive
 import Data.Foldable
 import Data.Bits
 import Data.Word
@@ -30,20 +31,20 @@ import Graphics.Cairo.Values
 foreign import ccall "cairo_image_surface_create" c_cairo_image_surface_create ::
 	#{type cairo_format_t} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
 
-cairoImageSurfaceCreate :: CairoMonad s m => CairoFormatT -> #{type int} -> #{type int} -> m (CairoSurfaceT s)
+cairoImageSurfaceCreate :: PrimMonad m => CairoFormatT -> #{type int} -> #{type int} -> m (CairoSurfaceT (PrimState m))
 cairoImageSurfaceCreate (CairoFormatT f) w h =
 	returnCairoSurfaceT $ c_cairo_image_surface_create f w h
 
 foreign import ccall "cairo_image_surface_get_format" c_cairo_image_surface_get_format ::
 	Ptr (CairoSurfaceT s) -> IO #type cairo_format_t
 
-cairoImageSurfaceGetFormat :: CairoMonad s m => CairoSurfaceT s -> m CairoFormatT
+cairoImageSurfaceGetFormat :: PrimMonad m => CairoSurfaceT (PrimState m) -> m CairoFormatT
 cairoImageSurfaceGetFormat s = CairoFormatT <$> argCairoSurfaceT c_cairo_image_surface_get_format s
 
 foreign import ccall "cairo_image_surface_get_stride" c_cairo_image_surface_get_stride ::
 	Ptr (CairoSurfaceT s) -> IO #type int
 
-cairoImageSurfaceGetStride :: CairoMonad s m => CairoSurfaceT s -> m #type int
+cairoImageSurfaceGetStride :: PrimMonad m => CairoSurfaceT (PrimState m) -> m #type int
 cairoImageSurfaceGetStride = argCairoSurfaceT c_cairo_image_surface_get_stride
 
 foreign import ccall "cairo_image_surface_get_width" c_cairo_image_surface_get_width ::
@@ -55,7 +56,7 @@ foreign import ccall "cairo_image_surface_get_height" c_cairo_image_surface_get_
 -- foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_data ::
 --	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})
 
-cairoImageSurfaceGetImage :: CairoMonad s m => CairoSurfaceT s -> m DynamicImage
+cairoImageSurfaceGetImage :: PrimMonad m => CairoSurfaceT (PrimState m) -> m DynamicImage
 cairoImageSurfaceGetImage = argCairoSurfaceT \sfc -> do
 	d <- c_cairo_image_surface_get_data sfc
 	f <- c_cairo_image_surface_get_format sfc
@@ -101,10 +102,10 @@ generateImageIo f w h = do
 	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> writePixel mi x y =<< f x y
 	freezeImage mi
 
-cairoImageSurfaceCreateForImageRgba8 :: CairoMonad s m =>
-	Image PixelRGBA8 -> m (CairoSurfaceT s)
+cairoImageSurfaceCreateForImageRgba8 :: PrimMonad m =>
+	Image PixelRGBA8 -> m (CairoSurfaceT (PrimState m))
 cairoImageSurfaceCreateForImageRgba8 img = returnCairoSurfaceT' do
-	s <- c_cairo_format_stride_from_width #{const CAIRO_FORMAT_ARGB32} w
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
 	d <- mallocBytes . fromIntegral $ s * h
 	imageRgba8ToFormatArgb32 w h s img d
 	(, d) <$> c_cairo_image_surface_create_for_data d #{const CAIRO_FORMAT_ARGB32} w h s
@@ -115,7 +116,7 @@ cairoImageSurfaceCreateForImageRgba8 img = returnCairoSurfaceT' do
 foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
 	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
 
-foreign import ccall "cairo_format_stride_from_width" c_cairo_format_stride_from_width ::
+foreign import ccall "cairo_format_stride_for_width" c_cairo_format_stride_for_width ::
 	#{type cairo_format_t} -> #{type int} -> IO #{type int}
 
 imageRgba8ToFormatArgb32 :: #{type int} -> #{type int} -> #{type int} ->

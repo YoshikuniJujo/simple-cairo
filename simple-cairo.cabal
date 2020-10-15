@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8300c4efc54cfcc65c4766c3cbcb5143a86363745ebfc937f7edcf2aa4aa034a
+-- hash: c5c3d1601fa08458b68f464123cc4a9c8c59281ae9aaa9587b9c6bf95a029d6f
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -51,6 +51,7 @@ library
     , base >=4.7 && <5
     , bytestring
     , exception-hierarchy
+    , primitive
     , text
     , vector
   default-language: Haskell2010
@@ -68,6 +69,7 @@ test-suite exception-test
     , base >=4.7 && <5
     , bytestring
     , exception-hierarchy
+    , primitive
     , simple-cairo
     , text
     , vector
@@ -86,6 +88,7 @@ test-suite simple-cairo-test
     , base >=4.7 && <5
     , bytestring
     , exception-hierarchy
+    , primitive
     , simple-cairo
     , text
     , vector

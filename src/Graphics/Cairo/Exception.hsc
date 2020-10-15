@@ -6,6 +6,7 @@
 module Graphics.Cairo.Exception where
 
 import Foreign.Ptr
+import Control.Monad.Primitive
 import Control.Exception
 import Control.Exception.Hierarchy
 import Data.Word
@@ -32,7 +33,7 @@ newtype CairoStatusT = CairoStatusT #{type cairo_status_t} deriving (Show, Eq)
 
 foreign import ccall "cairo_status" c_cairo_status :: Ptr (CairoT s) -> IO #type cairo_status_t
 
-raiseIfError :: CairoMonad s m => CairoT s -> m ()
+raiseIfError :: PrimMonad m => CairoT (PrimState m) -> m ()
 raiseIfError cr = (`argCairoT` cr) \pcr -> do
 	st <- c_cairo_status pcr
 	case st of

@@ -24,7 +24,7 @@ main = do
 
 red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, CairoFormatT, Int32)
 red = do
-	s <- cairoImageSurfaceCreate @s cairoFormatArgb32 50 50
+	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
 	cr <- cairoCreate s
 	cairoSetSourceRgb cr 1 0 0
 	cairoPaint cr
