@@ -8,10 +8,12 @@ module Graphics.Cairo.ImageSurfaces (
 	cairoImageSurfaceCreateForImageRgba8,
 	cairoImageSurfaceGetImage,
 	cairoImageSurfaceGetFormat,
-	cairoImageSurfaceGetStride
+	cairoImageSurfaceGetStride,
+	cairoImageSurfaceGetCairoImage
 	) where
 
 import Foreign.Ptr
+import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
 import Control.Monad.Primitive
@@ -25,6 +27,8 @@ import Codec.Picture.Types
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
+
+import Graphics.Cairo.CairoImage
 
 #include <cairo.h>
 
@@ -66,6 +70,18 @@ cairoImageSurfaceGetImage = argCairoSurfaceT \sfc -> do
 	case f of
 		#{const CAIRO_FORMAT_ARGB32} -> ImageRGBA8 <$> formatArgb32ToImageRgba8 w h s d
 		_ -> error "yet"
+
+cairoImageSurfaceGetCairoImage :: PrimMonad m => CairoSurfaceT (PrimState m) -> m CairoImage
+cairoImageSurfaceGetCairoImage = argCairoSurfaceT \sfc -> do
+	d <- c_cairo_image_surface_get_data sfc
+	f <- c_cairo_image_surface_get_format sfc
+	w <- c_cairo_image_surface_get_width sfc
+	h <- c_cairo_image_surface_get_height sfc
+	s <- c_cairo_image_surface_get_stride sfc
+	p <- mallocBytes . fromIntegral $ s * h
+	copyBytes p d . fromIntegral $ s * h
+	fd <- newForeignPtr p $ free p
+	pure $ CairoImage f w h s fd
 
 formatArgb32ToImageRgba8 :: #{type int} -> #{type int} -> #{type int} ->
 	Ptr #{type unsigned char} -> IO (Image PixelRGBA8)

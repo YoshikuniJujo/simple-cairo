@@ -15,12 +15,15 @@ import Graphics.Cairo.Values
 
 import Codec.Picture
 
+import Graphics.Cairo.CairoImage
+
 main :: IO ()
 main = do
 	let	(i, f, s) = runST red
 	print (f, s)
 	putStrLn ""
 	print =<< redIo
+	print $ runST green
 
 red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, CairoFormatT, Int32)
 red = do
@@ -49,3 +52,11 @@ redIo = do
 	cairoRectangle cr 25 25 25 25
 	cairoFill cr
 	writeDynamicPng "tmp.png" =<< cairoImageSurfaceGetImage s
+
+green :: forall s . ST s CairoImage
+green = do
+	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
+	cr <- cairoCreate s
+	cairoSetSourceRgb cr 0 1 0
+	cairoPaint cr
+	cairoImageSurfaceGetCairoImage s
