@@ -34,6 +34,7 @@ memo
 	+ [ ] CAIRO\_FORMAT\_RGB30
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
+* [ ] use MonadPrim instead of CairoMonad
 * [ ] move converter for JuicyPixels to Graphics.Cairo.JuicyPixels
 * [ ] throw exception from functions
 * [ ] clean 'stack test'
