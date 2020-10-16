@@ -1,4 +1,4 @@
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE ScopedTypeVariables, TypeApplications #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
@@ -53,10 +53,12 @@ redIo = do
 	cairoFill cr
 	writeDynamicPng "tmp.png" =<< cairoImageSurfaceGetImage s
 
-green :: forall s . ST s CairoImage
+green :: forall s . ST s (Either Argb32 CairoImage)
 green = do
 	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
 	cr <- cairoCreate s
 	cairoSetSourceRgb cr 0 1 0
 	cairoPaint cr
-	cairoImageSurfaceGetCairoImage s
+	(<$> cairoImageSurfaceGetCairoImage s) \case
+		CairoImageArgb32 a -> Left a
+		i -> Right i

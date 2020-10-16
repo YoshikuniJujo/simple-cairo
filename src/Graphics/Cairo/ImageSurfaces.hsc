@@ -28,7 +28,7 @@ import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
-import Graphics.Cairo.CairoImage
+import Graphics.Cairo.CairoImage hiding (Argb32)
 
 #include <cairo.h>
 
