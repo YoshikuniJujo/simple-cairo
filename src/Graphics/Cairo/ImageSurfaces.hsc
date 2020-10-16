@@ -9,7 +9,8 @@ module Graphics.Cairo.ImageSurfaces (
 	cairoImageSurfaceGetImage,
 	cairoImageSurfaceGetFormat,
 	cairoImageSurfaceGetStride,
-	cairoImageSurfaceGetCairoImage
+	cairoImageSurfaceGetCairoImage,
+	cairoImageSurfaceGetCairoImageMut
 	) where
 
 import Foreign.Ptr
@@ -82,6 +83,18 @@ cairoImageSurfaceGetCairoImage = argCairoSurfaceT \sfc -> do
 	copyBytes p d . fromIntegral $ s * h
 	fd <- newForeignPtr p $ free p
 	pure $ CairoImage f w h s fd
+
+cairoImageSurfaceGetCairoImageMut :: PrimMonad m => CairoSurfaceT (PrimState m) -> m (CairoImageMut (PrimState m))
+cairoImageSurfaceGetCairoImageMut = argCairoSurfaceT \sfc -> do
+	d <- c_cairo_image_surface_get_data sfc
+	f <- c_cairo_image_surface_get_format sfc
+	w <- c_cairo_image_surface_get_width sfc
+	h <- c_cairo_image_surface_get_height sfc
+	s <- c_cairo_image_surface_get_stride sfc
+	p <- mallocBytes . fromIntegral $ s * h
+	copyBytes p d . fromIntegral $ s * h
+	fd <- newForeignPtr p $ free p
+	pure $ CairoImageMut f w h s fd
 
 formatArgb32ToImageRgba8 :: #{type int} -> #{type int} -> #{type int} ->
 	Ptr #{type unsigned char} -> IO (Image PixelRGBA8)

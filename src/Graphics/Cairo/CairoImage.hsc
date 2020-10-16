@@ -28,6 +28,14 @@ data CairoImage = CairoImage {
 	cairoImageData :: ForeignPtr #{type unsigned char} }
 	deriving Show
 
+data CairoImageMut s = CairoImageMut {
+	cairoImageMutFormat :: #{type cairo_format_t},
+	cairoImageMutWidth :: #{type int},
+	cairoImageMutHeight :: #{type int},
+	cairoImageMutStride :: #{type int},
+	cairoImageMutData :: ForeignPtr #{type unsigned char} }
+	deriving Show
+
 {-
 class Storable p => CairoPixel p where
 	posToPtr :: #{type int} -> #{type int} -> Ptr p -> Ptr p
