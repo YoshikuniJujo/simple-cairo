@@ -26,6 +26,7 @@ memo
 	+ [ ] define CairoImage
 		- [x] define CairoImage data type
 		- [x] define pattern CairoImageArgb32
+		- [x] define pixelAt
 		- [ ] read function
 		- [ ] create function
 	+ [ ] define CairoImageMut

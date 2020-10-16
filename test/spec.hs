@@ -13,7 +13,7 @@ import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
-import Codec.Picture
+import Codec.Picture hiding (pixelAt)
 
 import Graphics.Cairo.CairoImage
 
@@ -53,12 +53,12 @@ redIo = do
 	cairoFill cr
 	writeDynamicPng "tmp.png" =<< cairoImageSurfaceGetImage s
 
-green :: forall s . ST s (Either Argb32 CairoImage)
+green :: forall s . ST s (Either (Argb32, Maybe PixelArgb32, Maybe PixelArgb32, Maybe PixelArgb32) CairoImage)
 green = do
 	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
 	cr <- cairoCreate s
 	cairoSetSourceRgb cr 0 1 0
 	cairoPaint cr
 	(<$> cairoImageSurfaceGetCairoImage s) \case
-		CairoImageArgb32 a -> Left a
+		CairoImageArgb32 a -> Left (a, pixelAt a 0 0, pixelAt a 30 30, pixelAt a 49 49)
 		i -> Right i
