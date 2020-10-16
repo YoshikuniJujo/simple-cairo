@@ -30,6 +30,9 @@ memo
 		- [ ] read function
 		- [ ] create function
 	+ [ ] define CairoImageMut
+		- [ ] define `type CairoImageMut s = ...`
+		- [ ] define cairoImageSurfaceGetCairoImageMut
+		- [ ] others
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
 * [ ] use MonadPrim instead of CairoMonad
