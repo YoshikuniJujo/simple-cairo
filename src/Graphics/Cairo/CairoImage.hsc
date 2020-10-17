@@ -17,6 +17,7 @@ import Data.Int
 import System.IO.Unsafe
 
 -- import Graphics.Cairo.Values
+import Graphics.Cairo.Monad
 
 #include <cairo.h>
 
@@ -57,7 +58,16 @@ data Argb32 = Argb32 {
 	argb32Data :: ForeignPtr PixelArgb32 }
 	deriving Show
 
-data Arg32Mut s = Arg32Mut {
+pattern CairoImageMutArgb32 :: Argb32Mut s -> CairoImageMut s
+pattern CairoImageMutArgb32 a <- (cairoImageMutToArgb32 -> Just a)
+
+cairoImageMutToArgb32 :: CairoImageMut s -> Maybe (Argb32Mut s)
+cairoImageMutToArgb32 = \case
+	CairoImageMut #{const CAIRO_FORMAT_ARGB32} w h s d ->
+		Just . Argb32Mut w h s $ castForeignPtr d
+	_ -> Nothing
+
+data Argb32Mut s = Argb32Mut {
 	argb32MutWidth :: #{type int},
 	argb32MutHeight :: #{type int},
 	argb32MutStride :: #{type int},
@@ -81,6 +91,13 @@ instance Image Argb32 where
 	type Pixel Argb32 = PixelArgb32
 	pixelAt (Argb32 w h s d) x y = unsafePerformIO do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
+
+instance ImageMut Argb32Mut where
+	type PixelMut Argb32Mut = PixelArgb32
+	getPixel (Argb32Mut w h s d) x y = unPrimIo do
+		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
+	putPixel (Argb32Mut w h s d) x y px = unPrimIo do
+		withForeignPtr d \p -> maybe (pure ()) (`poke` px) $ ptrArgb32 w h s p x y
 
 ptrArgb32 :: #{type int} -> #{type int} -> #{type int} ->
 	Ptr PixelArgb32 -> #{type int} -> #{type int} -> Maybe (Ptr PixelArgb32)

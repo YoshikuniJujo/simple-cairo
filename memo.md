@@ -32,6 +32,8 @@ memo
 	+ [ ] define CairoImageMut
 		- [x] define `type CairoImageMut s = ...`
 		- [x] define cairoImageSurfaceGetCairoImageMut
+		- [x] define pattern CairoImageMutArgb32
+		- [x] define `instance ImageMut Argb32Mut`
 		- [ ] others
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
