@@ -27,13 +27,15 @@ memo
 		- [x] define CairoImage data type
 		- [x] define pattern CairoImageArgb32
 		- [x] define pixelAt
-		- [ ] read function
 		- [ ] create function
+		- [ ] define cairoImageSurfaceCreateForCairoImage
 	+ [ ] define CairoImageMut
 		- [x] define `type CairoImageMut s = ...`
 		- [x] define cairoImageSurfaceGetCairoImageMut
 		- [x] define pattern CairoImageMutArgb32
 		- [x] define `instance ImageMut Argb32Mut`
+		- [ ] create function
+		- [ ] define cairoImageSurfaceCreateForCairoImageMut
 		- [ ] others
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
