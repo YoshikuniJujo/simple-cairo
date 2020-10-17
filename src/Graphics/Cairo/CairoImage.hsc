@@ -78,10 +78,15 @@ newtype PixelArgb32 = PixelArgb32 Word32 deriving (Show, Storable)
 
 class Image i where
 	type Pixel i
+	imageSize :: i -> (#{type int}, #{type int})
+	createImage :: (#{type int} -> #{type int} -> m (Pixel i)) -> m i
 	pixelAt :: i -> #{type int} -> #{type int} -> Maybe (Pixel i)
 
 class ImageMut im where
 	type PixelMut im
+	imageMutSize :: im s -> (#{type int}, #{type int})
+	newImageMut :: PrimMonad m =>
+		#{type int} -> #{type int} -> m (im s)
 	getPixel :: PrimMonad m =>
 		im (PrimState m) -> #{type int} -> #{type int} -> m (Maybe (PixelMut im))
 	putPixel :: PrimMonad m =>
@@ -89,6 +94,7 @@ class ImageMut im where
 
 instance Image Argb32 where
 	type Pixel Argb32 = PixelArgb32
+	imageSize (Argb32 w h _ _) = (w, h)
 	pixelAt (Argb32 w h s d) x y = unsafePerformIO do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
 

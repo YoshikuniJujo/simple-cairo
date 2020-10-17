@@ -27,14 +27,16 @@ memo
 		- [x] define CairoImage data type
 		- [x] define pattern CairoImageArgb32
 		- [x] define pixelAt
-		- [ ] create function
+		- [x] define imageSize for Argb32
+		- [ ] define createImage for Argb32
 		- [ ] define cairoImageSurfaceCreateForCairoImage
 	+ [ ] define CairoImageMut
 		- [x] define `type CairoImageMut s = ...`
 		- [x] define cairoImageSurfaceGetCairoImageMut
 		- [x] define pattern CairoImageMutArgb32
 		- [x] define `instance ImageMut Argb32Mut`
-		- [ ] create function
+		- [ ] define imageMutSize for Arb32Mut
+		- [ ] define newImageMut for Argb32Mut
 		- [ ] define cairoImageSurfaceCreateForCairoImageMut
 		- [ ] others
 * [x] repair class CairoMonad
