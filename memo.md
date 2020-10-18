@@ -35,8 +35,8 @@ memo
 		- [x] define cairoImageSurfaceGetCairoImageMut
 		- [x] define pattern CairoImageMutArgb32
 		- [x] define `instance ImageMut Argb32Mut`
-		- [ ] define imageMutSize for Arb32Mut
-		- [ ] define newImageMut for Argb32Mut
+		- [x] define imageMutSize for Arb32Mut
+		- [x] define newImageMut for Argb32Mut
 		- [ ] define cairoImageSurfaceCreateForCairoImageMut
 		- [ ] others
 	+ [ ] define unsafe functions

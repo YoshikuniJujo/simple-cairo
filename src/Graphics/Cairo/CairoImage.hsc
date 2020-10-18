@@ -93,7 +93,7 @@ class ImageMut im where
 	type PixelMut im
 	imageMutSize :: im s -> (#{type int}, #{type int})
 	newImageMut :: PrimMonad m =>
-		#{type int} -> #{type int} -> m (im s)
+		#{type int} -> #{type int} -> m (im (PrimState m))
 	getPixel :: PrimMonad m =>
 		im (PrimState m) -> #{type int} -> #{type int} -> m (Maybe (PixelMut im))
 	putPixel :: PrimMonad m =>
@@ -124,10 +124,19 @@ withForeignPtr' fp f = unPrimIo . withForeignPtr fp $ primIo . f
 
 instance ImageMut Argb32Mut where
 	type PixelMut Argb32Mut = PixelArgb32
+	imageMutSize (Argb32Mut w h _ _) = (w, h)
+	newImageMut = newArgb32Mut
 	getPixel (Argb32Mut w h s d) x y = unPrimIo do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
 	putPixel (Argb32Mut w h s d) x y px = unPrimIo do
 		withForeignPtr d \p -> maybe (pure ()) (`poke` px) $ ptrArgb32 w h s p x y
+
+newArgb32Mut :: PrimMonad m => #{type int} -> #{type int} -> m (Argb32Mut (PrimState m))
+newArgb32Mut w h = unPrimIo do
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
+	d <- mallocBytes . fromIntegral $ s * h
+	fd <- newForeignPtr d $ free d
+	pure $ Argb32Mut w h s fd
 
 ptrArgb32 :: #{type int} -> #{type int} -> #{type int} ->
 	Ptr PixelArgb32 -> #{type int} -> #{type int} -> Maybe (Ptr PixelArgb32)
