@@ -21,6 +21,9 @@ import GHC.Base
 unPrimIo :: PrimMonad m => IO a -> m a
 unPrimIo = primitive . unsafeCoerce## . unIO
 
+primIo :: PrimBase m => m a -> IO a
+primIo = IO . unsafeCoerce## . internal
+
 returnCairoT :: PrimMonad m => IO (Ptr (CairoT (PrimState m))) -> m (CairoT (PrimState m))
 returnCairoT io = unPrimIo $ makeCairoT =<< io
 

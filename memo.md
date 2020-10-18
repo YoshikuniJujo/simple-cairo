@@ -28,7 +28,7 @@ memo
 		- [x] define pattern CairoImageArgb32
 		- [x] define pixelAt
 		- [x] define imageSize for Argb32
-		- [ ] define createImage for Argb32
+		- [x] define createImage for Argb32
 		- [ ] define cairoImageSurfaceCreateForCairoImage
 	+ [ ] define CairoImageMut
 		- [x] define `type CairoImageMut s = ...`
@@ -39,6 +39,8 @@ memo
 		- [ ] define newImageMut for Argb32Mut
 		- [ ] define cairoImageSurfaceCreateForCairoImageMut
 		- [ ] others
+	+ [ ] define unsafe functions
+		- get ForeignPtr or Ptr etc
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
 * [ ] use MonadPrim instead of CairoMonad

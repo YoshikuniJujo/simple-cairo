@@ -8,9 +8,13 @@
 module Graphics.Cairo.CairoImage where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr
+import Foreign.ForeignPtr hiding (newForeignPtr)
+import Foreign.Concurrent
+import Foreign.Marshal
 import Foreign.Storable
 import Control.Monad.Primitive
+import Control.Monad.ST
+import Data.Foldable
 -- import Data.Vector
 import Data.Word
 import Data.Int
@@ -79,8 +83,11 @@ newtype PixelArgb32 = PixelArgb32 Word32 deriving (Show, Storable)
 class Image i where
 	type Pixel i
 	imageSize :: i -> (#{type int}, #{type int})
-	createImage :: (#{type int} -> #{type int} -> m (Pixel i)) -> m i
+	generateImagePrimM :: PrimBase m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m (Pixel i)) -> m i
 	pixelAt :: i -> #{type int} -> #{type int} -> Maybe (Pixel i)
+
+	generateImage :: #{type int} -> #{type int} -> (#{type int} -> #{type int} -> Pixel i) -> i
+	generateImage w h f = runST $ generateImagePrimM w h (\x y -> pure $ f x y)
 
 class ImageMut im where
 	type PixelMut im
@@ -95,8 +102,25 @@ class ImageMut im where
 instance Image Argb32 where
 	type Pixel Argb32 = PixelArgb32
 	imageSize (Argb32 w h _ _) = (w, h)
+	generateImagePrimM = generateArgb32PrimM
 	pixelAt (Argb32 w h s d) x y = unsafePerformIO do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
+
+foreign import ccall "cairo_format_stride_for_width" c_cairo_format_stride_for_width ::
+	#{type cairo_format_t} -> #{type int} -> IO #{type int}
+
+generateArgb32PrimM :: PrimBase	m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelArgb32) -> m Argb32
+generateArgb32PrimM w h f = unPrimIo do
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
+	d <- mallocBytes . fromIntegral $ s * h
+	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> do
+		p <- primIo $ f x y
+		maybe (pure ()) (`poke` p) $ ptrArgb32 w h s d x y
+	fd <- newForeignPtr d $ free d
+	pure $ Argb32 w h s fd
+
+withForeignPtr' :: PrimBase m => ForeignPtr a -> (Ptr a -> m a) -> m a
+withForeignPtr' fp f = unPrimIo . withForeignPtr fp $ primIo . f
 
 instance ImageMut Argb32Mut where
 	type PixelMut Argb32Mut = PixelArgb32
