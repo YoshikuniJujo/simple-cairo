@@ -20,6 +20,7 @@ import Data.Word
 import Data.Int
 import System.IO.Unsafe
 
+import Graphics.Cairo.Types
 -- import Graphics.Cairo.Values
 import Graphics.Cairo.Monad
 
@@ -148,3 +149,24 @@ ptrArgb32 w h s p x y
 
 -- loadImageArgb32 :: Ptr #{type unsigned char} -> IO ImageArgb32
 -- loadImageArgb32 p = 
+
+foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
+	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
+
+cairoImageSurfaceCreateForCairoImage ::
+	PrimMonad m => CairoImage -> m (CairoSurfaceT (PrimState m))
+cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unPrimIo do
+	p <- mallocBytes n
+	withForeignPtr d \pd -> copyBytes p pd n
+	sp <- c_cairo_image_surface_create_for_data p f w h s
+	makeCairoSurfaceT' sp p
+	where n = fromIntegral $ s * h
+
+cairoImageSurfaceCreateForCairoImageMut ::
+	PrimMonad m => CairoImageMut (PrimState m) -> m (CairoSurfaceT (PrimState m))
+cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unPrimIo do
+	p <- mallocBytes n
+	withForeignPtr d \pd -> copyBytes p pd n
+	sp <- c_cairo_image_surface_create_for_data p f w h s
+	makeCairoSurfaceT' sp p
+	where n = fromIntegral $ s * h

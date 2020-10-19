@@ -30,6 +30,8 @@ memo
 		- [x] define imageSize for Argb32
 		- [x] define createImage for Argb32
 		- [ ] define cairoImageSurfaceCreateForCairoImage
+			* [x] define
+			* [ ] test
 	+ [ ] define CairoImageMut
 		- [x] define `type CairoImageMut s = ...`
 		- [x] define cairoImageSurfaceGetCairoImageMut
@@ -38,6 +40,8 @@ memo
 		- [x] define imageMutSize for Arb32Mut
 		- [x] define newImageMut for Argb32Mut
 		- [ ] define cairoImageSurfaceCreateForCairoImageMut
+			* [x] define
+			* [ ] test
 		- [ ] others
 	+ [ ] define unsafe functions
 		- get ForeignPtr or Ptr etc

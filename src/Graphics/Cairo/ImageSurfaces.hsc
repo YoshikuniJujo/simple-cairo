@@ -142,9 +142,6 @@ cairoImageSurfaceCreateForImageRgba8 img = returnCairoSurfaceT' do
 	w = fromIntegral $ imageWidth img
 	h = fromIntegral $ imageWidth img
 
-foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
-	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
-
 {-
 foreign import ccall "cairo_format_stride_for_width" c_cairo_format_stride_for_width ::
 	#{type cairo_format_t} -> #{type int} -> IO #{type int}
