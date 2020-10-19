@@ -46,9 +46,20 @@ memo
 		- get ForeignPtr or Ptr etc
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
-* [ ] use MonadPrim instead of CairoMonad
-* [ ] move converter for JuicyPixels to Graphics.Cairo.JuicyPixels
+* [x] use MonadPrim instead of CairoMonad
 * [ ] throw exception from functions
+	+ [x] cairoCreate
+	+ [ ] others
+* [ ] define functions
+	+ [ ] Graphics.Cairo.CairoT from API reference 'cairo\_t'
+		- [ ] cairoCreate from cairo_create
+		- [ ] cairo_save
+		- [ ] cairo_restore
+		- [ ] cairo_get_target
+		- [ ] others
+	+ [ ] Graphics.Cairo.Paths from API reference 'Paths'
+	+ [ ] others
+* [ ] move converter for JuicyPixels to Graphics.Cairo.JuicyPixels
 * [ ] clean 'stack test'
 
 cairo\_format\_t

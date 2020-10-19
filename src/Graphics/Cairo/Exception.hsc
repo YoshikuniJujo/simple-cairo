@@ -19,6 +19,13 @@ data CairoStatusNoMemory = CairoStatusNoMemory deriving Show
 data CairoStatusInvalidRestore = CairoStatusInvalidRestore deriving Show
 data CairoStatusInvalidPopGroup = CairoStatusInvalidPopGroup deriving Show
 data CairoStatusNoCurrentPoint = CairoStatusNoCurrentPoint deriving Show
+data CairoStatusInvalidMatrix = CairoStatusInvalidMatrix deriving Show
+data CairoStatusInvalidStatus = CairoStatusInvalidStatus deriving Show
+data CairoStatusNullPointer = CairoStatusNullPointer deriving Show
+data CairoStatusInvalidString = CairoStatusInvalidString deriving Show
+data CairoStatusInvalidPathData = CairoStatusInvalidPathData deriving Show
+data CairoStatusReadError = CairoStatusReadError deriving Show
+data CairoStatusWriteError = CairoStatusWriteError deriving Show
 data CairoStatusOthers = CairoStatusOthers #{type cairo_status_t} deriving Show
 
 exceptionHierarchy Nothing $ ExNode "CairoStatus" [
@@ -26,6 +33,13 @@ exceptionHierarchy Nothing $ ExNode "CairoStatus" [
 	ExType ''CairoStatusInvalidRestore,
 	ExType ''CairoStatusInvalidPopGroup,
 	ExType ''CairoStatusNoCurrentPoint,
+	ExType ''CairoStatusInvalidMatrix,
+	ExType ''CairoStatusInvalidStatus,
+	ExType ''CairoStatusNullPointer,
+	ExType ''CairoStatusInvalidString,
+	ExType ''CairoStatusInvalidPathData,
+	ExType ''CairoStatusReadError,
+	ExType ''CairoStatusWriteError,
 	ExType ''CairoStatusOthers
 	]
 
@@ -42,6 +56,13 @@ raiseIfError cr = (`argCairoT` cr) \pcr -> do
 		#{const CAIRO_STATUS_INVALID_RESTORE} -> throw CairoStatusInvalidRestore
 		#{const CAIRO_STATUS_INVALID_POP_GROUP} -> throw CairoStatusInvalidPopGroup
 		#{const CAIRO_STATUS_NO_CURRENT_POINT} -> throw CairoStatusNoCurrentPoint
+		#{const CAIRO_STATUS_INVALID_MATRIX} -> throw CairoStatusInvalidMatrix
+		#{const CAIRO_STATUS_INVALID_STATUS} -> throw CairoStatusInvalidStatus
+		#{const CAIRO_STATUS_NULL_POINTER} -> throw CairoStatusNullPointer
+		#{const CAIRO_STATUS_INVALID_STRING} -> throw CairoStatusInvalidString
+		#{const CAIRO_STATUS_INVALID_PATH_DATA} -> throw CairoStatusInvalidPathData
+		#{const CAIRO_STATUS_READ_ERROR} -> throw CairoStatusReadError
+		#{const CAIRO_STATUS_WRITE_ERROR} -> throw CairoStatusWriteError
 		_ -> throw $ CairoStatusOthers st
 
 #enum CairoStatusT, CairoStatusT, CAIRO_STATUS_SUCCESS, \
