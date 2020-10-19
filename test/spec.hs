@@ -13,7 +13,7 @@ import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
-import Codec.Picture hiding (pixelAt)
+import Codec.Picture hiding (pixelAt, generateImage)
 
 import Graphics.Cairo.CairoImage
 
@@ -24,6 +24,7 @@ main = do
 	putStrLn ""
 	print =<< redIo
 	print $ runST green
+	drawBlue
 
 red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, CairoFormatT, Int32)
 red = do
@@ -69,3 +70,14 @@ green = do
 		i -> Right i
 	p2020 <- getPixel r2 20 20
 	pure (r1, p2020)
+
+blue :: Argb32
+blue = generateImage 200 200 \_ _ -> PixelArgb32 0xff0000ff
+
+blueSurface :: ST s (CairoSurfaceT s)
+blueSurface = cairoImageSurfaceCreateForCairoImage $ CairoImageArgb32 blue
+
+drawBlue :: IO ()
+drawBlue = do
+	writeDynamicPng "tmp2.png" $ runST (cairoImageSurfaceGetImage =<<  blueSurface)
+	pure ()

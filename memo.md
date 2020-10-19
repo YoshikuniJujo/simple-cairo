@@ -29,9 +29,9 @@ memo
 		- [x] define pixelAt
 		- [x] define imageSize for Argb32
 		- [x] define createImage for Argb32
-		- [ ] define cairoImageSurfaceCreateForCairoImage
+		- [x] define cairoImageSurfaceCreateForCairoImage
 			* [x] define
-			* [ ] test
+			* [x] test
 	+ [ ] define CairoImageMut
 		- [x] define `type CairoImageMut s = ...`
 		- [x] define cairoImageSurfaceGetCairoImageMut
