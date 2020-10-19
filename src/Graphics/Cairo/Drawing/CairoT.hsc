@@ -1,7 +1,7 @@
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.CairoT (
+module Graphics.Cairo.Drawing.CairoT (
 	-- * Basic
 	cairoCreate,
 	-- * Push and Pop Group
