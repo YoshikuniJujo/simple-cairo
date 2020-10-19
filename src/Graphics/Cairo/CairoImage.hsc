@@ -49,6 +49,8 @@ class Storable p => CairoPixel p where
 
 pattern CairoImageArgb32 :: Argb32 -> CairoImage
 pattern CairoImageArgb32 a <- (cairoImageToArgb32 -> Just a)
+	where CairoImageArgb32 (Argb32 w h s d) =
+		CairoImage #{const CAIRO_FORMAT_ARGB32} w h s $ castForeignPtr d
 
 cairoImageToArgb32 :: CairoImage -> Maybe Argb32
 cairoImageToArgb32 = \case
