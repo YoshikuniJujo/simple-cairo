@@ -23,7 +23,7 @@ memo
 	+ [ ] ImageY16
 	+ [ ] ImageY8
 * [ ] make Cairo Image Format
-	+ [ ] define CairoImage
+	+ [x] define CairoImage
 		- [x] define CairoImage data type
 		- [x] define pattern CairoImageArgb32
 		- [x] define pixelAt
@@ -32,17 +32,16 @@ memo
 		- [x] define cairoImageSurfaceCreateForCairoImage
 			* [x] define
 			* [x] test
-	+ [ ] define CairoImageMut
+	+ [x] define CairoImageMut
 		- [x] define `type CairoImageMut s = ...`
 		- [x] define cairoImageSurfaceGetCairoImageMut
 		- [x] define pattern CairoImageMutArgb32
 		- [x] define `instance ImageMut Argb32Mut`
 		- [x] define imageMutSize for Arb32Mut
 		- [x] define newImageMut for Argb32Mut
-		- [ ] define cairoImageSurfaceCreateForCairoImageMut
+		- [x] define cairoImageSurfaceCreateForCairoImageMut
 			* [x] define
-			* [ ] test
-		- [ ] others
+			* [x] test
 	+ [ ] define unsafe functions
 		- get ForeignPtr or Ptr etc
 * [x] repair class CairoMonad

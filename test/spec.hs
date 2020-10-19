@@ -3,6 +3,7 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 import Control.Monad.ST
+import Data.Foldable
 import Data.Vector.Storable
 import Data.Word
 import Data.Int
@@ -25,6 +26,7 @@ main = do
 	print =<< redIo
 	print $ runST green
 	drawBlue
+	drawYellow
 
 red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, CairoFormatT, Int32)
 red = do
@@ -79,5 +81,19 @@ blueSurface = cairoImageSurfaceCreateForCairoImage $ CairoImageArgb32 blue
 
 drawBlue :: IO ()
 drawBlue = do
-	writeDynamicPng "tmp2.png" $ runST (cairoImageSurfaceGetImage =<<  blueSurface)
+	writeDynamicPng "tmp2.png" $ runST (cairoImageSurfaceGetImage =<< blueSurface)
+	pure ()
+
+yellow :: ST s (Argb32Mut s)
+yellow = do
+	i <- newImageMut 200 200
+	for_ [0 .. 199] \h -> for_ [0 .. 199] \w -> putPixel i w h $ PixelArgb32 0xffffff00
+	pure i
+
+yellowSurface :: ST s (CairoSurfaceT s)
+yellowSurface = cairoImageSurfaceCreateForCairoImageMut . CairoImageMutArgb32 =<< yellow
+
+drawYellow :: IO ()
+drawYellow = do
+	writeDynamicPng "tmp3.png" $ runST (cairoImageSurfaceGetImage =<< yellowSurface)
 	pure ()

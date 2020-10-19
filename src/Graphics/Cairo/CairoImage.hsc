@@ -67,6 +67,8 @@ data Argb32 = Argb32 {
 
 pattern CairoImageMutArgb32 :: Argb32Mut s -> CairoImageMut s
 pattern CairoImageMutArgb32 a <- (cairoImageMutToArgb32 -> Just a)
+	where CairoImageMutArgb32 (Argb32Mut w h s d) =
+		CairoImageMut #{const CAIRO_FORMAT_ARGB32} w h s $ castForeignPtr d
 
 cairoImageMutToArgb32 :: CairoImageMut s -> Maybe (Argb32Mut s)
 cairoImageMutToArgb32 = \case
