@@ -49,8 +49,6 @@ memo
 * [x] use MonadPrim instead of CairoMonad
 * [x] repair throwIfError and throwIfErrorRegion
 	+ use IO instead of PrimMonad
-* [ ] repair cairoCreate
-	+ use bracketOnError
 * [ ] define functions of Regions
 	+ [x] make module Graphics.Cairo.Drawing.Regions
 	+ [x] define function throwIfErrorRegion
@@ -58,8 +56,6 @@ memo
 		- use cairo\_region\_create\_rectangle
 		- use cairo\_region\_destory
 		- use throwIfErrorRegion
-	+ [ ] repair cairoRegionCreate
-		- destroy region if error
 	+ [ ] define cairoRegionCreateRectangle
 * [ ] move modules to Graphics.Cairo.Drawing
 	+ [x] move Graphics.Cairo.CairoT to it
