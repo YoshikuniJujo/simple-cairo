@@ -7,11 +7,9 @@ module Graphics.Cairo.Exception where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
-import Control.Monad.Primitive
 import Control.Exception
 import Control.Exception.Hierarchy
 import Data.Word
-import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 
 #include <cairo.h>

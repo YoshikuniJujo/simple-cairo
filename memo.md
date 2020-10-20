@@ -53,10 +53,10 @@ memo
 	+ [x] make module Graphics.Cairo.Drawing.Regions
 	+ [x] define function throwIfErrorRegion
 	+ [x] define cairoRegionCreate
-		- use cairo\_region\_create\_rectangle
+		- use cairo\_region\_create
 		- use cairo\_region\_destory
 		- use throwIfErrorRegion
-	+ [ ] define cairoRegionCreateRectangle
+	+ [x] define cairoRegionCreateRectangle
 * [ ] move modules to Graphics.Cairo.Drawing
 	+ [x] move Graphics.Cairo.CairoT to it
 	+ [ ] move Graphics.Cairo.Paths to it
