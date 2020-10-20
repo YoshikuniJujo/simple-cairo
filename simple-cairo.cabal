@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9615838dbc7be1d6170497007300d45b5c78666c09d4a2791bda9d56f7774ded
+-- hash: a33b0d12ceac29717153179962074233b78c88055c22afdaf1e3dc7c1151152c
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -31,6 +31,7 @@ library
       Graphics.Cairo.CairoImage
       Graphics.Cairo.CairoPatternT
       Graphics.Cairo.Drawing.CairoT
+      Graphics.Cairo.Drawing.Regions
       Graphics.Cairo.Exception
       Graphics.Cairo.ImageSurfaces
       Graphics.Cairo.Monad
