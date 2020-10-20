@@ -15,8 +15,8 @@ import Graphics.Cairo.Types
 foreign import ccall "cairo_region_create" c_cairo_region_create :: IO (Ptr (CairoRegionT s))
 
 cairoRegionCreate :: PrimMonad m => m (CairoRegionT (PrimState m))
-cairoRegionCreate = do
-	r <- unPrimIo $ makeCairoRegionT =<< c_cairo_region_create
+cairoRegionCreate = unPrimIo do
+	r <- makeCairoRegionT =<< c_cairo_region_create
 	r <$ raiseIfErrorRegion r
 
 -- foreign import ccall "cairo_region_create_rectangle" c_cairo_region_create_rectangle ::

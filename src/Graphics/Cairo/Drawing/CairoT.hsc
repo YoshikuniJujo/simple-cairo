@@ -27,8 +27,8 @@ import Graphics.Cairo.Types
 foreign import ccall "cairo_create" c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
 
 cairoCreate :: PrimMonad m => CairoSurfaceT (PrimState m) -> m (CairoT (PrimState m))
-cairoCreate (CairoSurfaceT fs) = do
-	cr <- unPrimIo $ makeCairoT =<< withForeignPtr fs c_cairo_create
+cairoCreate (CairoSurfaceT fs) = unPrimIo do
+	cr <- makeCairoT =<< withForeignPtr fs c_cairo_create
 	cr <$ raiseIfError cr
 
 foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
@@ -95,7 +95,7 @@ foreign import ccall "cairo_pop_group_to_source" c_cairo_pop_group_to_source ::
 	Ptr (CairoT s) -> IO ()
 
 cairoPopGroupToSource :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoPopGroupToSource cr = argCairoT c_cairo_pop_group_to_source cr <* raiseIfError cr
+cairoPopGroupToSource cr@(CairoT fcr) = unPrimIo $ withForeignPtr fcr c_cairo_pop_group_to_source <* raiseIfError cr
 
 foreign import ccall "cairo_pop_group" c_cairo_pop_group ::
 	Ptr (CairoT s) -> IO (Ptr (CairoPatternT s))

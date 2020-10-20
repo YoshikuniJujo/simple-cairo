@@ -48,12 +48,11 @@ newtype CairoStatusT = CairoStatusT #{type cairo_status_t} deriving (Show, Eq)
 
 foreign import ccall "cairo_status" c_cairo_status :: Ptr (CairoT s) -> IO #type cairo_status_t
 
-raiseIfError :: PrimMonad m => CairoT (PrimState m) -> m ()
-raiseIfError cr = (`argCairoT` cr) \pcr -> cairoStatusToThrowError =<< c_cairo_status pcr
+raiseIfError :: CairoT s -> IO ()
+raiseIfError (CairoT fcr) = withForeignPtr fcr \pcr -> cairoStatusToThrowError =<< c_cairo_status pcr
 
-raiseIfErrorRegion :: PrimMonad m => CairoRegionT (PrimState m) -> m ()
-raiseIfErrorRegion (CairoRegionT fr) = unPrimIo
-	$ withForeignPtr fr \r -> cairoStatusToThrowError =<< c_cairo_region_status r
+raiseIfErrorRegion :: CairoRegionT s -> IO ()
+raiseIfErrorRegion (CairoRegionT fr) = withForeignPtr fr \r -> cairoStatusToThrowError =<< c_cairo_region_status r
 
 foreign import ccall "cairo_region_status" c_cairo_region_status ::
 	Ptr (CairoRegionT s) -> IO #type cairo_status_t

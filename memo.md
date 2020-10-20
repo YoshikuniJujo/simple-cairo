@@ -47,7 +47,7 @@ memo
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
 * [x] use MonadPrim instead of CairoMonad
-* [ ] repair throwIfError
+* [x] repair throwIfError and throwIfErrorRegion
 	+ use IO instead of PrimMonad
 * [ ] repair cairoCreate
 	+ use bracketOnError

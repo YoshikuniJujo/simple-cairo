@@ -9,6 +9,7 @@ module Graphics.Cairo.Paths (
 	) where
 
 import Foreign.Ptr
+import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Exception
@@ -19,7 +20,7 @@ import Graphics.Cairo.Types
 
 cairoMoveTo, cairoLineTo, cairoRelLineTo :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
 cairoMoveTo cr x y = (`argCairoT` cr) \pcr -> c_cairo_move_to pcr x y
-cairoLineTo cr x y = argCairoT (\pcr -> c_cairo_line_to pcr x y) cr <* raiseIfError cr
+cairoLineTo cr@(CairoT fcr) x y = unPrimIo $ withForeignPtr fcr (\pcr -> c_cairo_line_to pcr x y) <* raiseIfError cr
 cairoRelLineTo cr x y = (`argCairoT` cr) \pcr -> c_cairo_rel_line_to pcr x y
 
 foreign import ccall "cairo_move_to" c_cairo_move_to ::
