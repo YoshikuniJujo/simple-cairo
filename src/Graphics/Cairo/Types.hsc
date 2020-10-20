@@ -61,3 +61,11 @@ instance Storable CairoTextExtentsT where
 		#{poke cairo_text_extents_t, height} p h
 		#{poke cairo_text_extents_t, x_advance} p xa
 		#{poke cairo_text_extents_t, y_advance} p ya
+
+newtype CairoRegionT s = CairoRegionT (ForeignPtr (CairoRegionT s)) deriving Show
+
+makeCairoRegionT :: Ptr (CairoRegionT s) -> IO (CairoRegionT s)
+makeCairoRegionT p = CairoRegionT <$> newForeignPtr p (c_cairo_region_destroy p)
+
+foreign import ccall "cairo_region_destroy" c_cairo_region_destroy ::
+	Ptr (CairoRegionT s) -> IO ()

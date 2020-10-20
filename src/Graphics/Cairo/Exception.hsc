@@ -1,11 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE ExistentialQuantification #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Exception where
 
 import Foreign.Ptr
+import Foreign.ForeignPtr
 import Control.Monad.Primitive
 import Control.Exception
 import Control.Exception.Hierarchy
@@ -48,22 +49,30 @@ newtype CairoStatusT = CairoStatusT #{type cairo_status_t} deriving (Show, Eq)
 foreign import ccall "cairo_status" c_cairo_status :: Ptr (CairoT s) -> IO #type cairo_status_t
 
 raiseIfError :: PrimMonad m => CairoT (PrimState m) -> m ()
-raiseIfError cr = (`argCairoT` cr) \pcr -> do
-	st <- c_cairo_status pcr
-	case st of
-		#{const CAIRO_STATUS_SUCCESS} -> pure ()
-		#{const CAIRO_STATUS_NO_MEMORY} -> throw CairoStatusNoMemory
-		#{const CAIRO_STATUS_INVALID_RESTORE} -> throw CairoStatusInvalidRestore
-		#{const CAIRO_STATUS_INVALID_POP_GROUP} -> throw CairoStatusInvalidPopGroup
-		#{const CAIRO_STATUS_NO_CURRENT_POINT} -> throw CairoStatusNoCurrentPoint
-		#{const CAIRO_STATUS_INVALID_MATRIX} -> throw CairoStatusInvalidMatrix
-		#{const CAIRO_STATUS_INVALID_STATUS} -> throw CairoStatusInvalidStatus
-		#{const CAIRO_STATUS_NULL_POINTER} -> throw CairoStatusNullPointer
-		#{const CAIRO_STATUS_INVALID_STRING} -> throw CairoStatusInvalidString
-		#{const CAIRO_STATUS_INVALID_PATH_DATA} -> throw CairoStatusInvalidPathData
-		#{const CAIRO_STATUS_READ_ERROR} -> throw CairoStatusReadError
-		#{const CAIRO_STATUS_WRITE_ERROR} -> throw CairoStatusWriteError
-		_ -> throw $ CairoStatusOthers st
+raiseIfError cr = (`argCairoT` cr) \pcr -> cairoStatusToThrowError =<< c_cairo_status pcr
+
+raiseIfErrorRegion :: PrimMonad m => CairoRegionT (PrimState m) -> m ()
+raiseIfErrorRegion (CairoRegionT fr) = unPrimIo
+	$ withForeignPtr fr \r -> cairoStatusToThrowError =<< c_cairo_region_status r
+
+foreign import ccall "cairo_region_status" c_cairo_region_status ::
+	Ptr (CairoRegionT s) -> IO #type cairo_status_t
+
+cairoStatusToThrowError :: #{type cairo_status_t} -> IO ()
+cairoStatusToThrowError = \case
+	#{const CAIRO_STATUS_SUCCESS} -> pure ()
+	#{const CAIRO_STATUS_NO_MEMORY} -> throw CairoStatusNoMemory
+	#{const CAIRO_STATUS_INVALID_RESTORE} -> throw CairoStatusInvalidRestore
+	#{const CAIRO_STATUS_INVALID_POP_GROUP} -> throw CairoStatusInvalidPopGroup
+	#{const CAIRO_STATUS_NO_CURRENT_POINT} -> throw CairoStatusNoCurrentPoint
+	#{const CAIRO_STATUS_INVALID_MATRIX} -> throw CairoStatusInvalidMatrix
+	#{const CAIRO_STATUS_INVALID_STATUS} -> throw CairoStatusInvalidStatus
+	#{const CAIRO_STATUS_NULL_POINTER} -> throw CairoStatusNullPointer
+	#{const CAIRO_STATUS_INVALID_STRING} -> throw CairoStatusInvalidString
+	#{const CAIRO_STATUS_INVALID_PATH_DATA} -> throw CairoStatusInvalidPathData
+	#{const CAIRO_STATUS_READ_ERROR} -> throw CairoStatusReadError
+	#{const CAIRO_STATUS_WRITE_ERROR} -> throw CairoStatusWriteError
+	st -> throw $ CairoStatusOthers st
 
 #enum CairoStatusT, CairoStatusT, CAIRO_STATUS_SUCCESS, \
 	CAIRO_STATUS_NO_MEMORY, CAIRO_STATUS_INVALID_RESTORE, \

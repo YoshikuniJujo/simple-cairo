@@ -47,13 +47,20 @@ memo
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
 * [x] use MonadPrim instead of CairoMonad
+* [ ] repair throwIfError
+	+ use IO instead of PrimMonad
+* [ ] repair cairoCreate
+	+ use bracketOnError
 * [ ] define functions of Regions
 	+ [x] make module Graphics.Cairo.Drawing.Regions
-	+ [ ] define function throwIfErrorRegion
+	+ [x] define function throwIfErrorRegion
+	+ [x] define cairoRegionCreate
+		- use cairo\_region\_create\_rectangle
+		- use cairo\_region\_destory
+		- use throwIfErrorRegion
+	+ [ ] repair cairoRegionCreate
+		- destroy region if error
 	+ [ ] define cairoRegionCreateRectangle
-		- [ ] use cairo\_region\_create\_rectangle
-		- [ ] use cairo\_region\_destory
-		- [ ] use cairo\_region\_status
 * [ ] move modules to Graphics.Cairo.Drawing
 	+ [x] move Graphics.Cairo.CairoT to it
 	+ [ ] move Graphics.Cairo.Paths to it
