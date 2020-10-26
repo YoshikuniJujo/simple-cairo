@@ -11,7 +11,7 @@ module Graphics.Cairo (
 
 #include <cairo.h>
 
-import Graphics.Cairo.CairoT
+import Graphics.Cairo.Drawing.CairoT
 import Graphics.Cairo.Paths
 import Graphics.Cairo.ImageSurfaces
 import Graphics.Cairo.Exception
