@@ -95,6 +95,7 @@ memo
 	+ [ ] Types
 * [ ] move converter for JuicyPixels to Graphics.Cairo.JuicyPixels
 * [ ] clean 'stack test'
+* [ ] change CairoRegionT to Storable instance
 
 cairo\_format\_t
 ----------------
