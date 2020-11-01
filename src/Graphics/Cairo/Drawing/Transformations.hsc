@@ -10,6 +10,11 @@ import Control.Monad.Primitive
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 
+foreign import ccall "cairo_translate" c_cairo_translate :: Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
+
+cairoTranslate :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
+cairoTranslate (CairoT fcr) tx ty = unPrimIo $ withForeignPtr fcr \cr -> c_cairo_translate cr tx ty
+
 foreign import ccall "cairo_scale" c_cairo_scale :: Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
 
 cairoScale :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
