@@ -9,7 +9,7 @@ memo
 		- [x] CairoPatternT
 		- [x] Transformations
 		- [x] Text
-	+ [ ] remove Tips
+	+ [x] remove Tips
 	+ [ ] move some modules under Surfaces
 		- [ ] ImageSurfaces
 		- [ ] PngSupport
