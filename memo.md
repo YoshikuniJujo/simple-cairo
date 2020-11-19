@@ -2,6 +2,8 @@ memo
 ====
 
 * [ ] clean module hierarchy
+	+ [ ] remove Graphics.Cairo
+	+ [ ] others
 * [ ] output image data
 	+ [ ] CAIRO\_FORMAT\_INVALID
 	+ [x] CAIRO\_FORMAT\_ARGB32 -> ImageRGBA8

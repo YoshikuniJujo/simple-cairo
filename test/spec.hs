@@ -3,6 +3,7 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 import Control.Monad
+import Control.Monad.Primitive
 import Control.Monad.ST
 import Data.Foldable
 import Data.Int
@@ -26,7 +27,7 @@ main = do
 	drawBlue
 	drawYellow
 
-makeRed :: forall s . ST s (CairoSurfaceT s, CairoT s)
+makeRed :: PrimMonad m => m (CairoSurfaceT (PrimState m), CairoT (PrimState m))
 makeRed = do
 	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
 	cr <- cairoCreate s
