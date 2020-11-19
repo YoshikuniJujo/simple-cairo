@@ -1,6 +1,7 @@
 memo
 ====
 
+* [ ] separate JuicyPixels
 * [ ] clean module hierarchy
 	+ [x] remove Graphics.Cairo
 	+ [x] move some modules under Drawing
@@ -10,9 +11,10 @@ memo
 		- [x] Transformations
 		- [x] Text
 	+ [x] remove Tips
-	+ [ ] move some modules under Surfaces
-		- [ ] ImageSurfaces
-		- [ ] PngSupport
+	+ [x] move some modules under Surfaces
+		- [x] ImageSurfaces
+		- [x] PngSupport
+	+ [ ] consider to remove Graphics.Cairo.Surfaces.PngSupport
 	+ [ ] others
 * [ ] output image data
 	+ [ ] CAIRO\_FORMAT\_INVALID
@@ -110,6 +112,7 @@ memo
 * [ ] clean 'stack test'
 * [ ] change CairoRegionT to Storable instance
 * [x] cairo\_identity\_matrix
+* [ ] select public and private modules
 
 cairo\_format\_t
 ----------------

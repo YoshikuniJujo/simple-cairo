@@ -3,7 +3,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.ImageSurfaces (
+module Graphics.Cairo.Surfaces.ImageSurfaces (
 	cairoImageSurfaceCreate,
 	cairoImageSurfaceCreateForImageRgba8,
 	cairoImageSurfaceGetImage,

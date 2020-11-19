@@ -9,7 +9,7 @@ import Data.Foldable
 import Data.Int
 import Graphics.Cairo.Drawing.CairoT
 import Graphics.Cairo.Drawing.Paths
-import Graphics.Cairo.ImageSurfaces
+import Graphics.Cairo.Surfaces.ImageSurfaces
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 

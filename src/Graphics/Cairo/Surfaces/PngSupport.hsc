@@ -1,7 +1,7 @@
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.PngSupport (
+module Graphics.Cairo.Surfaces.PngSupport (
 	cairoSurfaceCreateFromPng, cairoSurfaceWriteToPng
 	) where
 

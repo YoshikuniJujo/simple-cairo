@@ -3,7 +3,7 @@
 import Graphics.Cairo.Values
 import Graphics.Cairo.Drawing.CairoT
 import Graphics.Cairo.Drawing.Paths
-import Graphics.Cairo.ImageSurfaces
+import Graphics.Cairo.Surfaces.ImageSurfaces
 import Graphics.Cairo.Monad
 
 main :: IO ()
