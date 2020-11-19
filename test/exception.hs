@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-import Graphics.Cairo
+import Graphics.Cairo.Values
 import Graphics.Cairo.Drawing.CairoT
 import Graphics.Cairo.Paths
 import Graphics.Cairo.ImageSurfaces

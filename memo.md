@@ -2,7 +2,13 @@ memo
 ====
 
 * [ ] clean module hierarchy
-	+ [ ] remove Graphics.Cairo
+	+ [x] remove Graphics.Cairo
+	+ [ ] move some modules under Drawing
+		- [x] CairoT
+		- [ ] Paths
+		- [x] cairoPatternT
+		- [x] Transformations
+		- [ ] Text
 	+ [ ] others
 * [ ] output image data
 	+ [ ] CAIRO\_FORMAT\_INVALID
