@@ -1,7 +1,7 @@
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.CairoPatternT (
+module Graphics.Cairo.Drawing.CairoPatternT (
 	cairoPatternAddColorStopRgb, cairoPatternAddColorStopRgba,
 	cairoPatternCreateLinear, cairoPatternCreateRadial,
 	cairoPatternCreateForSurface

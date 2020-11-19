@@ -3,12 +3,16 @@ memo
 
 * [ ] clean module hierarchy
 	+ [x] remove Graphics.Cairo
-	+ [ ] move some modules under Drawing
+	+ [x] move some modules under Drawing
 		- [x] CairoT
-		- [ ] Paths
-		- [x] cairoPatternT
+		- [x] Paths
+		- [x] CairoPatternT
 		- [x] Transformations
-		- [ ] Text
+		- [x] Text
+	+ [ ] remove Tips
+	+ [ ] move some modules under Surfaces
+		- [ ] ImageSurfaces
+		- [ ] PngSupport
 	+ [ ] others
 * [ ] output image data
 	+ [ ] CAIRO\_FORMAT\_INVALID

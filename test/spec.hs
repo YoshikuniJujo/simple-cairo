@@ -8,7 +8,7 @@ import Control.Monad.ST
 import Data.Foldable
 import Data.Int
 import Graphics.Cairo.Drawing.CairoT
-import Graphics.Cairo.Paths
+import Graphics.Cairo.Drawing.Paths
 import Graphics.Cairo.ImageSurfaces
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values

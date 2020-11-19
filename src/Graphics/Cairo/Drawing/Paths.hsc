@@ -1,7 +1,7 @@
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.Paths (
+module Graphics.Cairo.Drawing.Paths (
 	cairoClosePath, cairoArc, cairoLineTo, cairoMoveTo, cairoRectangle,
 	cairoRelCurveTo, cairoRelLineTo,
 

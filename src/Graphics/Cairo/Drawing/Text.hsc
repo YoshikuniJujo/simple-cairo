@@ -1,7 +1,7 @@
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.Text (
+module Graphics.Cairo.Drawing.Text (
 	cairoSelectFontFace, cairoSetFontSize, cairoShowText, cairoTextExtents
 	) where
 
