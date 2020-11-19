@@ -1,16 +1,14 @@
 {-# LANGUAGE BlockArguments, LambdaCase #-}
-{-# LANGUAGE ScopedTypeVariables, TypeApplications #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
+import Control.Monad
 import Control.Monad.ST
 import Data.Foldable
-import Data.Vector.Storable
-import Data.Word
 import Data.Int
-import Graphics.Cairo.CairoT
+import Graphics.Cairo.Drawing.CairoT
 import Graphics.Cairo.Paths
 import Graphics.Cairo.ImageSurfaces
-import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
@@ -20,7 +18,7 @@ import Graphics.Cairo.CairoImage
 
 main :: IO ()
 main = do
-	let	(i, f, s) = runST red
+	let	(_i, f, s) = runST red
 	print (f, s)
 	putStrLn ""
 	print =<< redIo
@@ -28,19 +26,22 @@ main = do
 	drawBlue
 	drawYellow
 
-red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, CairoFormatT, Int32)
-red = do
+makeRed :: forall s . ST s (CairoSurfaceT s, CairoT s)
+makeRed = do
 	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
 	cr <- cairoCreate s
 	cairoSetSourceRgb cr 1 0 0
+	pure (s, cr)
+
+red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, CairoFormatT, Int32)
+red = do
+	(s, cr) <- makeRed
 	cairoPaint cr
 	(,,) <$> cairoImageSurfaceGetImage s <*> cairoImageSurfaceGetFormat s <*> cairoImageSurfaceGetStride s
 
 redIo :: IO (Either String Bool) -- DynamicImage -- (Vector Word8)
 redIo = do
-	s <- cairoImageSurfaceCreate cairoFormatArgb32 50 50
-	cr <- cairoCreate s
-	cairoSetSourceRgb cr 1 0 0
+	(s, cr) <- makeRed
 	cairoRectangle cr 0 0 25 25
 	cairoFill cr
 	cairoSetSourceRgb cr 0 1 0
@@ -81,7 +82,7 @@ blueSurface = cairoImageSurfaceCreateForCairoImage $ CairoImageArgb32 blue
 
 drawBlue :: IO ()
 drawBlue = do
-	writeDynamicPng "tmp2.png" $ runST (cairoImageSurfaceGetImage =<< blueSurface)
+	void . writeDynamicPng "tmp2.png" $ runST (cairoImageSurfaceGetImage =<< blueSurface)
 	pure ()
 
 yellow :: ST s (Argb32Mut s)
@@ -95,5 +96,5 @@ yellowSurface = cairoImageSurfaceCreateForCairoImageMut . CairoImageMutArgb32 =<
 
 drawYellow :: IO ()
 drawYellow = do
-	writeDynamicPng "tmp3.png" $ runST (cairoImageSurfaceGetImage =<< yellowSurface)
+	void . writeDynamicPng "tmp3.png" $ runST (cairoImageSurfaceGetImage =<< yellowSurface)
 	pure ()
