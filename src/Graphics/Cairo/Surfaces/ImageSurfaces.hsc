@@ -10,10 +10,14 @@ module Graphics.Cairo.Surfaces.ImageSurfaces (
 	cairoImageSurfaceGetFormat,
 	cairoImageSurfaceGetStride,
 	cairoImageSurfaceGetCairoImage,
-	cairoImageSurfaceGetCairoImageMut
+	cairoImageSurfaceGetCairoImageMut,
+
+	cairoImageSurfaceCreateForCairoImage,
+	cairoImageSurfaceCreateForCairoImageMut
 	) where
 
 import Foreign.Ptr
+import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
@@ -29,7 +33,7 @@ import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
-import Graphics.Cairo.CairoImage hiding (Argb32, pixelAt, Image, Pixel)
+import Graphics.Cairo.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
 
 #include <cairo.h>
 
@@ -131,6 +135,12 @@ generateImageIo f w h = do
 	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> writePixel mi x y =<< f x y
 	freezeImage mi
 
+foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
+	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
+
+foreign import ccall "cairo_format_stride_for_width" c_cairo_format_stride_for_width ::
+	#{type cairo_format_t} -> #{type int} -> IO #{type int}
+
 cairoImageSurfaceCreateForImageRgba8 :: PrimMonad m =>
 	Image PixelRGBA8 -> m (CairoSurfaceT (PrimState m))
 cairoImageSurfaceCreateForImageRgba8 img = returnCairoSurfaceT' do
@@ -159,3 +169,21 @@ rgba8ToArgb32 (PixelRGBA8 (fromIntegral -> r_) (fromIntegral -> g_) (fromIntegra
 	r = r_ * a `div` 0xff
 	g = g_ * a `div` 0xff
 	b = b_ * a `div` 0xff
+
+cairoImageSurfaceCreateForCairoImage ::
+	PrimMonad m => CairoImage -> m (CairoSurfaceT (PrimState m))
+cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unPrimIo do
+	p <- mallocBytes n
+	withForeignPtr d \pd -> copyBytes p pd n
+	sp <- c_cairo_image_surface_create_for_data p f w h s
+	makeCairoSurfaceT' sp p
+	where n = fromIntegral $ s * h
+
+cairoImageSurfaceCreateForCairoImageMut ::
+	PrimMonad m => CairoImageMut (PrimState m) -> m (CairoSurfaceT (PrimState m))
+cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unPrimIo do
+	p <- mallocBytes n
+	withForeignPtr d \pd -> copyBytes p pd n
+	sp <- c_cairo_image_surface_create_for_data p f w h s
+	makeCairoSurfaceT' sp p
+	where n = fromIntegral $ s * h

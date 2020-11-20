@@ -1,6 +1,21 @@
 memo
 ====
 
+* [ ] separate cairo-image
+	+ [ ] separate Graphics.Cairo.CairoImage to itself and Graphics.Cairo.CairoImage.Internal
+		- [x] move to ....Internal
+		- [x] make Graphics.Cairo.CairoImage
+		- [ ] make export list of Graphics.Cairo.CairoImage
+	+ [ ] refactor Graphics.Cairo.CairoImage
+		- [x] others 1
+		- [ ] others 2
+		- [ ] export list
+		- [ ] import list
+		- [ ] structure
+		- [ ] body
+	+ [ ] make CairoImage instance of Eq
+	+ [ ] extend Graphics.Cairo.CairoImage
+	+ [ ] separate cairo-image package
 * [ ] separate JuicyPixels
 * [ ] clean module hierarchy
 	+ [x] remove Graphics.Cairo

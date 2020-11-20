@@ -2,10 +2,14 @@
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE TypeFamilies #-}
--- {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.CairoImage where
+module Graphics.Cairo.CairoImage.Internal (
+	CairoImage(..), Argb32, pattern CairoImageArgb32, Image(..),
+
+	CairoImageMut(..), Argb32Mut, pattern CairoImageMutArgb32, ImageMut(..),
+	PixelArgb32(..),
+	) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
@@ -15,14 +19,11 @@ import Foreign.Storable
 import Control.Monad.Primitive
 import Control.Monad.ST
 import Data.Foldable
--- import Data.Vector
 import Data.Word
 import Data.Int
 import System.IO.Unsafe
 
-import Graphics.Cairo.Types
--- import Graphics.Cairo.Values
-import Graphics.Cairo.Monad
+import Graphics.Cairo.CairoImage.Private
 
 #include <cairo.h>
 
@@ -41,11 +42,6 @@ data CairoImageMut s = CairoImageMut {
 	cairoImageMutStride :: #{type int},
 	cairoImageMutData :: ForeignPtr #{type unsigned char} }
 	deriving Show
-
-{-
-class Storable p => CairoPixel p where
-	posToPtr :: #{type int} -> #{type int} -> Ptr p -> Ptr p
-	-}
 
 pattern CairoImageArgb32 :: Argb32 -> CairoImage
 pattern CairoImageArgb32 a <- (cairoImageToArgb32 -> Just a)
@@ -124,9 +120,6 @@ generateArgb32PrimM w h f = unPrimIo do
 	fd <- newForeignPtr d $ free d
 	pure $ Argb32 w h s fd
 
-withForeignPtr' :: PrimBase m => ForeignPtr a -> (Ptr a -> m a) -> m a
-withForeignPtr' fp f = unPrimIo . withForeignPtr fp $ primIo . f
-
 instance ImageMut Argb32Mut where
 	type PixelMut Argb32Mut = PixelArgb32
 	imageMutSize (Argb32Mut w h _ _) = (w, h)
@@ -148,29 +141,3 @@ ptrArgb32 :: #{type int} -> #{type int} -> #{type int} ->
 ptrArgb32 w h s p x y
 	| 0 <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x * 4)
 	| otherwise = Nothing
-
--- newtype ImageArgb32 = ImageArgb32 (ForeignPtr Word32) deriving Show
-
--- loadImageArgb32 :: Ptr #{type unsigned char} -> IO ImageArgb32
--- loadImageArgb32 p = 
-
-foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
-	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
-
-cairoImageSurfaceCreateForCairoImage ::
-	PrimMonad m => CairoImage -> m (CairoSurfaceT (PrimState m))
-cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unPrimIo do
-	p <- mallocBytes n
-	withForeignPtr d \pd -> copyBytes p pd n
-	sp <- c_cairo_image_surface_create_for_data p f w h s
-	makeCairoSurfaceT' sp p
-	where n = fromIntegral $ s * h
-
-cairoImageSurfaceCreateForCairoImageMut ::
-	PrimMonad m => CairoImageMut (PrimState m) -> m (CairoSurfaceT (PrimState m))
-cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unPrimIo do
-	p <- mallocBytes n
-	withForeignPtr d \pd -> copyBytes p pd n
-	sp <- c_cairo_image_surface_create_for_data p f w h s
-	makeCairoSurfaceT' sp p
-	where n = fromIntegral $ s * h
