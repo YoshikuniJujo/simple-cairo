@@ -14,7 +14,7 @@ memo
 	+ [ ] extend Graphics.Cairo.CairoImage
 		- [ ] define Rgb24
 			* [x] type PixelRgb24
-			* [ ] pattern PixelRgb24
+			* [x] pattern PixelRgb24
 			* [ ] pattern CairoImagRgb24
 			* [x] type Rgb24
 			* [ ] make Rgb24 instance of Image

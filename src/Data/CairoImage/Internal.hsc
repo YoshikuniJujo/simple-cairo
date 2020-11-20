@@ -13,7 +13,12 @@ module Data.CairoImage.Internal (
 	-- ** ARGB32
 	PixelArgb32(..), pattern PixelArgb32,
 	pattern CairoImageArgb32, Argb32,
-	pattern CairoImageMutArgb32, Argb32Mut ) where
+	pattern CairoImageMutArgb32, Argb32Mut,
+	-- ** RGB24
+	PixelRgb24(..), pattern PixelRgb24,
+	Rgb24,
+	Rgb24Mut
+	) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
@@ -215,12 +220,26 @@ ptrArgb32 w h s p x y
 
 newtype PixelRgb24 = PixelRgb24Word32 Word32 deriving (Show, Storable)
 
+pattern PixelRgb24 :: Word8 -> Word8 -> Word8 -> PixelRgb24
+pattern PixelRgb24 r g b <- (pixelRgb24ToRgb -> (r, g, b))
+	where PixelRgb24 = pixelRgb24FromRgb
+
+pixelRgb24FromRgb :: Word8 -> Word8 -> Word8 -> PixelRgb24
+pixelRgb24FromRgb (fromIntegral -> r)
+	(fromIntegral -> g) (fromIntegral -> b) =
+	PixelRgb24Word32 $ r `shiftL` 16 .|. g `shift` 8 .|. b
+
+pixelRgb24ToRgb :: PixelRgb24 -> (Word8, Word8, Word8)
+pixelRgb24ToRgb (PixelRgb24Word32 w) = (
+	fromIntegral $ w `shiftR` 16,
+	fromIntegral $ w `shiftR` 8, fromIntegral w )
+
 data Rgb24 = Rgb24 {
 	rgb24Width :: #{type int}, rgb24Height :: #{type int},
 	rgb24Stride :: #{type int}, rgb24Data :: ForeignPtr PixelRgb24 }
 	deriving Show
 
-data Rgb24Mutt = Rgb24Mutt {
+data Rgb24Mut = Rgb24Mut {
 	rgb24MutWidth :: #{type int}, rgb24MutHeight :: #{type int},
 	rgb24MutStride :: #{type int}, rgb24MutData :: ForeignPtr PixelRgb24 }
 	deriving Show
