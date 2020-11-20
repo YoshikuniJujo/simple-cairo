@@ -8,7 +8,7 @@ module Data.CairoImage.Internal (
 	-- * Class Image and ImageMut
 	Image(..), ImageMut(..),
 	-- * Type CairoImage and CairoImageMut
-	CairoImage(..), CairoImageMut(..),
+	CairoImage(..), CairoImageMut(..), cairoImageFreeze, cairoImageThaw,
 	-- * Image Format
 	-- ** ARGB32
 	PixelArgb32(..), pattern PixelArgb32,
@@ -32,6 +32,10 @@ import Data.CairoImage.Private
 
 #include <cairo.h>
 
+foreign import ccall "cairo_format_stride_for_width"
+	c_cairo_format_stride_for_width ::
+	#{type cairo_format_t} -> #{type int} -> IO #{type int}
+
 data CairoImage = CairoImage {
 	cairoImageFormat :: #{type cairo_format_t},
 	cairoImageWidth :: #{type int},
@@ -47,6 +51,35 @@ data CairoImageMut s = CairoImageMut {
 	cairoImageMutStride :: #{type int},
 	cairoImageMutData :: ForeignPtr #{type unsigned char} }
 	deriving Show
+
+cairoImageDataCopy :: #{type int} -> #{type int} ->
+	ForeignPtr #{type unsigned char} -> IO (ForeignPtr #{type unsigned char})
+cairoImageDataCopy str h fdt = withForeignPtr fdt \dt -> do
+	dt' <- mallocBytes . fromIntegral $ str * h
+	copyBytes dt' dt . fromIntegral $ str * h
+	newForeignPtr dt' (free dt')
+
+cairoImageFreeze :: PrimMonad m =>
+	CairoImageMut (PrimState m) -> m CairoImage
+cairoImageFreeze cim = unPrimIo
+	$ CairoImage fmt w h str <$> cairoImageDataCopy str h dt
+	where
+	fmt = cairoImageMutFormat cim
+	w = cairoImageMutWidth cim
+	h = cairoImageMutHeight cim
+	str = cairoImageMutStride cim
+	dt = cairoImageMutData cim
+
+cairoImageThaw :: PrimMonad m =>
+	CairoImage -> m (CairoImageMut (PrimState m))
+cairoImageThaw ci = unPrimIo
+	$ CairoImageMut fmt w h str <$> cairoImageDataCopy str h dt
+	where
+	fmt = cairoImageFormat ci
+	w = cairoImageWidth ci
+	h = cairoImageHeight ci
+	str = cairoImageStride ci
+	dt = cairoImageData ci
 
 pattern CairoImageArgb32 :: Argb32 -> CairoImage
 pattern CairoImageArgb32 a <- (cairoImageToArgb32 -> Just a)
@@ -128,9 +161,6 @@ instance Image Argb32 where
 	generateImagePrimM = generateArgb32PrimM
 	pixelAt (Argb32 w h s d) x y = unsafePerformIO do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
-
-foreign import ccall "cairo_format_stride_for_width" c_cairo_format_stride_for_width ::
-	#{type cairo_format_t} -> #{type int} -> IO #{type int}
 
 generateArgb32PrimM :: PrimBase	m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelArgb32) -> m Argb32
 generateArgb32PrimM w h f = unPrimIo do

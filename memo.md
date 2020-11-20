@@ -13,20 +13,23 @@ memo
 		- [x] others 2
 		- [x] structure of export list
 		- [ ] with haddock
-			* [ ] Data.CairoImage
+			* [x] Data.CairoImage
 				+ [x] class Image
 				+ [x] class ImageMut
 				+ [x] type CairoImage
 				+ [x] type CairoImageMut
 				+ [x] type PixelArgb32
-				+ [ ] pattern CairoImageArgb32
-				+ [ ] type Argb32
-				+ [ ] pattern CairoImageMutArgb32
-				+ [ ] type Argb32Mut
-			* [ ] Data.CairoImage.Internal
-				+ [ ] type CairoImage
-				+ [ ] type CairoImageMut
+				+ [x] pattern CairoImageArgb32
+				+ [x] type Argb32
+				+ [x] pattern CairoImageMutArgb32
+				+ [x] type Argb32Mut
+			* [x] Data.CairoImage.Internal
+				+ [x] type CairoImage
+				+ [x] type CairoImageMut
 			* [ ] Data.CairoImage.Private
+		- [x] define cairoImageDataCopy
+		- [x] define cairoImageFreeze
+		- [x] define cairoImageThaw
 		- [ ] export list
 		- [ ] import list
 		- [ ] structure

@@ -5,7 +5,7 @@ module Data.CairoImage (
 	-- * Class Image and ImageMut
 	Image(..), ImageMut(..),
 	-- * Type CairoImage and CairoImageMut
-	CairoImage, CairoImageMut,
+	CairoImage, CairoImageMut, cairoImageFreeze, cairoImageThaw,
 	-- * Image Format
 	-- ** ARGB32
 	PixelArgb32(..), pattern PixelArgb32,
