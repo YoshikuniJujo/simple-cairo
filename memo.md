@@ -26,7 +26,7 @@ memo
 			* [x] Data.CairoImage.Internal
 				+ [x] type CairoImage
 				+ [x] type CairoImageMut
-			* [ ] Data.CairoImage.Private
+		- [x] remove Data.CairoImage.Private
 		- [x] define cairoImageDataCopy
 		- [x] define cairoImageFreeze
 		- [x] define cairoImageThaw

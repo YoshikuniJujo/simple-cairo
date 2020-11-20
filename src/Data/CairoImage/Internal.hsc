@@ -28,8 +28,6 @@ import Data.Word
 import Data.Int
 import System.IO.Unsafe
 
-import Data.CairoImage.Private
-
 #include <cairo.h>
 
 foreign import ccall "cairo_format_stride_for_width"
@@ -61,7 +59,7 @@ cairoImageDataCopy str h fdt = withForeignPtr fdt \dt -> do
 
 cairoImageFreeze :: PrimMonad m =>
 	CairoImageMut (PrimState m) -> m CairoImage
-cairoImageFreeze cim = unPrimIo
+cairoImageFreeze cim = unsafeIOToPrim
 	$ CairoImage fmt w h str <$> cairoImageDataCopy str h dt
 	where
 	fmt = cairoImageMutFormat cim
@@ -72,7 +70,7 @@ cairoImageFreeze cim = unPrimIo
 
 cairoImageThaw :: PrimMonad m =>
 	CairoImage -> m (CairoImageMut (PrimState m))
-cairoImageThaw ci = unPrimIo
+cairoImageThaw ci = unsafeIOToPrim
 	$ CairoImageMut fmt w h str <$> cairoImageDataCopy str h dt
 	where
 	fmt = cairoImageFormat ci
@@ -163,11 +161,11 @@ instance Image Argb32 where
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
 
 generateArgb32PrimM :: PrimBase	m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelArgb32) -> m Argb32
-generateArgb32PrimM w h f = unPrimIo do
+generateArgb32PrimM w h f = unsafeIOToPrim do
 	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
 	d <- mallocBytes . fromIntegral $ s * h
 	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> do
-		p <- primIo $ f x y
+		p <- unsafePrimToIO $ f x y
 		maybe (pure ()) (`poke` p) $ ptrArgb32 w h s d x y
 	fd <- newForeignPtr d $ free d
 	pure $ Argb32 w h s fd
@@ -176,13 +174,13 @@ instance ImageMut Argb32Mut where
 	type PixelMut Argb32Mut = PixelArgb32
 	imageMutSize (Argb32Mut w h _ _) = (w, h)
 	newImageMut = newArgb32Mut
-	getPixel (Argb32Mut w h s d) x y = unPrimIo do
+	getPixel (Argb32Mut w h s d) x y = unsafeIOToPrim do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
-	putPixel (Argb32Mut w h s d) x y px = unPrimIo do
+	putPixel (Argb32Mut w h s d) x y px = unsafeIOToPrim do
 		withForeignPtr d \p -> maybe (pure ()) (`poke` px) $ ptrArgb32 w h s p x y
 
 newArgb32Mut :: PrimMonad m => #{type int} -> #{type int} -> m (Argb32Mut (PrimState m))
-newArgb32Mut w h = unPrimIo do
+newArgb32Mut w h = unsafeIOToPrim do
 	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
 	d <- mallocBytes . fromIntegral $ s * h
 	fd <- newForeignPtr d $ free d
