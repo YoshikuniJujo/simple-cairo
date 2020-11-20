@@ -8,7 +8,7 @@ module Data.CairoImage (
 	CairoImage, CairoImageMut,
 	-- * Image Format
 	-- ** ARGB32
-	PixelArgb32(..),
+	PixelArgb32(..), pattern PixelArgb32,
 	pattern CairoImageArgb32, Argb32,
 	pattern CairoImageMutArgb32, Argb32Mut ) where
 

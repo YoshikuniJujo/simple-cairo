@@ -11,7 +11,7 @@ module Data.CairoImage.Internal (
 	CairoImage(..), CairoImageMut(..),
 	-- * Image Format
 	-- ** ARGB32
-	PixelArgb32(..),
+	PixelArgb32(..), pattern PixelArgb32,
 	pattern CairoImageArgb32, Argb32,
 	pattern CairoImageMutArgb32, Argb32Mut ) where
 
@@ -23,6 +23,7 @@ import Foreign.Storable
 import Control.Monad.Primitive
 import Control.Monad.ST
 import Data.Foldable
+import Data.Bits
 import Data.Word
 import Data.Int
 import System.IO.Unsafe
@@ -83,24 +84,41 @@ data Argb32Mut s = Argb32Mut {
 	argb32MutData :: ForeignPtr PixelArgb32 }
 	deriving Show
 
-newtype PixelArgb32 = PixelArgb32 Word32 deriving (Show, Storable)
+newtype PixelArgb32 = PixelArgb32Word32 Word32 deriving (Show, Storable)
+
+{-# COMPLETE PixelArgb32 #-}
+
+pattern PixelArgb32 :: Word8 -> Word8 -> Word8 -> Word8 -> PixelArgb32
+pattern PixelArgb32 a r g b <- (pixelArgb32ToArgb -> (a, r, g, b))
+	where PixelArgb32 = pixelArgb32FromArgb
+
+pixelArgb32FromArgb :: Word8 -> Word8 -> Word8 -> Word8 -> PixelArgb32
+pixelArgb32FromArgb
+	(fromIntegral -> a) (fromIntegral -> r)
+	(fromIntegral -> g) (fromIntegral -> b) = PixelArgb32Word32
+	$ a `shiftL` 24 .|. r `shiftL` 16 .|. g `shift` 8 .|. b
+
+pixelArgb32ToArgb :: PixelArgb32 -> (Word8, Word8, Word8, Word8)
+pixelArgb32ToArgb (PixelArgb32Word32 w) = (
+	fromIntegral $ w `shiftR` 24, fromIntegral $ w `shiftR` 16,
+	fromIntegral $ w `shiftR` 8, fromIntegral w )
 
 class Image i where
 	type Pixel i
 	imageSize :: i -> (#{type int}, #{type int})
-	generateImagePrimM :: PrimBase m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m (Pixel i)) -> m i
 	pixelAt :: i -> #{type int} -> #{type int} -> Maybe (Pixel i)
-
 	generateImage :: #{type int} -> #{type int} -> (#{type int} -> #{type int} -> Pixel i) -> i
+	generateImagePrimM :: PrimBase m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m (Pixel i)) -> m i
+
 	generateImage w h f = runST $ generateImagePrimM w h (\x y -> pure $ f x y)
 
 class ImageMut im where
 	type PixelMut im
 	imageMutSize :: im s -> (#{type int}, #{type int})
-	newImageMut :: PrimMonad m =>
-		#{type int} -> #{type int} -> m (im (PrimState m))
 	getPixel :: PrimMonad m =>
 		im (PrimState m) -> #{type int} -> #{type int} -> m (Maybe (PixelMut im))
+	newImageMut :: PrimMonad m =>
+		#{type int} -> #{type int} -> m (im (PrimState m))
 	putPixel :: PrimMonad m =>
 		im (PrimState m) -> #{type int} -> #{type int} -> PixelMut im -> m ()
 

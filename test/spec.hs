@@ -76,7 +76,7 @@ green = do
 	pure (r1, p2020)
 
 blue :: Argb32
-blue = generateImage 200 200 \_ _ -> PixelArgb32 0xff0000ff
+blue = generateImage 200 200 \_ _ -> PixelArgb32Word32 0xff0000ff
 
 blueSurface :: ST s (CairoSurfaceT s)
 blueSurface = cairoImageSurfaceCreateForCairoImage $ CairoImageArgb32 blue
@@ -89,7 +89,7 @@ drawBlue = do
 yellow :: ST s (Argb32Mut s)
 yellow = do
 	i <- newImageMut 200 200
-	for_ [0 .. 199] \h -> for_ [0 .. 199] \w -> putPixel i w h $ PixelArgb32 0xffffff00
+	for_ [0 .. 199] \h -> for_ [0 .. 199] \w -> putPixel i w h $ PixelArgb32Word32 0xffffff00
 	pure i
 
 yellowSurface :: ST s (CairoSurfaceT s)

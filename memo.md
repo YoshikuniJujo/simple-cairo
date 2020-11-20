@@ -14,11 +14,11 @@ memo
 		- [x] structure of export list
 		- [ ] with haddock
 			* [ ] Data.CairoImage
-				+ [ ] class Image
-				+ [ ] class ImageMut
-				+ [ ] type CairoImage
-				+ [ ] type CairoImageMut
-				+ [ ] type PixelArgb32
+				+ [x] class Image
+				+ [x] class ImageMut
+				+ [x] type CairoImage
+				+ [x] type CairoImageMut
+				+ [x] type PixelArgb32
 				+ [ ] pattern CairoImageArgb32
 				+ [ ] type Argb32
 				+ [ ] pattern CairoImageMutArgb32
