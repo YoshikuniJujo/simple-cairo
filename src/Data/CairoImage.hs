@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.CairoImage (
+module Data.CairoImage (
 	CairoImage, CairoImageMut
 	) where
 
-import Graphics.Cairo.CairoImage.Internal
+import Data.CairoImage.Internal

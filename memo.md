@@ -2,6 +2,8 @@ memo
 ====
 
 * [ ] separate cairo-image
+	+ [x] consider to rename module
+		- Graphics.Cairo.CairoImage to Data.Cairo.Image or Data.CairoImage
 	+ [ ] separate Graphics.Cairo.CairoImage to itself and Graphics.Cairo.CairoImage.Internal
 		- [x] move to ....Internal
 		- [x] make Graphics.Cairo.CairoImage

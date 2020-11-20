@@ -33,7 +33,7 @@ import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
-import Graphics.Cairo.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
+import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
 
 #include <cairo.h>
 

@@ -4,7 +4,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.CairoImage.Internal (
+module Data.CairoImage.Internal (
 	CairoImage(..), Argb32, pattern CairoImageArgb32, Image(..),
 
 	CairoImageMut(..), Argb32Mut, pattern CairoImageMutArgb32, ImageMut(..),
@@ -23,7 +23,7 @@ import Data.Word
 import Data.Int
 import System.IO.Unsafe
 
-import Graphics.Cairo.CairoImage.Private
+import Data.CairoImage.Private
 
 #include <cairo.h>
 

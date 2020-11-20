@@ -1,7 +1,7 @@
 {-# LANGUAGE MagicHash #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.CairoImage.Private (primIo, unPrimIo) where
+module Data.CairoImage.Private (primIo, unPrimIo) where
 
 import GHC.Base
 import Control.Monad.Primitive

@@ -15,7 +15,7 @@ import Graphics.Cairo.Values
 
 import Codec.Picture hiding (pixelAt, generateImage)
 
-import Graphics.Cairo.CairoImage.Internal
+import Data.CairoImage.Internal
 
 main :: IO ()
 main = do
