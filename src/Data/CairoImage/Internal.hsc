@@ -79,6 +79,27 @@ cairoImageThaw ci = unsafeIOToPrim
 	str = cairoImageStride ci
 	dt = cairoImageData ci
 
+instance Eq CairoImage where
+	ci1 == ci2 = and [
+		fmt1 == fmt2, w1 == w2, h1 == h2, str1 == str2,
+		unsafePerformIO
+			$ withForeignPtr fd1 \d1 -> withForeignPtr fd2 \d2 ->
+				compareBytes d1 d2 (str1 * h1) >>=
+					\case EQ -> pure True; _ -> pure False ]
+		where
+		[fmt1, fmt2] = cairoImageFormat <$> [ci1, ci2]
+		[w1, w2] = cairoImageWidth <$> [ci1, ci2]
+		[h1, h2] = cairoImageHeight <$> [ci1, ci2]
+		[str1, str2] = cairoImageStride <$> [ci1, ci2]
+		[fd1, fd2] = cairoImageData <$> [ci1, ci2]
+
+compareBytes :: (Ord n, Num n) => Ptr a -> Ptr a -> n -> IO Ordering
+compareBytes _ _ n | n < 1 = pure EQ
+compareBytes p1 p2 _ | p1 == p2 = pure EQ
+compareBytes p1 p2 n = compare <$> peek p1b <*> peek p2b >>=
+	\case EQ -> compareBytes p1 p2 (n - 1); o -> pure o
+	where [p1b, p2b] = castPtr <$> [p1, p2] :: [Ptr Word8]
+
 pattern CairoImageArgb32 :: Argb32 -> CairoImage
 pattern CairoImageArgb32 a <- (cairoImageToArgb32 -> Just a)
 	where CairoImageArgb32 (Argb32 w h s d) =

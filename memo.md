@@ -4,15 +4,24 @@ memo
 * [ ] separate cairo-image
 	+ [x] consider to rename module
 		- Graphics.Cairo.CairoImage to Data.Cairo.Image or Data.CairoImage
-	+ [ ] separate Graphics.Cairo.CairoImage to itself and Graphics.Cairo.CairoImage.Internal
+	+ [x] separate Graphics.Cairo.CairoImage to itself and Graphics.Cairo.CairoImage.Internal
 		- [x] move to ....Internal
 		- [x] make Graphics.Cairo.CairoImage
-		- [ ] make export list of Graphics.Cairo.CairoImage
+		- [x] make export list of Graphics.Cairo.CairoImage
+	+ [x] make CairoImage instance of Eq
+		- [x] define compareBytes
+		- [x] make CairoImage instance of Eq
+	+ [ ] extend Graphics.Cairo.CairoImage
+		- [ ] define Rgb24
+		- [ ] define A8
+		- [ ] define A1
+		- [ ] define Rgb16565
+		- [ ] define Rgb30
 	+ [ ] refactor Data.CairoImage
 		- [x] others 1
 		- [x] others 2
 		- [x] structure of export list
-		- [ ] with haddock
+		- [x] with haddock
 			* [x] Data.CairoImage
 				+ [x] class Image
 				+ [x] class ImageMut
@@ -30,12 +39,16 @@ memo
 		- [x] define cairoImageDataCopy
 		- [x] define cairoImageFreeze
 		- [x] define cairoImageThaw
-		- [ ] export list
-		- [ ] import list
-		- [ ] structure
-		- [ ] body
-	+ [ ] make CairoImage instance of Eq
-	+ [ ] extend Graphics.Cairo.CairoImage
+		- [ ] refactor Data.CairoImage
+			* [ ] export list
+			* [ ] import list
+			* [ ] structure
+			* [ ] body
+		- [ ] refactor Data.CairoImage.Internal
+			* [ ] export list
+			* [ ] import list
+			* [ ] structure
+			* [ ] body
 	+ [ ] separate cairo-image package
 * [ ] separate JuicyPixels
 * [ ] clean module hierarchy
