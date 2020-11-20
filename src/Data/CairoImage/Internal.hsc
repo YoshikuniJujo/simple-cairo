@@ -212,3 +212,15 @@ ptrArgb32 :: #{type int} -> #{type int} -> #{type int} ->
 ptrArgb32 w h s p x y
 	| 0 <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x * 4)
 	| otherwise = Nothing
+
+newtype PixelRgb24 = PixelRgb24Word32 Word32 deriving (Show, Storable)
+
+data Rgb24 = Rgb24 {
+	rgb24Width :: #{type int}, rgb24Height :: #{type int},
+	rgb24Stride :: #{type int}, rgb24Data :: ForeignPtr PixelRgb24 }
+	deriving Show
+
+data Rgb24Mutt = Rgb24Mutt {
+	rgb24MutWidth :: #{type int}, rgb24MutHeight :: #{type int},
+	rgb24MutStride :: #{type int}, rgb24MutData :: ForeignPtr PixelRgb24 }
+	deriving Show

@@ -13,6 +13,14 @@ memo
 		- [x] make CairoImage instance of Eq
 	+ [ ] extend Graphics.Cairo.CairoImage
 		- [ ] define Rgb24
+			* [x] type PixelRgb24
+			* [ ] pattern PixelRgb24
+			* [ ] pattern CairoImagRgb24
+			* [x] type Rgb24
+			* [ ] make Rgb24 instance of Image
+			* [ ] pattern CairoImageMutRgb24
+			* [x] type Rgb24Mut
+			* [ ] make Rgb24Mut instance of ImageMut
 		- [ ] define A8
 		- [ ] define A1
 		- [ ] define Rgb16565
