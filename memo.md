@@ -8,9 +8,25 @@ memo
 		- [x] move to ....Internal
 		- [x] make Graphics.Cairo.CairoImage
 		- [ ] make export list of Graphics.Cairo.CairoImage
-	+ [ ] refactor Graphics.Cairo.CairoImage
+	+ [ ] refactor Data.CairoImage
 		- [x] others 1
-		- [ ] others 2
+		- [x] others 2
+		- [x] structure of export list
+		- [ ] with haddock
+			* [ ] Data.CairoImage
+				+ [ ] class Image
+				+ [ ] class ImageMut
+				+ [ ] type CairoImage
+				+ [ ] type CairoImageMut
+				+ [ ] type PixelArgb32
+				+ [ ] pattern CairoImageArgb32
+				+ [ ] type Argb32
+				+ [ ] pattern CairoImageMutArgb32
+				+ [ ] type Argb32Mut
+			* [ ] Data.CairoImage.Internal
+				+ [ ] type CairoImage
+				+ [ ] type CairoImageMut
+			* [ ] Data.CairoImage.Private
 		- [ ] export list
 		- [ ] import list
 		- [ ] structure

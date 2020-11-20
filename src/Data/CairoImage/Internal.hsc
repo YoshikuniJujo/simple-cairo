@@ -5,11 +5,15 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Data.CairoImage.Internal (
-	CairoImage(..), Argb32, pattern CairoImageArgb32, Image(..),
-
-	CairoImageMut(..), Argb32Mut, pattern CairoImageMutArgb32, ImageMut(..),
+	-- * Class Image and ImageMut
+	Image(..), ImageMut(..),
+	-- * Type CairoImage and CairoImageMut
+	CairoImage(..), CairoImageMut(..),
+	-- * Image Format
+	-- ** ARGB32
 	PixelArgb32(..),
-	) where
+	pattern CairoImageArgb32, Argb32,
+	pattern CairoImageMutArgb32, Argb32Mut ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
