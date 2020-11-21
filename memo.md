@@ -12,7 +12,7 @@ memo
 		- [x] define compareBytes
 		- [x] make CairoImage instance of Eq
 	+ [ ] extend Graphics.Cairo.CairoImage
-		- [ ] define Rgb24
+		- [x] define Rgb24
 			* [x] type PixelRgb24
 			* [x] pattern PixelRgb24
 			* [x] pattern CairoImagRgb24
@@ -27,9 +27,9 @@ memo
 				+ [x] define cairoImageMutToRgb24
 				+ [x] define pattern
 			* [x] type Rgb24Mut
-			* [ ] make Rgb24Mut instance of ImageMut
-				+ [ ] newRgb24Mut
-				+ [ ] define instance
+			* [x] make Rgb24Mut instance of ImageMut
+				+ [x] newRgb24Mut
+				+ [x] define instance
 		- [ ] define A8
 		- [ ] define A1
 		- [ ] define Rgb16565
