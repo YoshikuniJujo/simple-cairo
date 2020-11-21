@@ -17,7 +17,7 @@ module Data.CairoImage.Internal (
 	-- ** RGB24
 	PixelRgb24(..), pattern PixelRgb24,
 	pattern CairoImageRgb24, Rgb24,
-	Rgb24Mut
+	pattern CairoImageMutRgb24, Rgb24Mut
 	) where
 
 import Foreign.Ptr
@@ -125,6 +125,17 @@ cairoImageToRgb24 :: CairoImage -> Maybe Rgb24
 cairoImageToRgb24 = \case
 	CairoImage #{const CAIRO_FORMAT_RGB24} w h s d ->
 		Just . Rgb24 w h s $ castForeignPtr d
+	_ -> Nothing
+
+pattern CairoImageMutRgb24 :: Rgb24Mut s -> CairoImageMut s
+pattern CairoImageMutRgb24 r <- (cairoImageMutToRgb24 -> Just r)
+	where CairoImageMutRgb24 (Rgb24Mut w h s d) =
+		CairoImageMut #{const CAIRO_FORMAT_RGB24} w h s $ castForeignPtr d
+
+cairoImageMutToRgb24 :: (CairoImageMut s) -> Maybe (Rgb24Mut s)
+cairoImageMutToRgb24 = \case
+	CairoImageMut #{const CAIRO_FORMAT_RGB24} w h s d ->
+		Just . Rgb24Mut w h s $ castForeignPtr d
 	_ -> Nothing
 
 data Argb32 = Argb32 {
@@ -250,7 +261,7 @@ data Rgb24 = Rgb24 {
 	rgb24Stride :: #{type int}, rgb24Data :: ForeignPtr PixelRgb24 }
 	deriving Show
 
-data Rgb24Mut = Rgb24Mut {
+data Rgb24Mut s = Rgb24Mut {
 	rgb24MutWidth :: #{type int}, rgb24MutHeight :: #{type int},
 	rgb24MutStride :: #{type int}, rgb24MutData :: ForeignPtr PixelRgb24 }
 	deriving Show

@@ -20,7 +20,9 @@ memo
 				+ [x] define pattern
 			* [x] type Rgb24
 			* [ ] make Rgb24 instance of Image
-			* [ ] pattern CairoImageMutRgb24
+			* [x] pattern CairoImageMutRgb24
+				+ [x] define cairoImageMutToRgb24
+				+ [x] define pattern
 			* [x] type Rgb24Mut
 			* [ ] make Rgb24Mut instance of ImageMut
 		- [ ] define A8
