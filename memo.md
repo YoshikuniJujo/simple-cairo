@@ -19,12 +19,17 @@ memo
 				+ [x] define cairoImageToRgb24
 				+ [x] define pattern
 			* [x] type Rgb24
-			* [ ] make Rgb24 instance of Image
+			* [x] make Rgb24 instance of Image
+				+ [x] ptrRgb24
+				+ [x] generateRgb24PrimM
+				+ [x] define instance
 			* [x] pattern CairoImageMutRgb24
 				+ [x] define cairoImageMutToRgb24
 				+ [x] define pattern
 			* [x] type Rgb24Mut
 			* [ ] make Rgb24Mut instance of ImageMut
+				+ [ ] newRgb24Mut
+				+ [ ] define instance
 		- [ ] define A8
 		- [ ] define A1
 		- [ ] define Rgb16565

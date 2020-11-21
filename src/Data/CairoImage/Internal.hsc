@@ -208,6 +208,13 @@ instance Image Argb32 where
 	pixelAt (Argb32 w h s d) x y = unsafePerformIO do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrArgb32 w h s p x y
 
+instance Image Rgb24 where
+	type Pixel Rgb24 = PixelRgb24
+	imageSize (Rgb24 w h _ _) = (w, h)
+	generateImagePrimM = generateRgb24PrimM
+	pixelAt (Rgb24 w h s d) x y = unsafePerformIO do
+		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrRgb24 w h s p x y
+
 generateArgb32PrimM :: PrimBase	m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelArgb32) -> m Argb32
 generateArgb32PrimM w h f = unsafeIOToPrim do
 	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
@@ -217,6 +224,16 @@ generateArgb32PrimM w h f = unsafeIOToPrim do
 		maybe (pure ()) (`poke` p) $ ptrArgb32 w h s d x y
 	fd <- newForeignPtr d $ free d
 	pure $ Argb32 w h s fd
+
+generateRgb24PrimM :: PrimBase m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelRgb24) -> m Rgb24
+generateRgb24PrimM w h f = unsafeIOToPrim do
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_RGB24} w
+	d <- mallocBytes . fromIntegral $ s * h
+	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> do
+		p <- unsafePrimToIO $ f x y
+		maybe (pure ()) (`poke` p) $ ptrRgb24 w h s d x y
+	fd <- newForeignPtr d $ free d
+	pure $ Rgb24 w h s fd
 
 instance ImageMut Argb32Mut where
 	type PixelMut Argb32Mut = PixelArgb32
@@ -238,6 +255,12 @@ ptrArgb32 :: #{type int} -> #{type int} -> #{type int} ->
 	Ptr PixelArgb32 -> #{type int} -> #{type int} -> Maybe (Ptr PixelArgb32)
 ptrArgb32 w h s p x y
 	| 0 <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x * 4)
+	| otherwise = Nothing
+
+ptrRgb24 :: #{type int} -> #{type int} -> #{type int} ->
+	Ptr PixelRgb24 -> #{type int} -> #{type int} -> Maybe (Ptr PixelRgb24)
+ptrRgb24 w h s p x y
+	| x <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x * 4)
 	| otherwise = Nothing
 
 newtype PixelRgb24 = PixelRgb24Word32 Word32 deriving (Show, Storable)
