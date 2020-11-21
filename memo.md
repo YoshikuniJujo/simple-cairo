@@ -15,7 +15,9 @@ memo
 		- [ ] define Rgb24
 			* [x] type PixelRgb24
 			* [x] pattern PixelRgb24
-			* [ ] pattern CairoImagRgb24
+			* [x] pattern CairoImagRgb24
+				+ [x] define cairoImageToRgb24
+				+ [x] define pattern
 			* [x] type Rgb24
 			* [ ] make Rgb24 instance of Image
 			* [ ] pattern CairoImageMutRgb24
