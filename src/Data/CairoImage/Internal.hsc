@@ -10,14 +10,18 @@ module Data.CairoImage.Internal (
 	-- * Type CairoImage and CairoImageMut
 	CairoImage(..), CairoImageMut(..), cairoImageFreeze, cairoImageThaw,
 	-- * Image Format
-	-- ** ARGB32
+	-- ** ARGB 32
 	PixelArgb32(..), pattern PixelArgb32,
 	pattern CairoImageArgb32, Argb32,
 	pattern CairoImageMutArgb32, Argb32Mut,
-	-- ** RGB24
+	-- ** RGB 24
 	PixelRgb24(..), pattern PixelRgb24,
 	pattern CairoImageRgb24, Rgb24,
-	pattern CairoImageMutRgb24, Rgb24Mut
+	pattern CairoImageMutRgb24, Rgb24Mut,
+	-- ** A 8
+	PixelA8(..),
+	A8,
+	A8Mut
 	) where
 
 import Foreign.Ptr
@@ -303,4 +307,16 @@ data Rgb24 = Rgb24 {
 data Rgb24Mut s = Rgb24Mut {
 	rgb24MutWidth :: #{type int}, rgb24MutHeight :: #{type int},
 	rgb24MutStride :: #{type int}, rgb24MutData :: ForeignPtr PixelRgb24 }
+	deriving Show
+
+newtype PixelA8 = PixelA8Word8 Word8 deriving (Show, Storable)
+
+data A8 = A8 {
+	a8Width :: #{type int}, a8Height :: #{type int},
+	a8Stride :: #{type int}, a8Data :: ForeignPtr PixelA8 }
+	deriving Show
+
+data A8Mut = A8Mut {
+	a8MutWidth :: #{type int}, a8MutHeight :: #{type int},
+	a8MutStride :: #{type int}, a8MutData :: ForeignPtr PixelA8 }
 	deriving Show

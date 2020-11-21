@@ -2,6 +2,8 @@ memo
 ====
 
 * [ ] separate cairo-image
+	+ [ ] try Tuple n in another project
+	+ [ ] consider whether or not to use Tuple n
 	+ [x] consider to rename module
 		- Graphics.Cairo.CairoImage to Data.Cairo.Image or Data.CairoImage
 	+ [x] separate Graphics.Cairo.CairoImage to itself and Graphics.Cairo.CairoImage.Internal
@@ -31,7 +33,23 @@ memo
 				+ [x] newRgb24Mut
 				+ [x] define instance
 		- [ ] define A8
+			* [x] type PixelA8
+			* [x] type A8
+			* [ ] pattern CairoImageA8
+			* [ ] make A8 instance of Image
+			* [x] type A8Mut
+			* [ ] pattern CairoImageMutA8
+			* [ ] make A8Mut instance of ImageMut
 		- [ ] define A1
+			* [ ] type PixelA1
+			* [ ] pattern PixelA1
+				+ `pattern PixelA1 :: Tuple 32 Bool -> PixelA1`
+			* [ ] type A1
+			* [ ] pattern CairoImageA1
+			* [ ] make A1 instance of Image
+			* [ ] make A1Mut
+			* [ ] pattern CairoImageMutA1
+			* [ ] make A1Mut instance of ImageMut
 		- [ ] define Rgb16565
 		- [ ] define Rgb30
 	+ [ ] refactor Data.CairoImage
