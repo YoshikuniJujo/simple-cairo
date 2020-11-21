@@ -131,6 +131,12 @@ cairoImageToRgb24 = \case
 		Just . Rgb24 w h s $ castForeignPtr d
 	_ -> Nothing
 
+cairoImageToA8 :: CairoImage -> Maybe A8
+cairoImageToA8 = \case
+	CairoImage #{const CAIRO_FORMAT_A8} w h s d ->
+		Just . A8 w h s $ castForeignPtr d
+	_ -> Nothing
+
 pattern CairoImageMutRgb24 :: Rgb24Mut s -> CairoImageMut s
 pattern CairoImageMutRgb24 r <- (cairoImageMutToRgb24 -> Just r)
 	where CairoImageMutRgb24 (Rgb24Mut w h s d) =
