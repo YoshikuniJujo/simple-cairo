@@ -36,6 +36,8 @@ memo
 			* [x] type PixelA8
 			* [x] type A8
 			* [x] pattern CairoImageA8
+				+ [x] define cairoImageToA8
+				+ [x] define pattern
 			* [ ] make A8 instance of Image
 			* [x] type A8Mut
 			* [ ] pattern CairoImageMutA8
