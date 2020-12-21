@@ -20,7 +20,7 @@ module Data.CairoImage.Internal (
 	pattern CairoImageMutRgb24, Rgb24Mut,
 	-- ** A 8
 	PixelA8(..),
-	A8,
+	pattern CairoImageA8, A8,
 	A8Mut
 	) where
 
@@ -129,6 +129,17 @@ cairoImageToRgb24 :: CairoImage -> Maybe Rgb24
 cairoImageToRgb24 = \case
 	CairoImage #{const CAIRO_FORMAT_RGB24} w h s d ->
 		Just . Rgb24 w h s $ castForeignPtr d
+	_ -> Nothing
+
+pattern CairoImageA8 :: A8 -> CairoImage
+pattern CairoImageA8 a <- (cairoImageToA8 -> Just a)
+	where CairoImageA8 (A8 w h s d) =
+		CairoImage #{const CAIRO_FORMAT_A8} w h s $ castForeignPtr d
+
+cairoImageToA8 :: CairoImage -> Maybe A8
+cairoImageToA8 = \case
+	CairoImage #{const CAIRO_FORMAT_A8} w h s d ->
+		Just . A8 w h s $ castForeignPtr d
 	_ -> Nothing
 
 pattern CairoImageMutRgb24 :: Rgb24Mut s -> CairoImageMut s
@@ -309,7 +320,7 @@ data Rgb24Mut s = Rgb24Mut {
 	rgb24MutStride :: #{type int}, rgb24MutData :: ForeignPtr PixelRgb24 }
 	deriving Show
 
-newtype PixelA8 = PixelA8Word8 Word8 deriving (Show, Storable)
+newtype PixelA8 = PixelA8 Word8 deriving (Show, Storable)
 
 data A8 = A8 {
 	a8Width :: #{type int}, a8Height :: #{type int},
