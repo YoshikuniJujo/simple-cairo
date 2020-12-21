@@ -230,6 +230,13 @@ instance Image Rgb24 where
 	pixelAt (Rgb24 w h s d) x y = unsafePerformIO do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrRgb24 w h s p x y
 
+instance Image A8 where
+	type Pixel A8 = PixelA8
+	imageSize (A8 w h _ _) = (w, h)
+	generateImagePrimM = generateA8PrimM
+	pixelAt (A8 w h s d) x y = unsafePerformIO do
+		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrA8 w h s p x y
+
 generateArgb32PrimM :: PrimBase	m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelArgb32) -> m Argb32
 generateArgb32PrimM w h f = unsafeIOToPrim do
 	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
@@ -249,6 +256,16 @@ generateRgb24PrimM w h f = unsafeIOToPrim do
 		maybe (pure ()) (`poke` p) $ ptrRgb24 w h s d x y
 	fd <- newForeignPtr d $ free d
 	pure $ Rgb24 w h s fd
+
+generateA8PrimM :: PrimBase m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelA8) -> m A8
+generateA8PrimM w h f = unsafeIOToPrim do
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_A8} w
+	d <- mallocBytes . fromIntegral $ s * h
+	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> do
+		p <- unsafePrimToIO $ f x y
+		maybe (pure ()) (`poke` p) $ ptrA8 w h s d x y
+	fd <- newForeignPtr d $ free d
+	pure $ A8 w h s fd
 
 instance ImageMut Argb32Mut where
 	type PixelMut Argb32Mut = PixelArgb32
@@ -291,7 +308,13 @@ ptrArgb32 w h s p x y
 ptrRgb24 :: #{type int} -> #{type int} -> #{type int} ->
 	Ptr PixelRgb24 -> #{type int} -> #{type int} -> Maybe (Ptr PixelRgb24)
 ptrRgb24 w h s p x y
-	| x <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x * 4)
+	| 0 <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x * 4)
+	| otherwise = Nothing
+
+ptrA8 :: #{type int} -> #{type int} -> #{type int} ->
+	Ptr PixelA8 -> #{type int} -> #{type int} -> Maybe (Ptr PixelA8)
+ptrA8 w h s p x y
+	| 0 <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x)
 	| otherwise = Nothing
 
 newtype PixelRgb24 = PixelRgb24Word32 Word32 deriving (Show, Storable)

@@ -38,7 +38,7 @@ memo
 			* [x] pattern CairoImageA8
 				+ [x] define cairoImageToA8
 				+ [x] define pattern
-			* [ ] make A8 instance of Image
+			* [x] make A8 instance of Image
 			* [x] type A8Mut
 			* [ ] pattern CairoImageMutA8
 			* [ ] make A8Mut instance of ImageMut
@@ -54,6 +54,9 @@ memo
 			* [ ] make A1Mut instance of ImageMut
 		- [ ] define Rgb16565
 		- [ ] define Rgb30
+	* [ ] try to use A8
+		+ [ ] define cairoMaskSurface
+		+ [ ] others
 	+ [ ] refactor Data.CairoImage
 		- [x] others 1
 		- [x] others 2
