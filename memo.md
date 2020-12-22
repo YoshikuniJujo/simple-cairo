@@ -88,6 +88,8 @@ memo
 			* [ ] structure
 			* [ ] body
 	+ [ ] separate cairo-image package
+* [ ] make package typecheck-plugin-nat-simple
+* [ ] make package ranged-list
 * [ ] separate JuicyPixels
 * [ ] clean module hierarchy
 	+ [x] remove Graphics.Cairo
