@@ -88,8 +88,9 @@ memo
 			* [ ] structure
 			* [ ] body
 	+ [ ] separate cairo-image package
-* [ ] make package typecheck-plugin-nat-simple
-* [ ] make package ranged-list
+* [x] make package typecheck-plugin-nat-simple
+* [x] make package ranged-list
+* [ ] define repeatMin, repeatMax, repeat
 * [ ] separate JuicyPixels
 * [ ] clean module hierarchy
 	+ [x] remove Graphics.Cairo

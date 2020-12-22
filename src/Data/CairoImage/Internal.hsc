@@ -1,7 +1,8 @@
 {-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Data.CairoImage.Internal (
@@ -21,7 +22,9 @@ module Data.CairoImage.Internal (
 	-- ** A 8
 	PixelA8(..),
 	pattern CairoImageA8, A8,
-	pattern CairoImageMutA8, A8Mut
+	pattern CairoImageMutA8, A8Mut,
+	-- * Temporary
+	toWord32, fromWord32
 	) where
 
 import Foreign.Ptr
@@ -32,7 +35,9 @@ import Foreign.Storable
 import Control.Monad.Primitive
 import Control.Monad.ST
 import Data.Foldable
+import Data.List.Length
 import Data.Bits
+import Data.Bool
 import Data.Word
 import Data.Int
 import System.IO.Unsafe
@@ -381,3 +386,11 @@ data A8Mut s = A8Mut {
 	a8MutWidth :: #{type int}, a8MutHeight :: #{type int},
 	a8MutStride :: #{type int}, a8MutData :: ForeignPtr PixelA8 }
 	deriving Show
+
+data Bit = O | I deriving (Show, Enum)
+
+toWord32 :: LengthL 32 Bit -> Word32
+toWord32 = foldr (\b w -> w `shift` 1 .|. fromIntegral (fromEnum b)) 0
+
+fromWord32 :: Word32 -> LengthL 32 Bit
+fromWord32 = unfoldr \n -> (bool O I $ testBit n 0, n `shiftR` 1)

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7337169ef2d9498812cf8b4af6d67d809d6db4b3eed33f59a334f31845ea75e6
+-- hash: 574c00c1cd5e559131ebdf42de27ef2e9cd96109d6b300c37fcc02f878679310
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -54,6 +54,7 @@ library
     , bytestring
     , exception-hierarchy
     , primitive
+    , ranged-list
     , text
     , vector
   default-language: Haskell2010
@@ -73,6 +74,7 @@ test-suite cairo-a8-test
     , bytestring
     , exception-hierarchy
     , primitive
+    , ranged-list
     , simple-cairo
     , text
     , vector
@@ -93,6 +95,7 @@ test-suite cairo-image-test
     , bytestring
     , exception-hierarchy
     , primitive
+    , ranged-list
     , simple-cairo
     , text
     , vector
@@ -113,6 +116,7 @@ test-suite exception-test
     , bytestring
     , exception-hierarchy
     , primitive
+    , ranged-list
     , simple-cairo
     , text
     , vector
@@ -133,6 +137,28 @@ test-suite simple-cairo-test
     , bytestring
     , exception-hierarchy
     , primitive
+    , ranged-list
+    , simple-cairo
+    , text
+    , vector
+  default-language: Haskell2010
+
+test-suite test-word32
+  type: exitcode-stdio-1.0
+  main-is: testWord32.hs
+  other-modules:
+      Title
+      Paths_simple_cairo
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      JuicyPixels
+    , base >=4.7 && <5
+    , bytestring
+    , exception-hierarchy
+    , primitive
+    , ranged-list
     , simple-cairo
     , text
     , vector
