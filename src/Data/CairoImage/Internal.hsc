@@ -21,7 +21,7 @@ module Data.CairoImage.Internal (
 	-- ** A 8
 	PixelA8(..),
 	pattern CairoImageA8, A8,
-	A8Mut
+	pattern CairoImageMutA8, A8Mut
 	) where
 
 import Foreign.Ptr
@@ -147,10 +147,21 @@ pattern CairoImageMutRgb24 r <- (cairoImageMutToRgb24 -> Just r)
 	where CairoImageMutRgb24 (Rgb24Mut w h s d) =
 		CairoImageMut #{const CAIRO_FORMAT_RGB24} w h s $ castForeignPtr d
 
-cairoImageMutToRgb24 :: (CairoImageMut s) -> Maybe (Rgb24Mut s)
+cairoImageMutToRgb24 :: CairoImageMut s -> Maybe (Rgb24Mut s)
 cairoImageMutToRgb24 = \case
 	CairoImageMut #{const CAIRO_FORMAT_RGB24} w h s d ->
 		Just . Rgb24Mut w h s $ castForeignPtr d
+	_ -> Nothing
+
+pattern CairoImageMutA8 :: A8Mut s -> CairoImageMut s
+pattern CairoImageMutA8 a <- (cairoImageMutToA8 -> Just a)
+	where CairoImageMutA8 (A8Mut w h s d) =
+		CairoImageMut #{const CAIRO_FORMAT_A8} w h s $ castForeignPtr d
+
+cairoImageMutToA8 :: CairoImageMut s -> Maybe (A8Mut s)
+cairoImageMutToA8 = \case
+	CairoImageMut #{const CAIRO_FORMAT_A8} w h s d ->
+		Just . A8Mut w h s $ castForeignPtr d
 	_ -> Nothing
 
 data Argb32 = Argb32 {
@@ -299,6 +310,22 @@ newRgb24Mut w h = unsafeIOToPrim do
 	fd <- newForeignPtr d $ free d
 	pure $ Rgb24Mut w h s fd
 
+instance ImageMut A8Mut where
+	type PixelMut A8Mut = PixelA8
+	imageMutSize (A8Mut w h _ _) = (w, h)
+	newImageMut = newA8Mut
+	getPixel (A8Mut w h s d) x y = unsafeIOToPrim do
+		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . peek) $ ptrA8 w h s p x y
+	putPixel (A8Mut w h s d) x y px = unsafeIOToPrim do
+		withForeignPtr d \p -> maybe (pure ()) (`poke` px) $ ptrA8 w h s p x y
+
+newA8Mut :: PrimMonad m => #{type int} -> #{type int} -> m (A8Mut (PrimState m))
+newA8Mut w h = unsafeIOToPrim do
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_A8} w
+	d <- mallocBytes . fromIntegral $ s * h
+	fd <- newForeignPtr d $ free d
+	pure $ A8Mut w h s fd
+
 ptrArgb32 :: #{type int} -> #{type int} -> #{type int} ->
 	Ptr PixelArgb32 -> #{type int} -> #{type int} -> Maybe (Ptr PixelArgb32)
 ptrArgb32 w h s p x y
@@ -350,7 +377,7 @@ data A8 = A8 {
 	a8Stride :: #{type int}, a8Data :: ForeignPtr PixelA8 }
 	deriving Show
 
-data A8Mut = A8Mut {
+data A8Mut s = A8Mut {
 	a8MutWidth :: #{type int}, a8MutHeight :: #{type int},
 	a8MutStride :: #{type int}, a8MutData :: ForeignPtr PixelA8 }
 	deriving Show

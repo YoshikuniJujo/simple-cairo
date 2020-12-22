@@ -32,7 +32,7 @@ memo
 			* [x] make Rgb24Mut instance of ImageMut
 				+ [x] newRgb24Mut
 				+ [x] define instance
-		- [ ] define A8
+		- [x] define A8
 			* [x] type PixelA8
 			* [x] type A8
 			* [x] pattern CairoImageA8
@@ -40,8 +40,8 @@ memo
 				+ [x] define pattern
 			* [x] make A8 instance of Image
 			* [x] type A8Mut
-			* [ ] pattern CairoImageMutA8
-			* [ ] make A8Mut instance of ImageMut
+			* [x] pattern CairoImageMutA8
+			* [x] make A8Mut instance of ImageMut
 		- [ ] define A1
 			* [ ] type PixelA1
 			* [ ] pattern PixelA1
