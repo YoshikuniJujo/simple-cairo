@@ -54,9 +54,7 @@ memo
 			* [ ] make A1Mut instance of ImageMut
 		- [ ] define Rgb16565
 		- [ ] define Rgb30
-	* [ ] try to use A8
-		+ [ ] define cairoMaskSurface
-		+ [ ] others
+	* [x] try to use A8
 	+ [ ] refactor Data.CairoImage
 		- [x] others 1
 		- [x] others 2
