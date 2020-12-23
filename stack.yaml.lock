@@ -10,11 +10,11 @@ packages:
     git: https://github.com/YoshikuniJujo/ranged-list
     pantry-tree:
       size: 778
-      sha256: 645c9e0fadda6539af6f38200e8f5a9b31e9933f53391a6ae916e109d3bad48c
-    commit: bccc7b9f6703f3fedb1cdf4b3faf82031102a191
+      sha256: db2cebbe2234c6c7cc4e54aa2d9045b90cc5e3dca4bace72199326f5a30c8fd3
+    commit: 3627e19229c84c3cc8e55254b04b58ecc27680fa
   original:
     git: https://github.com/YoshikuniJujo/ranged-list
-    commit: bccc7b9f6703f3fedb1cdf4b3faf82031102a191
+    commit: 3627e19229c84c3cc8e55254b04b58ecc27680fa
 - completed:
     name: typecheck-plugin-nat-simple
     version: 0.1.0.0

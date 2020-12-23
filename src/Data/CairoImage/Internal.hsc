@@ -24,7 +24,7 @@ module Data.CairoImage.Internal (
 	pattern CairoImageA8, A8,
 	pattern CairoImageMutA8, A8Mut,
 	-- * Temporary
-	toWord32, fromWord32
+	toWord32, fromWord32, Bit(..)
 	) where
 
 import Foreign.Ptr

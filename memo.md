@@ -90,7 +90,8 @@ memo
 	+ [ ] separate cairo-image package
 * [x] make package typecheck-plugin-nat-simple
 * [x] make package ranged-list
-* [ ] define repeatMin, repeatMax, repeat
+* [x] define repeatMin, repeatMax, repeat
+* [ ] try to encode/decode bits to/from Word32 in little or big endian machine
 * [ ] separate JuicyPixels
 * [ ] clean module hierarchy
 	+ [x] remove Graphics.Cairo
