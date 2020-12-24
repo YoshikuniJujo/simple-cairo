@@ -41,7 +41,7 @@ packages:
 #
 extra-deps:
 - git: https://github.com/YoshikuniJujo/ranged-list
-  commit: 3627e19229c84c3cc8e55254b04b58ecc27680fa
+  commit: 88054aa9fd717fd88fb64c89e09669db4d6bce5f
 - git: https://github.com/YoshikuniJujo/typecheck-plugin-nat-simple
   commit: 9066190addfed1eb5b4b08769787e914cc5b309a
 
