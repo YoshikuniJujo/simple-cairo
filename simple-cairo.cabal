@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 574c00c1cd5e559131ebdf42de27ef2e9cd96109d6b300c37fcc02f878679310
+-- hash: 2e6701497709d8d631d6e150c425c1ffa3a8a91ee1ff39a0e0ab1c98033b59f6
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Data.Bits.Word32
       Data.CairoImage
       Data.CairoImage.Internal
       Data.CairoImage.Private
@@ -42,6 +43,7 @@ library
       Graphics.Cairo.Surfaces.PngSupport
       Graphics.Cairo.Types
       Graphics.Cairo.Values
+      System.TargetEndian
   other-modules:
       Paths_simple_cairo
   hs-source-dirs:
@@ -55,6 +57,7 @@ library
     , exception-hierarchy
     , primitive
     , ranged-list
+    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -76,6 +79,7 @@ test-suite cairo-a8-test
     , primitive
     , ranged-list
     , simple-cairo
+    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -97,6 +101,7 @@ test-suite cairo-image-test
     , primitive
     , ranged-list
     , simple-cairo
+    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -118,6 +123,7 @@ test-suite exception-test
     , primitive
     , ranged-list
     , simple-cairo
+    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -139,6 +145,7 @@ test-suite simple-cairo-test
     , primitive
     , ranged-list
     , simple-cairo
+    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -160,6 +167,7 @@ test-suite test-word32
     , primitive
     , ranged-list
     , simple-cairo
+    , template-haskell
     , text
     , vector
   default-language: Haskell2010
