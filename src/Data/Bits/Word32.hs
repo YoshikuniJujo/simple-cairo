@@ -47,7 +47,7 @@ bitsToWord32BigE' :: LengthL 32 Bit -> Word32
 bitsToWord32BigE' = bitsToWord32BigE . leftToRight
 
 word32ToBitsBigE :: Word32 -> LengthR 32 Bit
-word32ToBitsBigE = unfoldl \w -> (bool O I (w `testBit` 0), w `shiftR` 1)
+word32ToBitsBigE = unfoldl \w -> (w `shiftR` 1, bool O I (w `testBit` 0))
 
 word32ToBitsBigE' :: Word32 -> LengthL 32 Bit
 word32ToBitsBigE' = rightToLeft . word32ToBitsBigE
