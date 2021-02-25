@@ -3,7 +3,7 @@ memo
 
 * [ ] separate cairo-image
 	+ [ ] try Tuple n in another project
-	+ [ ] consider whether or not to use Tuple n
+	+ [x] consider whether or not to use Tuple n
 	+ [x] consider to rename module
 		- Graphics.Cairo.CairoImage to Data.Cairo.Image or Data.CairoImage
 	+ [x] separate Graphics.Cairo.CairoImage to itself and Graphics.Cairo.CairoImage.Internal
