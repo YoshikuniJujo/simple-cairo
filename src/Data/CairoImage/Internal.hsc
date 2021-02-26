@@ -27,7 +27,8 @@ module Data.CairoImage.Internal (
 	-- * Temporary
 	toWord32, fromWord32, Bit(..), toBit,
 	PixelA1(..),
-	pattern CairoImageA1, A1
+	pattern CairoImageA1, A1,
+	pattern CairoImageMutA1, A1Mut
 	) where
 
 import Foreign.Ptr
@@ -182,6 +183,17 @@ cairoImageMutToA8 :: CairoImageMut s -> Maybe (A8Mut s)
 cairoImageMutToA8 = \case
 	CairoImageMut #{const CAIRO_FORMAT_A8} w h s d ->
 		Just . A8Mut w h s $ castForeignPtr d
+	_ -> Nothing
+
+pattern CairoImageMutA1 :: A1Mut s -> CairoImageMut s
+pattern CairoImageMutA1 a <- (cairoImageMutToA1 -> Just a)
+	where CairoImageMutA1 (A1Mut w h s d) =
+		CairoImageMut #{const CAIRO_FORMAT_A1} w h s $ castForeignPtr d
+
+cairoImageMutToA1 :: CairoImageMut s -> Maybe (A1Mut s)
+cairoImageMutToA1 = \case
+	CairoImageMut #{const CAIRO_FORMAT_A1} w h s d ->
+		Just . A1Mut w h s $ castForeignPtr d
 	_ -> Nothing
 
 data Argb32 = Argb32 {
@@ -462,9 +474,30 @@ data A1 = A1 {
 	a1Stride :: #{type int}, a1Data :: ForeignPtr Word32 }
 	deriving Show
 
+data A1Mut s = A1Mut {
+	a1MutWidth :: #{type int}, a1MutHeight :: #{type int},
+	a1MutStride :: #{type int}, a1MutData :: ForeignPtr PixelA1 }
+	deriving Show
+
 instance Image A1 where
 	type Pixel A1 = PixelA1
 	imageSize (A1 w h _ _) = (w, h)
 	generateImagePrimM = generateA1PrimM
 	pixelAt (A1 w h s d) x y = unsafePerformIO do
 		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . uncurry peekA1) $ ptrA1 w h s (castPtr p) x y
+
+instance ImageMut A1Mut where
+	type PixelMut A1Mut = PixelA1
+	imageMutSize (A1Mut w h _ _) = (w, h)
+	newImageMut = newA1Mut
+	getPixel (A1Mut w h s d) x y = unsafeIOToPrim do
+		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . uncurry peekA1) $ ptrA1 w h s p x y
+	putPixel (A1Mut w h s d) x y px = unsafeIOToPrim do
+		withForeignPtr d \p -> maybe (pure ()) (\(pt, i) -> pokeA1 pt i px) $ ptrA1 w h s p x y
+
+newA1Mut :: PrimMonad m => #{type int} -> #{type int} -> m (A1Mut (PrimState m))
+newA1Mut w h = unsafeIOToPrim do
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_A1} w
+	d <- mallocBytes . fromIntegral $ s * h
+	fd <- newForeignPtr d $ free d
+	pure $ A1Mut w h s fd

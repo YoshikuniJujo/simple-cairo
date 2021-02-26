@@ -5,6 +5,7 @@ import Title
 
 import Control.Monad
 import Control.Monad.ST
+import Data.Foldable
 import Data.Int
 import Data.CairoImage.Internal
 import Graphics.Cairo.Drawing.CairoT
@@ -21,12 +22,10 @@ main = do
 	let	a1 = generateImage 33 33 (\x y -> PixelA1 $ circle x y) :: A1
 	p <- cairoPatternCreateForSurface =<< cairoImageSurfaceCreateForCairoImage (CairoImageA1 a1)
 	testPattern (0, 1, 1) "testA1.png" p
-	{-
-	a8m <- newImageMut 32 32 :: IO (A8Mut RealWorld)
-	for_ [0 .. 32] \y -> for_ [0 .. 32] \x -> putPixel a8m x y . PixelA8 $ circle x y
-	pm <- cairoPatternCreateForSurface =<< cairoImageSurfaceCreateForCairoImageMut (CairoImageMutA8 a8m)
-	testPattern (1, 1, 0) "testA8Mut.png" pm
-	-}
+	a1m <- newImageMut 32 32 :: IO (A1Mut RealWorld)
+	for_ [0 .. 32] \y -> for_ [0 .. 32] \x -> putPixel a1m x y . PixelA1 $ circle x y
+	pm <- cairoPatternCreateForSurface =<< cairoImageSurfaceCreateForCairoImageMut (CairoImageMutA1 a1m)
+	testPattern (1, 1, 0) "testA1Mut.png" pm
 
 circle :: Int32 -> Int32 -> Bit
 circle x_ y_ = toBit . (< 256) $ sqrt (x ^ (2 :: Int) + y ^ (2 :: Int))

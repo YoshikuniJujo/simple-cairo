@@ -42,16 +42,14 @@ memo
 			* [x] type A8Mut
 			* [x] pattern CairoImageMutA8
 			* [x] make A8Mut instance of ImageMut
-		- [ ] define A1
-			* [ ] type PixelA1
-			* [ ] pattern PixelA1
-				+ `pattern PixelA1 :: Tuple 32 Bool -> PixelA1`
-			* [ ] type A1
-			* [ ] pattern CairoImageA1
-			* [ ] make A1 instance of Image
-			* [ ] make A1Mut
-			* [ ] pattern CairoImageMutA1
-			* [ ] make A1Mut instance of ImageMut
+		- [x] define A1
+			* [x] type PixelA1
+			* [x] type A1
+			* [x] pattern CairoImageA1
+			* [x] make A1 instance of Image
+			* [x] make A1Mut
+			* [x] pattern CairoImageMutA1
+			* [x] make A1Mut instance of ImageMut
 		- [ ] define Rgb16565
 		- [ ] define Rgb30
 	* [x] try to use A8
