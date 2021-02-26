@@ -3,7 +3,18 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    name: cairo-image
+    version: 0.1.0.0
+    git: https://github.com/YoshikuniJujo/cairo-image.git
+    pantry-tree:
+      size: 715
+      sha256: ab849fa433115d5a716e0a749d1d8fe4ed32341388c8e906724db88e167c49b6
+    commit: 0510d9085669f8cc558a17969d1c670f0a5c75be
+  original:
+    git: https://github.com/YoshikuniJujo/cairo-image.git
+    commit: 0510d9085669f8cc558a17969d1c670f0a5c75be
 snapshots:
 - completed:
     size: 568887

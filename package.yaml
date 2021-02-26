@@ -22,13 +22,12 @@ description:         Please see the README on GitHub at <https://github.com/Yosh
 dependencies:
 - base >= 4.7 && < 5
 - primitive
-- template-haskell
 - bytestring
 - text
 - vector
 - exception-hierarchy
 - JuicyPixels
-- ranged-list
+- cairo-image
 
 library:
   source-dirs: src

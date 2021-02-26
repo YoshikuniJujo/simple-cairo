@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 843420c32310349cd57b0eb763bba5081dc14c1712013a7834d2be1ae8de41b0
+-- hash: fbda45c5f995d4b6a7334a17ec087d5d6ec2337d533e0d91ab9135e665895ac0
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -27,9 +27,6 @@ source-repository head
 
 library
   exposed-modules:
-      Data.CairoImage
-      Data.CairoImage.Internal
-      Data.CairoImage.Private
       Graphics.Cairo.Drawing.CairoPatternT
       Graphics.Cairo.Drawing.CairoT
       Graphics.Cairo.Drawing.Paths
@@ -42,7 +39,6 @@ library
       Graphics.Cairo.Surfaces.PngSupport
       Graphics.Cairo.Types
       Graphics.Cairo.Values
-      System.TargetEndian
   other-modules:
       Paths_simple_cairo
   hs-source-dirs:
@@ -53,10 +49,9 @@ library
       JuicyPixels
     , base >=4.7 && <5
     , bytestring
+    , cairo-image
     , exception-hierarchy
     , primitive
-    , ranged-list
-    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -74,11 +69,10 @@ test-suite cairo-a1-test
       JuicyPixels
     , base >=4.7 && <5
     , bytestring
+    , cairo-image
     , exception-hierarchy
     , primitive
-    , ranged-list
     , simple-cairo
-    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -96,11 +90,10 @@ test-suite cairo-a8-test
       JuicyPixels
     , base >=4.7 && <5
     , bytestring
+    , cairo-image
     , exception-hierarchy
     , primitive
-    , ranged-list
     , simple-cairo
-    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -118,11 +111,10 @@ test-suite cairo-image-test
       JuicyPixels
     , base >=4.7 && <5
     , bytestring
+    , cairo-image
     , exception-hierarchy
     , primitive
-    , ranged-list
     , simple-cairo
-    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -140,11 +132,10 @@ test-suite exception-test
       JuicyPixels
     , base >=4.7 && <5
     , bytestring
+    , cairo-image
     , exception-hierarchy
     , primitive
-    , ranged-list
     , simple-cairo
-    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -162,11 +153,10 @@ test-suite simple-cairo-test
       JuicyPixels
     , base >=4.7 && <5
     , bytestring
+    , cairo-image
     , exception-hierarchy
     , primitive
-    , ranged-list
     , simple-cairo
-    , template-haskell
     , text
     , vector
   default-language: Haskell2010
@@ -184,11 +174,10 @@ test-suite test-word32
       JuicyPixels
     , base >=4.7 && <5
     , bytestring
+    , cairo-image
     , exception-hierarchy
     , primitive
-    , ranged-list
     , simple-cairo
-    , template-haskell
     , text
     , vector
   default-language: Haskell2010
