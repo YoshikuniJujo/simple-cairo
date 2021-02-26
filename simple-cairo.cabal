@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fbda45c5f995d4b6a7334a17ec087d5d6ec2337d533e0d91ab9135e665895ac0
+-- hash: 21a28b7d7da170bca0bcbaa7baa111f07540dabb3f6bd1e88e49d70382c77713
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -143,27 +143,6 @@ test-suite exception-test
 test-suite simple-cairo-test
   type: exitcode-stdio-1.0
   main-is: spec.hs
-  other-modules:
-      Title
-      Paths_simple_cairo
-  hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      JuicyPixels
-    , base >=4.7 && <5
-    , bytestring
-    , cairo-image
-    , exception-hierarchy
-    , primitive
-    , simple-cairo
-    , text
-    , vector
-  default-language: Haskell2010
-
-test-suite test-word32
-  type: exitcode-stdio-1.0
-  main-is: testWord32.hs
   other-modules:
       Title
       Paths_simple_cairo
