@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# LANGUAGE DataKinds #-}
@@ -24,7 +25,9 @@ module Data.CairoImage.Internal (
 	pattern CairoImageA8, A8,
 	pattern CairoImageMutA8, A8Mut,
 	-- * Temporary
-	toWord32, fromWord32, Bit(..)
+	toWord32, fromWord32, Bit(..), toBit,
+	PixelA1(..),
+	pattern CairoImageA1, A1
 	) where
 
 import Foreign.Ptr
@@ -41,6 +44,7 @@ import Data.Bool
 import Data.Word
 import Data.Int
 import System.IO.Unsafe
+import System.TargetEndian
 
 #include <cairo.h>
 
@@ -145,6 +149,17 @@ cairoImageToA8 :: CairoImage -> Maybe A8
 cairoImageToA8 = \case
 	CairoImage #{const CAIRO_FORMAT_A8} w h s d ->
 		Just . A8 w h s $ castForeignPtr d
+	_ -> Nothing
+
+pattern CairoImageA1 :: A1 -> CairoImage
+pattern CairoImageA1 a <- (cairoImageToA1 -> Just a)
+	where CairoImageA1 (A1 w h s d) =
+		CairoImage #{const CAIRO_FORMAT_A1} w h s $ castForeignPtr d
+
+cairoImageToA1 :: CairoImage -> Maybe A1
+cairoImageToA1 = \case
+	CairoImage #{const CAIRO_FORMAT_A1} w h s d ->
+		Just . A1 w h s $ castForeignPtr d
 	_ -> Nothing
 
 pattern CairoImageMutRgb24 :: Rgb24Mut s -> CairoImageMut s
@@ -283,6 +298,17 @@ generateA8PrimM w h f = unsafeIOToPrim do
 	fd <- newForeignPtr d $ free d
 	pure $ A8 w h s fd
 
+generateA1PrimM :: PrimBase m => #{type int} -> #{type int} -> (#{type int} -> #{type int} -> m PixelA1) -> m A1
+generateA1PrimM w h f = unsafeIOToPrim do
+	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_A8} w
+	d <- mallocBytes . fromIntegral $ s * h
+	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> do
+		p <- unsafePrimToIO $ f x y
+		maybe (pure ()) (\(pt, i) -> pokeA1 pt i p) $ ptrA1 w h s d x y
+	let	d' = castPtr d
+	fd <- newForeignPtr d' $ free d'
+	pure $ A1 w h s fd
+
 instance ImageMut Argb32Mut where
 	type PixelMut Argb32Mut = PixelArgb32
 	imageMutSize (Argb32Mut w h _ _) = (w, h)
@@ -349,6 +375,22 @@ ptrA8 w h s p x y
 	| 0 <= x && x < w && 0 <= y && y < h = Just $ p `plusPtr` fromIntegral (y * s + x)
 	| otherwise = Nothing
 
+ptrA1 :: #{type int} -> #{type int} -> #{type int} ->
+	Ptr PixelA1 -> #{type int} -> #{type int} -> Maybe (Ptr PixelA1, #{type int})
+ptrA1 w h s p x y
+	| 0 <= x && x < w && 0 <= y && y < h = Just (p `plusPtr` fromIntegral (y * s + x `div` 32 * 4), x `mod` 32)
+	| otherwise = Nothing
+
+peekA1 :: Ptr PixelA1 -> #{type int} -> IO PixelA1
+peekA1 p i = do
+	w32 <- peek (castPtr p) :: IO Word32
+	pure . PixelA1 . toBit $ w32 `testBit` (fromIntegral $(endian [e| i |] [e| 31 - i |]))
+
+pokeA1 :: Ptr PixelA1 -> #{type int} -> PixelA1 -> IO ()
+pokeA1 p i (PixelA1 b) = do
+	w32 <- peek (castPtr p) :: IO Word32
+	poke (castPtr p) (put w32 (fromIntegral $(endian [e| i |] [e| 31 - i |])) b)
+
 newtype PixelRgb24 = PixelRgb24Word32 Word32 deriving (Show, Storable)
 
 pattern PixelRgb24 :: Word8 -> Word8 -> Word8 -> PixelRgb24
@@ -389,8 +431,40 @@ data A8Mut s = A8Mut {
 
 data Bit = O | I deriving (Show, Enum)
 
+{-
+fromBit :: Bit -> Bool
+fromBit = \case O -> False; I -> True
+-}
+
+toBit :: Bool -> Bit
+toBit = \case False -> O; True -> I
+
+put :: Bits a => a -> Int -> Bit -> a
+put n i O = n `clearBit` i
+put n i I = n `setBit` i
+
+{-
+instance Storable Bit where
+	sizeOf _ = sizeOf False; alignment _ = alignment False
+	peek = (toBit <$>) . peek . castPtr; poke p = poke (castPtr p) . fromBit
+-}
+
 toWord32 :: LengthL 32 Bit -> Word32
 toWord32 = foldr (\b w -> w `shift` 1 .|. fromIntegral (fromEnum b)) 0
 
 fromWord32 :: Word32 -> LengthL 32 Bit
 fromWord32 = unfoldr \n -> (bool O I $ testBit n 0, n `shiftR` 1)
+
+newtype PixelA1 = PixelA1 Bit deriving Show -- (Show, Storable)
+
+data A1 = A1 {
+	a1Width :: #{type int}, a1Height :: #{type int},
+	a1Stride :: #{type int}, a1Data :: ForeignPtr Word32 }
+	deriving Show
+
+instance Image A1 where
+	type Pixel A1 = PixelA1
+	imageSize (A1 w h _ _) = (w, h)
+	generateImagePrimM = generateA1PrimM
+	pixelAt (A1 w h s d) x y = unsafePerformIO do
+		withForeignPtr d \p -> maybe (pure Nothing) ((Just <$>) . uncurry peekA1) $ ptrA1 w h s (castPtr p) x y

@@ -71,6 +71,15 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - simple-cairo
+  cairo-a1-test:
+    main:                testA1.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - simple-cairo
   test-word32:
     main:                testWord32.hs
     source-dirs:         test

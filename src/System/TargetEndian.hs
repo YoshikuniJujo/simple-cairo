@@ -1,8 +1,9 @@
 {-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module System.TargetEndian (Endian(..), targetEndian) where
+module System.TargetEndian (endian) where
 
+import Language.Haskell.TH
 import Foreign.Ptr
 import Foreign.Marshal
 import Foreign.Storable
@@ -29,3 +30,10 @@ targetEndian = lookupEnv "GHC_TARGET_ENDIAN" >>= \case
 	Just edn -> pure . Left $ "no such endian: " ++ edn ++ "\n" ++
 		"\tGHC_TARGET_ENDIAN: little-endian or big-endian"
 	Nothing -> Right <$> checkEndian
+
+endian :: ExpQ -> ExpQ -> ExpQ
+endian el eb = runIO targetEndian >>= \case
+	Right LittleEndian -> el
+	Right BigEndian -> eb
+	Right UnknownEndian -> error "Unknown endian"
+	Left emsg -> error emsg
