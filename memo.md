@@ -213,3 +213,12 @@ cairo\_format\_t
 * CAIRO\_FORMAT\_A1
 * CAIRO\_FORMAT\_RGB16\_565
 * CAIRO\_FORMAT\_RGB30
+
+separate JuicyPixels
+--------------------
+
+* [ ] to make package to convert cairo image and JuicyPixels image
+* [ ] to use the above package and simple-cairo in try-cairo
+* [ ] to try ARGB 32 in try-cairo
+	+ [ ] read
+	+ [ ] write
