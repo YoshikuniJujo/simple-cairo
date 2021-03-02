@@ -217,7 +217,20 @@ cairo\_format\_t
 separate JuicyPixels
 --------------------
 
+* [ ] make a converter from/to cairo image to/from JuicyPixels image
+	+ [x] make module Data.JuicyCairo
+	+ [ ] converter from/to instance of Image to/from Image a
+		- [x] converter from instance of Image to Image a
+		- [ ] converter from Image a to instance of Image
+	+ [ ] converter from/to instance of ImageMut to/from Image a
+	+ [ ] converter from/to Argb32 to/from Image PixelRGBA8
+		- [x] converter from Argb32 to Image PixelRGBA8
+		- [ ] converter from Image PixelRGBA8 to Argb32
+	+ [ ] converter from/to Argb32Mut to/from  Image PixelRGBA8
+	+ [ ] others
+* [ ] use the converter
 * [ ] to make package to convert cairo image and JuicyPixels image
+	+ the name is JuicyCairo
 * [ ] to use the above package and simple-cairo in try-cairo
 * [ ] to try ARGB 32 in try-cairo
 	+ [ ] read
