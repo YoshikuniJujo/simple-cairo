@@ -1,7 +1,7 @@
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Data.JuicyCairo where
+module Data.JuicyCairo (cairoArgb32ToJuicyRGBA8) where
 
 import Data.Maybe
 

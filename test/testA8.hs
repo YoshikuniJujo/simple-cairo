@@ -44,4 +44,4 @@ testPattern (r, g, b) fp p = do
 	cairoPaint cr
 	cairoSetSourceRgb cr r g b
 	cairoMask cr p
-	void $ writeDynamicPng fp =<< cairoImageSurfaceGetImage s
+	void $ writeDynamicPng fp =<< cairoImageSurfaceGetJuicyImage s

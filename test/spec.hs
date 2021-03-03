@@ -38,7 +38,7 @@ red :: forall s . ST s (DynamicImage, CairoFormatT, Int32) -- (Vector Word8, Cai
 red = do
 	(s, cr) <- makeRed
 	cairoPaint cr
-	(,,) <$> cairoImageSurfaceGetImage s <*> cairoImageSurfaceGetFormat s <*> cairoImageSurfaceGetStride s
+	(,,) <$> cairoImageSurfaceGetJuicyImage s <*> cairoImageSurfaceGetFormat s <*> cairoImageSurfaceGetStride s
 
 redIo :: IO (Either String Bool) -- DynamicImage -- (Vector Word8)
 redIo = do
@@ -56,7 +56,7 @@ redIo = do
 --	cairoSetSourceRgb cr 1 0 0
 	cairoRectangle cr 25 25 25 25
 	cairoFill cr
-	writeDynamicPng "tmp.png" =<< cairoImageSurfaceGetImage s
+	writeDynamicPng "tmp.png" =<< cairoImageSurfaceGetJuicyImage s
 
 green :: forall s . ST s (
 	Either (Argb32, Maybe PixelArgb32, Maybe PixelArgb32, Maybe PixelArgb32) CairoImage,
@@ -83,7 +83,7 @@ blueSurface = cairoImageSurfaceCreateForCairoImage $ CairoImageArgb32 blue
 
 drawBlue :: IO ()
 drawBlue = do
-	void . writeDynamicPng "tmp2.png" $ runST (cairoImageSurfaceGetImage =<< blueSurface)
+	void . writeDynamicPng "tmp2.png" $ runST (cairoImageSurfaceGetJuicyImage =<< blueSurface)
 	pure ()
 
 yellow :: ST s (Argb32Mut s)
@@ -97,5 +97,5 @@ yellowSurface = cairoImageSurfaceCreateForCairoImageMut . CairoImageMutArgb32 =<
 
 drawYellow :: IO ()
 drawYellow = do
-	void . writeDynamicPng "tmp3.png" $ runST (cairoImageSurfaceGetImage =<< yellowSurface)
+	void . writeDynamicPng "tmp3.png" $ runST (cairoImageSurfaceGetJuicyImage =<< yellowSurface)
 	pure ()

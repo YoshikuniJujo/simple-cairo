@@ -6,6 +6,7 @@ import Title
 import Control.Monad
 import Control.Monad.ST
 import Data.Foldable
+import Data.Bool
 import Data.Int
 import Data.CairoImage.Internal
 import Graphics.Cairo.Drawing.CairoT
@@ -28,7 +29,7 @@ main = do
 	testPattern (1, 1, 0) "testA1Mut.png" pm
 
 circle :: Int32 -> Int32 -> Bit
-circle x_ y_ = toBit . (< 256) $ sqrt (x ^ (2 :: Int) + y ^ (2 :: Int))
+circle x_ y_ = bool O I . (< 256) $ sqrt (x ^ (2 :: Int) + y ^ (2 :: Int))
 	where
 	x = (fromIntegral x_ - 16) * 0x100 / 16 :: Double
 	y = (fromIntegral y_ - 16) * 0x100 / 16 :: Double
@@ -43,4 +44,4 @@ testPattern (r, g, b) fp p = do
 	cairoPaint cr
 	cairoSetSourceRgb cr r g b
 	cairoMask cr p
-	void $ writeDynamicPng fp =<< cairoImageSurfaceGetImage s
+	void $ writeDynamicPng fp =<< cairoImageSurfaceGetJuicyImage s
