@@ -1,12 +1,12 @@
 memo
 ====
 
-* [ ] define cairoRotate
+* [x] define cairoRotate
 	+ [x] test/test-rotate.hs
 	+ [x] prepare a sample .png file
 	+ [x] read a sample .png file and write to a new .png file
-	+ [ ] define cairoRotate
-	+ [ ] rotate a new .png file
+	+ [x] define cairoRotate
+	+ [x] rotate a new .png file
 * [x] separate cairo-image
 	+ [x] consider whether or not to use Tuple n
 	+ [x] consider to rename module
