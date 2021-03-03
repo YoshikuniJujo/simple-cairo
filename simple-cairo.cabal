@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 496af243642d7c707da309ed06f29d83eadd79043a69c674fb53330ebc6506d6
+-- hash: 283cb5387935edbbc0dfbe4bea9c3e12f9a9d4014b3fa7e5c8cb0016895ce895
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -20,6 +20,9 @@ build-type:     Simple
 extra-source-files:
     README.md
     ChangeLog.md
+data-files:
+    HaskellLogo.png
+data-dir:       data
 
 source-repository head
   type: git
@@ -78,6 +81,26 @@ test-suite cairo-image-test
 test-suite exception-test
   type: exitcode-stdio-1.0
   main-is: exception.hs
+  other-modules:
+      Title
+      Paths_simple_cairo
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , cairo-image
+    , exception-hierarchy
+    , primitive
+    , simple-cairo
+    , text
+    , vector
+  default-language: Haskell2010
+
+test-suite test-rotate
+  type: exitcode-stdio-1.0
+  main-is: test-rotate.hs
   other-modules:
       Title
       Paths_simple_cairo

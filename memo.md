@@ -1,8 +1,13 @@
 memo
 ====
 
-* [ ] separate cairo-image
-	+ [ ] try Tuple n in another project
+* [ ] define cairoRotate
+	+ [x] test/test-rotate.hs
+	+ [x] prepare a sample .png file
+	+ [x] read a sample .png file and write to a new .png file
+	+ [ ] define cairoRotate
+	+ [ ] rotate a new .png file
+* [x] separate cairo-image
 	+ [x] consider whether or not to use Tuple n
 	+ [x] consider to rename module
 		- Graphics.Cairo.CairoImage to Data.Cairo.Image or Data.CairoImage
@@ -13,46 +18,46 @@ memo
 	+ [x] make CairoImage instance of Eq
 		- [x] define compareBytes
 		- [x] make CairoImage instance of Eq
-	+ [ ] extend Graphics.Cairo.CairoImage
-		- [x] define Rgb24
-			* [x] type PixelRgb24
-			* [x] pattern PixelRgb24
-			* [x] pattern CairoImagRgb24
-				+ [x] define cairoImageToRgb24
-				+ [x] define pattern
-			* [x] type Rgb24
-			* [x] make Rgb24 instance of Image
-				+ [x] ptrRgb24
-				+ [x] generateRgb24PrimM
-				+ [x] define instance
-			* [x] pattern CairoImageMutRgb24
-				+ [x] define cairoImageMutToRgb24
-				+ [x] define pattern
-			* [x] type Rgb24Mut
-			* [x] make Rgb24Mut instance of ImageMut
-				+ [x] newRgb24Mut
-				+ [x] define instance
-		- [x] define A8
-			* [x] type PixelA8
-			* [x] type A8
-			* [x] pattern CairoImageA8
-				+ [x] define cairoImageToA8
-				+ [x] define pattern
-			* [x] make A8 instance of Image
-			* [x] type A8Mut
-			* [x] pattern CairoImageMutA8
-			* [x] make A8Mut instance of ImageMut
-		- [x] define A1
-			* [x] type PixelA1
-			* [x] type A1
-			* [x] pattern CairoImageA1
-			* [x] make A1 instance of Image
-			* [x] make A1Mut
-			* [x] pattern CairoImageMutA1
-			* [x] make A1Mut instance of ImageMut
-		- [ ] define Rgb16565
-		- [ ] define Rgb30
-	* [x] try to use A8
+* [ ] extend Graphics.Cairo.CairoImage
+	- [x] define Rgb24
+		* [x] type PixelRgb24
+		* [x] pattern PixelRgb24
+		* [x] pattern CairoImagRgb24
+			+ [x] define cairoImageToRgb24
+			+ [x] define pattern
+		* [x] type Rgb24
+		* [x] make Rgb24 instance of Image
+			+ [x] ptrRgb24
+			+ [x] generateRgb24PrimM
+			+ [x] define instance
+		* [x] pattern CairoImageMutRgb24
+			+ [x] define cairoImageMutToRgb24
+			+ [x] define pattern
+		* [x] type Rgb24Mut
+		* [x] make Rgb24Mut instance of ImageMut
+			+ [x] newRgb24Mut
+			+ [x] define instance
+	- [x] define A8
+		* [x] type PixelA8
+		* [x] type A8
+		* [x] pattern CairoImageA8
+			+ [x] define cairoImageToA8
+			+ [x] define pattern
+		* [x] make A8 instance of Image
+		* [x] type A8Mut
+		* [x] pattern CairoImageMutA8
+		* [x] make A8Mut instance of ImageMut
+	- [x] define A1
+		* [x] type PixelA1
+		* [x] type A1
+		* [x] pattern CairoImageA1
+		* [x] make A1 instance of Image
+		* [x] make A1Mut
+		* [x] pattern CairoImageMutA1
+		* [x] make A1Mut instance of ImageMut
+	- [ ] define Rgb16565
+	- [ ] define Rgb30
+* [x] try to use A8
 	+ [ ] refactor Data.CairoImage
 		- [x] others 1
 		- [x] others 2

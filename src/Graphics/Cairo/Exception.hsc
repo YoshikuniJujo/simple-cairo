@@ -25,6 +25,7 @@ data CairoStatusInvalidString = CairoStatusInvalidString deriving Show
 data CairoStatusInvalidPathData = CairoStatusInvalidPathData deriving Show
 data CairoStatusReadError = CairoStatusReadError deriving Show
 data CairoStatusWriteError = CairoStatusWriteError deriving Show
+data CairoStatusFileNotFound = CairoStatusFileNotFound deriving Show
 data CairoStatusOthers = CairoStatusOthers #{type cairo_status_t} deriving Show
 
 exceptionHierarchy Nothing $ ExNode "CairoStatus" [
@@ -39,6 +40,7 @@ exceptionHierarchy Nothing $ ExNode "CairoStatus" [
 	ExType ''CairoStatusInvalidPathData,
 	ExType ''CairoStatusReadError,
 	ExType ''CairoStatusWriteError,
+	ExType ''CairoStatusFileNotFound,
 	ExType ''CairoStatusOthers
 	]
 
@@ -69,6 +71,7 @@ cairoStatusToThrowError = \case
 	#{const CAIRO_STATUS_INVALID_PATH_DATA} -> throw CairoStatusInvalidPathData
 	#{const CAIRO_STATUS_READ_ERROR} -> throw CairoStatusReadError
 	#{const CAIRO_STATUS_WRITE_ERROR} -> throw CairoStatusWriteError
+	#{const CAIRO_STATUS_FILE_NOT_FOUND} -> throw CairoStatusFileNotFound
 	st -> throw $ CairoStatusOthers st
 
 #enum CairoStatusT, CairoStatusT, CAIRO_STATUS_SUCCESS, \
