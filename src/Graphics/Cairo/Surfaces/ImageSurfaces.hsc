@@ -12,9 +12,6 @@ module Graphics.Cairo.Surfaces.ImageSurfaces (
 
 	cairoImageSurfaceCreateForCairoImage,
 	cairoImageSurfaceCreateForCairoImageMut,
-
-	cairoImageSurfaceCreateForJuicyImageRgba8,
-	cairoImageSurfaceGetJuicyImage
 	) where
 
 import Foreign.Ptr
@@ -25,9 +22,7 @@ import Foreign.Storable
 import Control.Monad.Primitive
 import Data.Word
 import Data.Int
-import Codec.Picture
 
-import Data.JuicyCairo
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
@@ -64,11 +59,6 @@ foreign import ccall "cairo_image_surface_get_height" c_cairo_image_surface_get_
 -- foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_data ::
 --	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})
 
-cairoImageSurfaceGetJuicyImage :: PrimMonad m => CairoSurfaceT (PrimState m) -> m DynamicImage
-cairoImageSurfaceGetJuicyImage sfc = (<$> cairoImageSurfaceGetCairoImage sfc) \case
-	CairoImageArgb32 a -> ImageRGBA8 $ cairoArgb32ToJuicyRGBA8 a
-	_ -> error "yet"
-
 cairoImageSurfaceGetCairoImage :: PrimMonad m => CairoSurfaceT (PrimState m) -> m CairoImage
 cairoImageSurfaceGetCairoImage = argCairoSurfaceT \sfc -> do
 	d <- c_cairo_image_surface_get_data sfc
@@ -97,11 +87,6 @@ newtype Argb32 = Argb32 Word32 deriving (Show, Storable)
 
 foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
 	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
-
-cairoImageSurfaceCreateForJuicyImageRgba8 :: PrimMonad m =>
-	Image PixelRGBA8 -> m (CairoSurfaceT (PrimState m))
-cairoImageSurfaceCreateForJuicyImageRgba8 =
-	cairoImageSurfaceCreateForCairoImage . CairoImageArgb32 . juicyRGBA8ToCairoArgb32
 
 cairoImageSurfaceCreateForCairoImage ::
 	PrimMonad m => CairoImage -> m (CairoSurfaceT (PrimState m))

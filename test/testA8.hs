@@ -12,6 +12,7 @@ import Data.CairoImage.Internal
 import Graphics.Cairo.Drawing.CairoT
 import Graphics.Cairo.Drawing.CairoPatternT
 import Graphics.Cairo.Surfaces.ImageSurfaces
+import Graphics.Cairo.Surfaces.ImageSurfaces.Juicy
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
