@@ -26,7 +26,6 @@ dependencies:
 - text
 - vector
 - exception-hierarchy
-- JuicyPixels
 - cairo-image
 
 library:

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 764158abf1b05159af8ca24eb0643b31b1a46350ea966fd4869173736f37fc2f
+-- hash: 496af243642d7c707da309ed06f29d83eadd79043a69c674fb53330ebc6506d6
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -27,7 +27,6 @@ source-repository head
 
 library
   exposed-modules:
-      Data.JuicyCairo
       Graphics.Cairo.Drawing.CairoPatternT
       Graphics.Cairo.Drawing.CairoT
       Graphics.Cairo.Drawing.Paths
@@ -47,8 +46,7 @@ library
   pkgconfig-depends:
       cairo
   build-depends:
-      JuicyPixels
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , bytestring
     , cairo-image
     , exception-hierarchy
@@ -67,8 +65,7 @@ test-suite cairo-image-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      JuicyPixels
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , bytestring
     , cairo-image
     , exception-hierarchy
@@ -88,8 +85,7 @@ test-suite exception-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      JuicyPixels
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , bytestring
     , cairo-image
     , exception-hierarchy
