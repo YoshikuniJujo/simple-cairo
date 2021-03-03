@@ -219,13 +219,13 @@ separate JuicyPixels
 
 * [ ] make a converter from/to cairo image to/from JuicyPixels image
 	+ [x] make module Data.JuicyCairo
-	+ [ ] converter from/to instance of Image to/from Image a
-		- [x] converter from instance of Image to Image a
-		- [ ] converter from Image a to instance of Image
+	+ [x] converter from/to instance of Cairo Image to/from Juicy Image a
+		- [x] converter from instance of Cairo Image to Juicy Image a
+		- [x] converter from Juicy Image a to instance of Cairo Image
 	+ [ ] converter from/to instance of ImageMut to/from Image a
-	+ [ ] converter from/to Argb32 to/from Image PixelRGBA8
+	+ [x] converter from/to Argb32 to/from Image PixelRGBA8
 		- [x] converter from Argb32 to Image PixelRGBA8
-		- [ ] converter from Image PixelRGBA8 to Argb32
+		- [x] converter from Image PixelRGBA8 to Argb32
 	+ [ ] converter from/to Argb32Mut to/from  Image PixelRGBA8
 	+ [ ] others
 * [ ] use the converter

@@ -5,7 +5,6 @@
 
 module Graphics.Cairo.Surfaces.ImageSurfaces (
 	cairoImageSurfaceCreate,
-	cairoImageSurfaceCreateForImageRgba8,
 	cairoImageSurfaceGetFormat,
 	cairoImageSurfaceGetStride,
 	cairoImageSurfaceGetCairoImage,
@@ -14,6 +13,7 @@ module Graphics.Cairo.Surfaces.ImageSurfaces (
 	cairoImageSurfaceCreateForCairoImage,
 	cairoImageSurfaceCreateForCairoImageMut,
 
+	cairoImageSurfaceCreateForJuicyImageRgba8,
 	cairoImageSurfaceGetJuicyImage
 	) where
 
@@ -23,8 +23,6 @@ import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
 import Control.Monad.Primitive
-import Data.Foldable
-import Data.Bits
 import Data.Word
 import Data.Int
 import Codec.Picture
@@ -95,45 +93,15 @@ cairoImageSurfaceGetCairoImageMut = argCairoSurfaceT \sfc -> do
 	fd <- newForeignPtr p $ free p
 	pure $ CairoImageMut f w h s fd
 
-calcPtr :: Int -> Int -> Ptr a -> Int -> Int -> Ptr a
-calcPtr byts s p x y = p `plusPtr` (x * byts + y * s)
-
 newtype Argb32 = Argb32 Word32 deriving (Show, Storable)
 
 foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface_create_for_data ::
 	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
 
-foreign import ccall "cairo_format_stride_for_width" c_cairo_format_stride_for_width ::
-	#{type cairo_format_t} -> #{type int} -> IO #{type int}
-
-cairoImageSurfaceCreateForImageRgba8 :: PrimMonad m =>
+cairoImageSurfaceCreateForJuicyImageRgba8 :: PrimMonad m =>
 	Image PixelRGBA8 -> m (CairoSurfaceT (PrimState m))
-cairoImageSurfaceCreateForImageRgba8 img = returnCairoSurfaceT' do
-	s <- c_cairo_format_stride_for_width #{const CAIRO_FORMAT_ARGB32} w
-	d <- mallocBytes . fromIntegral $ s * h
-	imageRgba8ToFormatArgb32 w h s img d
-	(, d) <$> c_cairo_image_surface_create_for_data d #{const CAIRO_FORMAT_ARGB32} w h s
-	where
-	w = fromIntegral $ imageWidth img
-	h = fromIntegral $ imageWidth img
-
-{-
-foreign import ccall "cairo_format_stride_for_width" c_cairo_format_stride_for_width ::
-	#{type cairo_format_t} -> #{type int} -> IO #{type int}
-	-}
-
-imageRgba8ToFormatArgb32 :: #{type int} -> #{type int} -> #{type int} ->
-	Image PixelRGBA8 -> Ptr #{type unsigned char} -> IO ()
-imageRgba8ToFormatArgb32 (fromIntegral -> w) (fromIntegral -> h) (fromIntegral -> s) img (castPtr -> p) =
-	for_ [0 .. h - 1] \y -> for_ [0 .. w - 1] \x -> poke (calcPtr 4 s p x y) (rgba8ToArgb32 $ pixelAt img x y)
-
-rgba8ToArgb32 :: PixelRGBA8 -> Argb32
-rgba8ToArgb32 (PixelRGBA8 (fromIntegral -> r_) (fromIntegral -> g_) (fromIntegral -> b_) (fromIntegral -> a)) =
-	Argb32 $ a `shiftL` 24 .|. r `shiftL` 16 .|.  g `shiftL` 8 .|. b
-	where
-	r = r_ * a `div` 0xff
-	g = g_ * a `div` 0xff
-	b = b_ * a `div` 0xff
+cairoImageSurfaceCreateForJuicyImageRgba8 =
+	cairoImageSurfaceCreateForCairoImage . CairoImageArgb32 . juicyRGBA8ToCairoArgb32
 
 cairoImageSurfaceCreateForCairoImage ::
 	PrimMonad m => CairoImage -> m (CairoSurfaceT (PrimState m))
