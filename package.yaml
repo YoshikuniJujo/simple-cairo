@@ -34,15 +34,6 @@ library:
   pkg-config-dependencies: cairo
 
 tests:
-  simple-cairo-test:
-    main:                spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - simple-cairo
   exception-test:
     main:                exception.hs
     source-dirs:         test
@@ -54,24 +45,6 @@ tests:
     - simple-cairo
   cairo-image-test:
     main:                cairo-image-test.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - simple-cairo
-  cairo-a8-test:
-    main:                testA8.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - simple-cairo
-  cairo-a1-test:
-    main:                testA1.hs
     source-dirs:         test
     ghc-options:
     - -threaded

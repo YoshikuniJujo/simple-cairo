@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 58343bdc51f48b908e700d595ebffb9ff126416b327c78e8b77589d127c41341
+-- hash: 764158abf1b05159af8ca24eb0643b31b1a46350ea966fd4869173736f37fc2f
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -37,7 +37,6 @@ library
       Graphics.Cairo.Exception
       Graphics.Cairo.Monad
       Graphics.Cairo.Surfaces.ImageSurfaces
-      Graphics.Cairo.Surfaces.ImageSurfaces.Juicy
       Graphics.Cairo.Surfaces.PngSupport
       Graphics.Cairo.Types
       Graphics.Cairo.Values
@@ -54,48 +53,6 @@ library
     , cairo-image
     , exception-hierarchy
     , primitive
-    , text
-    , vector
-  default-language: Haskell2010
-
-test-suite cairo-a1-test
-  type: exitcode-stdio-1.0
-  main-is: testA1.hs
-  other-modules:
-      Title
-      Paths_simple_cairo
-  hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      JuicyPixels
-    , base >=4.7 && <5
-    , bytestring
-    , cairo-image
-    , exception-hierarchy
-    , primitive
-    , simple-cairo
-    , text
-    , vector
-  default-language: Haskell2010
-
-test-suite cairo-a8-test
-  type: exitcode-stdio-1.0
-  main-is: testA8.hs
-  other-modules:
-      Title
-      Paths_simple_cairo
-  hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      JuicyPixels
-    , base >=4.7 && <5
-    , bytestring
-    , cairo-image
-    , exception-hierarchy
-    , primitive
-    , simple-cairo
     , text
     , vector
   default-language: Haskell2010
@@ -124,27 +81,6 @@ test-suite cairo-image-test
 test-suite exception-test
   type: exitcode-stdio-1.0
   main-is: exception.hs
-  other-modules:
-      Title
-      Paths_simple_cairo
-  hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      JuicyPixels
-    , base >=4.7 && <5
-    , bytestring
-    , cairo-image
-    , exception-hierarchy
-    , primitive
-    , simple-cairo
-    , text
-    , vector
-  default-language: Haskell2010
-
-test-suite simple-cairo-test
-  type: exitcode-stdio-1.0
-  main-is: spec.hs
   other-modules:
       Title
       Paths_simple_cairo
