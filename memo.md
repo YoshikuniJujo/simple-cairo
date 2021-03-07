@@ -1,6 +1,14 @@
 memo
 ====
 
+* [ ] define `data Rgb`
+	+ [x] define `data Rgb = RgbWord8_ Word8 Word8 Word8 | RgbDouble_ Double Double Double`
+	+ [x] define `pattern RgbWord8`
+	+ [ ] define `pattern RgbDouble`
+	+ [ ] define constructor `rgbDouble :: Double -> Double -> Double -> Rgb`
+* [ ] use `data Rgb` in cairoSetSourceRgb
+* [ ] define `data Rgba`
+* [ ] use `data Rgba` in cairoSetSourceRgba
 * [x] define cairoRotate
 	+ [x] test/test-rotate.hs
 	+ [x] prepare a sample .png file
