@@ -9,6 +9,8 @@ import Data.Word
 data Rgb = RgbWord8_ Word8 Word8 Word8 | RgbDouble_ Double Double Double
 	deriving Show
 
+{-# COMPLETE RgbWord8 #-}
+
 pattern RgbWord8 :: Word8 -> Word8 -> Word8 -> Rgb
 pattern RgbWord8 r g b <- (fromRgbWord8 -> (r, g, b))
 	where RgbWord8 = RgbWord8_
