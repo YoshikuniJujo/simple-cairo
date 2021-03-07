@@ -1,12 +1,12 @@
 memo
 ====
 
-* [ ] define `data Rgb`
+* [x] define `data Rgb`
 	+ [x] define `data Rgb = RgbWord8_ Word8 Word8 Word8 | RgbDouble_ Double Double Double`
 	+ [x] define `pattern RgbWord8`
 		- [x] add COMPLETE pragma
-	+ [ ] define `pattern RgbDouble`
-	+ [ ] define constructor `rgbDouble :: Double -> Double -> Double -> Rgb`
+	+ [x] define `pattern RgbDouble`
+	+ [x] define constructor `rgbDouble :: Double -> Double -> Double -> Rgb`
 * [ ] use `data Rgb` in cairoSetSourceRgb
 * [ ] define `data Rgba`
 * [ ] use `data Rgba` in cairoSetSourceRgba
