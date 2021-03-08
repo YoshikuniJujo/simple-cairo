@@ -4,7 +4,7 @@
 
 module Data.Color (
 	Rgb, pattern RgbWord8, pattern RgbDouble, rgbDouble,
-	Rgba, pattern RgbaWord8 ) where
+	Rgba, pattern RgbaWord8, pattern RgbaDouble, rgbaDouble ) where
 
 import Foreign.C.Types
 import Data.Word
@@ -39,8 +39,7 @@ fromRgbDouble = \case
 
 rgbDouble :: CDouble -> CDouble -> CDouble -> Maybe Rgb
 rgbDouble r g b
-	| 0 <= r && r <= 1 && 0 <= g && g <= 1 && 0 <= b && b <= 1 =
-		Just $ RgbDouble_ r g b
+	| from0to1 r && from0to1 g && from0to1 b = Just $ RgbDouble_ r g b
 	| otherwise = Nothing
 
 data Rgba
@@ -60,8 +59,28 @@ fromRgbaWord8 = \case
 	RgbaDouble_ r g b a -> (r', g', b', a')
 		where [r', g', b', a'] = cDoubleToWord8 <$> [r, g, b, a]
 
+{-# COMPLETE RgbaDouble #-}
+
+pattern RgbaDouble :: CDouble -> CDouble -> CDouble -> CDouble -> Rgba
+pattern RgbaDouble r g b a <- (fromRgbaDouble -> (r, g, b, a))
+
+fromRgbaDouble :: Rgba -> (CDouble, CDouble, CDouble, CDouble)
+fromRgbaDouble = \case
+	RgbaWord8_ r g b a -> (r', g', b', a')
+		where [r', g', b', a'] = word8ToCDouble <$> [r, g, b, a]
+	RgbaDouble_ r g b a -> (r, g, b, a)
+
+rgbaDouble :: CDouble -> CDouble -> CDouble -> CDouble -> Maybe Rgba
+rgbaDouble r g b a
+	| from0to1 r && from0to1 g && from0to1 b && from0to1 a =
+		Just $ RgbaDouble_ r g b a
+	| otherwise = Nothing
+
 cDoubleToWord8 :: CDouble -> Word8
 cDoubleToWord8 = round . (* 0xff)
 
 word8ToCDouble :: Word8 -> CDouble
 word8ToCDouble = (/ 0xff) . fromIntegral
+
+from0to1 :: CDouble -> Bool
+from0to1 n = 0 <= n && n <= 1

@@ -11,12 +11,12 @@ memo
 	+ [x] use CDouble instead of `#{type double}`
 	+ [x] rename `foo.hsc` to `foo.hs`
 * [x] use `data Rgb` in cairoSetSourceRgb
-* [ ] define `data Rgba`
+* [x] define `data Rgba`
 	+ [x] define `data Rgba`
 	+ [x] define `pattern RgbaWord8`
-	+ [ ] define `pattern RgbaDouble`
-	+ [ ] define constructor `rgbaDouble :: Double -> Double -> Double -> Double -> Rgba`
-	+ [ ] use CDouble instead of Double
+	+ [x] define `pattern RgbaDouble`
+	+ [x] define constructor `rgbaDouble :: Double -> Double -> Double -> Double -> Rgba`
+	+ [x] use CDouble instead of Double
 * [ ] use `data Rgba` in cairoSetSourceRgba
 * [x] define cairoRotate
 	+ [x] test/test-rotate.hs
