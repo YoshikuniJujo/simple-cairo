@@ -12,8 +12,8 @@ memo
 	+ [x] rename `foo.hsc` to `foo.hs`
 * [x] use `data Rgb` in cairoSetSourceRgb
 * [ ] define `data Rgba`
-	+ [ ] define `data Rgba`
-	+ [ ] define `pattern RgbaWord8`
+	+ [x] define `data Rgba`
+	+ [x] define `pattern RgbaWord8`
 	+ [ ] define `pattern RgbaDouble`
 	+ [ ] define constructor `rgbaDouble :: Double -> Double -> Double -> Double -> Rgba`
 	+ [ ] use CDouble instead of Double
