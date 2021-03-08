@@ -47,10 +47,11 @@ cairoSetSourceRgb cr (RgbDouble r g b) =
 	argCairoT (\pcr -> c_cairo_set_source_rgb pcr r g b) cr
 
 foreign import ccall "cairo_set_source_rgba" c_cairo_set_source_rgba ::
-	Ptr (CairoT s) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> IO ()
+	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
-cairoSetSourceRgba :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> m ()
-cairoSetSourceRgba cr r g b a = argCairoT (\pcr -> c_cairo_set_source_rgba pcr r g b a) cr
+cairoSetSourceRgba :: PrimMonad m => CairoT (PrimState m) -> Rgba -> m ()
+cairoSetSourceRgba cr (RgbaDouble r g b a) =
+	argCairoT (\pcr -> c_cairo_set_source_rgba pcr r g b a) cr
 
 foreign import ccall "cairo_stroke" c_cairo_stroke :: Ptr (CairoT s) -> IO ()
 

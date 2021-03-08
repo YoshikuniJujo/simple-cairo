@@ -17,7 +17,7 @@ memo
 	+ [x] define `pattern RgbaDouble`
 	+ [x] define constructor `rgbaDouble :: Double -> Double -> Double -> Double -> Rgba`
 	+ [x] use CDouble instead of Double
-* [ ] use `data Rgba` in cairoSetSourceRgba
+* [x] use `data Rgba` in cairoSetSourceRgba
 * [x] define cairoRotate
 	+ [x] test/test-rotate.hs
 	+ [x] prepare a sample .png file
