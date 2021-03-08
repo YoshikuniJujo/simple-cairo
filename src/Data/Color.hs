@@ -2,7 +2,7 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Data.Color where
+module Data.Color (Rgb, pattern RgbWord8, pattern RgbDouble, rgbDouble) where
 
 import Foreign.C.Types
 import Data.Word
