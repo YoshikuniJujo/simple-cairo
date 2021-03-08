@@ -8,8 +8,15 @@ memo
 	+ [x] define `pattern RgbDouble`
 	+ [x] define constructor `rgbDouble :: Double -> Double -> Double -> Rgb`
 	+ [x] use `#{type double}` instead of Double
+	+ [x] use CDouble instead of `#{type double}`
+	+ [x] rename `foo.hsc` to `foo.hs`
 * [x] use `data Rgb` in cairoSetSourceRgb
 * [ ] define `data Rgba`
+	+ [ ] define `data Rgba`
+	+ [ ] define `pattern RgbaWord8`
+	+ [ ] define `pattern RgbaDouble`
+	+ [ ] define constructor `rgbaDouble :: Double -> Double -> Double -> Double -> Rgba`
+	+ [ ] use CDouble instead of Double
 * [ ] use `data Rgba` in cairoSetSourceRgba
 * [x] define cairoRotate
 	+ [x] test/test-rotate.hs

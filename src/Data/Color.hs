@@ -4,11 +4,12 @@
 
 module Data.Color where
 
+import Foreign.C.Types
 import Data.Word
 
 data Rgb
 	= RgbWord8_ Word8 Word8 Word8
-	| RgbDouble_ #{type double} #{type double} #{type double}
+	| RgbDouble_ CDouble CDouble CDouble
 	deriving Show
 
 {-# COMPLETE RgbWord8 #-}
@@ -27,10 +28,10 @@ fromRgbWord8 (RgbDouble_ r g b) = (r', g', b')
 
 {-# COMPLETE RgbDouble #-}
 
-pattern RgbDouble :: #{type double} -> #{type double} -> #{type double} -> Rgb
+pattern RgbDouble :: CDouble -> CDouble -> CDouble -> Rgb
 pattern RgbDouble r g b <- (fromRgbDouble -> (r, g, b))
 
-fromRgbDouble :: Rgb -> (#{type double}, #{type double}, #{type double})
+fromRgbDouble :: Rgb -> (CDouble, CDouble, CDouble)
 fromRgbDouble (RgbWord8_ r g b) = (r', g', b')
 	where
 	r' = fromIntegral r / 0xff
@@ -38,7 +39,7 @@ fromRgbDouble (RgbWord8_ r g b) = (r', g', b')
 	b' = fromIntegral b / 0xff
 fromRgbDouble (RgbDouble_ r g b) = (r, g, b)
 
-rgbDouble :: #{type double} -> #{type double} -> #{type double} -> Maybe Rgb
+rgbDouble :: CDouble -> CDouble -> CDouble -> Maybe Rgb
 rgbDouble r g b
 	| 0 <= r && r <= 1 && 0 <= g && g <= 1 && 0 <= b && b <= 1 =
 		Just $ RgbDouble_ r g b
