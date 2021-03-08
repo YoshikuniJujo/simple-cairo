@@ -19,6 +19,7 @@ module Graphics.Cairo.Drawing.CairoT (
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Monad.Primitive
+import Data.Color
 
 import Graphics.Cairo.Exception
 import Graphics.Cairo.Monad
@@ -40,8 +41,9 @@ cairoSetLineWidth cr w = (`argCairoT` cr) \pcr -> c_cairo_set_line_width pcr w
 foreign import ccall "cairo_set_source_rgb" c_cairo_set_source_rgb ::
 	Ptr (CairoT s) -> #{type double} -> #{type double} -> #{type double} -> IO ()
 
-cairoSetSourceRgb :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> #{type double} -> m ()
-cairoSetSourceRgb cr r g b = argCairoT (\pcr -> c_cairo_set_source_rgb pcr r g b) cr
+cairoSetSourceRgb :: PrimMonad m => CairoT (PrimState m) -> Rgb -> m ()
+cairoSetSourceRgb cr (RgbDouble r g b) =
+	argCairoT (\pcr -> c_cairo_set_source_rgb pcr r g b) cr
 
 foreign import ccall "cairo_set_source_rgba" c_cairo_set_source_rgba ::
 	Ptr (CairoT s) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> IO ()
