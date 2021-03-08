@@ -7,6 +7,7 @@ memo
 		- [x] add COMPLETE pragma
 	+ [x] define `pattern RgbDouble`
 	+ [x] define constructor `rgbDouble :: Double -> Double -> Double -> Rgb`
+	+ [x] use `#{type double}` instead of Double
 * [ ] use `data Rgb` in cairoSetSourceRgb
 * [ ] define `data Rgba`
 * [ ] use `data Rgba` in cairoSetSourceRgba
