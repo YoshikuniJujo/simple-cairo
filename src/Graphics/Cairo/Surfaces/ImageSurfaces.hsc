@@ -68,8 +68,8 @@ cairoImageSurfaceGetCairoImage = argCairoSurfaceT \sfc -> do
 	s <- c_cairo_image_surface_get_stride sfc
 	p <- mallocBytes . fromIntegral $ s * h
 	copyBytes p d . fromIntegral $ s * h
-	fd <- newForeignPtr p $ free p
-	pure $ CairoImage f w h s fd
+	fd <- newForeignPtr (castPtr p) $ free (castPtr p)
+	pure $ CairoImage f (fromIntegral w) (fromIntegral h) (fromIntegral s) fd
 
 cairoImageSurfaceGetCairoImageMut :: PrimMonad m => CairoSurfaceT (PrimState m) -> m (CairoImageMut (PrimState m))
 cairoImageSurfaceGetCairoImageMut = argCairoSurfaceT \sfc -> do
@@ -80,8 +80,8 @@ cairoImageSurfaceGetCairoImageMut = argCairoSurfaceT \sfc -> do
 	s <- c_cairo_image_surface_get_stride sfc
 	p <- mallocBytes . fromIntegral $ s * h
 	copyBytes p d . fromIntegral $ s * h
-	fd <- newForeignPtr p $ free p
-	pure $ CairoImageMut f w h s fd
+	fd <- newForeignPtr (castPtr p) $ free (castPtr p)
+	pure $ CairoImageMut f (fromIntegral w) (fromIntegral h) (fromIntegral s) fd
 
 newtype Argb32 = Argb32 Word32 deriving (Show, Storable)
 
@@ -93,7 +93,7 @@ cairoImageSurfaceCreateForCairoImage ::
 cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unPrimIo do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
-	sp <- c_cairo_image_surface_create_for_data p f w h s
+	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
 	makeCairoSurfaceT' sp p
 	where n = fromIntegral $ s * h
 
@@ -102,6 +102,6 @@ cairoImageSurfaceCreateForCairoImageMut ::
 cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unPrimIo do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
-	sp <- c_cairo_image_surface_create_for_data p f w h s
+	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
 	makeCairoSurfaceT' sp p
 	where n = fromIntegral $ s * h
