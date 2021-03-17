@@ -1,6 +1,50 @@
 memo
 ====
 
+Cairo structure
+---------------
+
+* Drawing
+	+ cairo\_t
+	+ Paths
+	+ cairo\_pattern\_t
+	+ Regions
+	+ Transformations
+	+ text (will delete)
+	+ Raster Sources (will implement in the distant future)
+	+ Tags and LInks (won't implement)
+* Fonts (won't implement)
+* Surfaces
+	+ cairo\_device\_t
+	+ cairo\_surface\_t
+	+ Image Surfaces (will implement soone)
+	+ PDF Surfaces
+	+ PNG Surfaces (toy API)
+	+ Recording Surfaces (will implement in the distant future)
+	+ Win32 Surfaces (won't implement)
+	+ SVG Surfaces
+	+ Quartz Surfaces (won't implement)
+	+ XCB Surfaces
+	+ XLib Surfaces (won't implement)
+	+ XLib-XRender Backend (won't implement)
+	+ Script Surfaces (will implement in the distant future)
+* Utilities
+
+todo
+----
+
+* [ ] Drawing
+	+ [ ] cairo\_t
+	+ [ ] Paths
+	+ [ ] cairo\_pattern\_t
+	+ [ ] Regions
+	+ [ ] Transformations
+* [ ] Surfaces
+	+ [ ] Image Surfaces
+
+old
+---
+
 * [x] define `data Rgb`
 	+ [x] define `data Rgb = RgbWord8_ Word8 Word8 Word8 | RgbDouble_ Double Double Double`
 	+ [x] define `pattern RgbWord8`
@@ -35,7 +79,7 @@ memo
 	+ [x] make CairoImage instance of Eq
 		- [x] define compareBytes
 		- [x] make CairoImage instance of Eq
-* [ ] extend Graphics.Cairo.CairoImage
+* [x] extend Graphics.Cairo.CairoImage
 	- [x] define Rgb24
 		* [x] type PixelRgb24
 		* [x] pattern PixelRgb24
@@ -72,10 +116,10 @@ memo
 		* [x] make A1Mut
 		* [x] pattern CairoImageMutA1
 		* [x] make A1Mut instance of ImageMut
-	- [ ] define Rgb16565
-	- [ ] define Rgb30
+	- [x] define Rgb16565
+	- [x] define Rgb30
 * [x] try to use A8
-	+ [ ] refactor Data.CairoImage
+	+ [x] refactor Data.CairoImage
 		- [x] others 1
 		- [x] others 2
 		- [x] structure of export list
@@ -97,22 +141,22 @@ memo
 		- [x] define cairoImageDataCopy
 		- [x] define cairoImageFreeze
 		- [x] define cairoImageThaw
-		- [ ] refactor Data.CairoImage
-			* [ ] export list
-			* [ ] import list
-			* [ ] structure
-			* [ ] body
-		- [ ] refactor Data.CairoImage.Internal
-			* [ ] export list
-			* [ ] import list
-			* [ ] structure
-			* [ ] body
-	+ [ ] separate cairo-image package
+		- [x] refactor Data.CairoImage
+			* [x] export list
+			* [x] import list
+			* [x] structure
+			* [x] body
+		- [x] refactor Data.CairoImage.Internal
+			* [x] export list
+			* [x] import list
+			* [x] structure
+			* [x] body
+	+ [x] separate cairo-image package
 * [x] make package typecheck-plugin-nat-simple
 * [x] make package ranged-list
 * [x] define repeatMin, repeatMax, repeat
-* [ ] try to encode/decode bits to/from Word32 in little or big endian machine
-* [ ] separate JuicyPixels
+* [x] try to encode/decode bits to/from Word32 in little or big endian machine
+* [x] separate JuicyPixels
 * [ ] clean module hierarchy
 	+ [x] remove Graphics.Cairo
 	+ [x] move some modules under Drawing
@@ -127,28 +171,7 @@ memo
 		- [x] PngSupport
 	+ [ ] consider to remove Graphics.Cairo.Surfaces.PngSupport
 	+ [ ] others
-* [ ] output image data
-	+ [ ] CAIRO\_FORMAT\_INVALID
-	+ [x] CAIRO\_FORMAT\_ARGB32 -> ImageRGBA8
-		- [x] define cairoImageSurfaceGetImage
-		- [x] process pre-multiplied
-	+ [ ] CAIRO\_FORMAT\_RGB24 -> ImageRGB8
-	+ [ ] CAIRO\_FORMAT\_A8
-	+ [ ] CAIRO\_FORMAT\_A1
-	+ [ ] CAIRO\_FORMAT\_RGB16\_565 -> ImageRGB8
-	+ [ ] CAIRO\_FORMAT\_RGB30 -> ImageRGB16
-* [ ] input image data
-	+ [x] ImageRGBA8 -> CAIRO\_FORMAT\_ARGB32
-		- [x] imageRgba8ToFormatArgb32
-		- [x] others
-	+ [ ] ImageRGBA16
-	+ [ ] ImageRGB8 -> CAIRO\_FORMAT\_RGB24
-	+ [ ] ImageRGB16 -> CAIRO\_FORMAT\_RGB30
-	+ [ ] ImageYA16
-	+ [ ] ImageYA8
-	+ [ ] ImageY16
-	+ [ ] ImageY8
-* [ ] make Cairo Image Format
+* [x] make Cairo Image Format
 	+ [x] define CairoImage
 		- [x] define CairoImage data type
 		- [x] define pattern CairoImageArgb32
@@ -168,8 +191,6 @@ memo
 		- [x] define cairoImageSurfaceCreateForCairoImageMut
 			* [x] define
 			* [x] test
-	+ [ ] define unsafe functions
-		- get ForeignPtr or Ptr etc
 * [x] repair class CairoMonad
 	+ to add finalizer to CairoSurfaceT
 * [x] use MonadPrim instead of CairoMonad
@@ -183,11 +204,11 @@ memo
 		- use cairo\_region\_destory
 		- use throwIfErrorRegion
 	+ [x] define cairoRegionCreateRectangle
-* [ ] move modules to Graphics.Cairo.Drawing
+* [x] move modules to Graphics.Cairo.Drawing
 	+ [x] move Graphics.Cairo.CairoT to it
-	+ [ ] move Graphics.Cairo.Paths to it
-	+ [ ] move Graphics.Cairo.CairoPatternT to it
-	+ [ ] move Graphics.Cairo.Text to it
+	+ [x] move Graphics.Cairo.Paths to it
+	+ [x] move Graphics.Cairo.CairoPatternT to it
+	+ [x] move Graphics.Cairo.Text to it
 * [ ] throw exception from functions
 	+ [x] cairoCreate
 	+ [ ] others
@@ -219,7 +240,7 @@ memo
 	+ [ ] Error handling
 	+ [ ] Version Information
 	+ [ ] Types
-* [ ] move converter for JuicyPixels to Graphics.Cairo.JuicyPixels
+* [x] move converter for JuicyPixels to Graphics.Cairo.JuicyPixels
 * [ ] clean 'stack test'
 * [ ] change CairoRegionT to Storable instance
 * [x] cairo\_identity\_matrix
@@ -239,21 +260,21 @@ cairo\_format\_t
 separate JuicyPixels
 --------------------
 
-* [ ] make a converter from/to cairo image to/from JuicyPixels image
+* [x] make a converter from/to cairo image to/from JuicyPixels image
 	+ [x] make module Data.JuicyCairo
 	+ [x] converter from/to instance of Cairo Image to/from Juicy Image a
 		- [x] converter from instance of Cairo Image to Juicy Image a
 		- [x] converter from Juicy Image a to instance of Cairo Image
-	+ [ ] converter from/to instance of ImageMut to/from Image a
+	+ [x] converter from/to instance of ImageMut to/from Image a
 	+ [x] converter from/to Argb32 to/from Image PixelRGBA8
 		- [x] converter from Argb32 to Image PixelRGBA8
 		- [x] converter from Image PixelRGBA8 to Argb32
-	+ [ ] converter from/to Argb32Mut to/from  Image PixelRGBA8
-	+ [ ] others
-* [ ] use the converter
-* [ ] to make package to convert cairo image and JuicyPixels image
+	+ [x] converter from/to Argb32Mut to/from  Image PixelRGBA8
+	+ [x] others
+* [x] use the converter
+* [x] to make package to convert cairo image and JuicyPixels image
 	+ the name is JuicyCairo
-* [ ] to use the above package and simple-cairo in try-cairo
-* [ ] to try ARGB 32 in try-cairo
-	+ [ ] read
-	+ [ ] write
+* [x] to use the above package and simple-cairo in try-cairo
+* [x] to try ARGB 32 in try-cairo
+	+ [x] read
+	+ [x] write
