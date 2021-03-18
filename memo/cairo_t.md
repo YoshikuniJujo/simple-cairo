@@ -168,6 +168,6 @@ todo
 * [x] move the data type `CairoSurfaceT` to module `...Surfaces.CairoSurfaceT`
 * [x] move argCairoPatternT and returnCairoPatternT to `...CairoPatternT`
 * [x] move argCairoT to `...CairoT`
-* [ ] flip argument of argCairoT
+* [x] flip argument of argCairoT
 * [ ] use CairoFormatT pattens of the package cairo-image
 	instead of CairoFormatT values of the module Graphics.Cairo.Values

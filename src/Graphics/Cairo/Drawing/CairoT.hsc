@@ -31,29 +31,29 @@ foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
 	Ptr (CairoT s) -> #{type double} -> IO ()
 
 cairoSetLineWidth :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
-cairoSetLineWidth cr w = (`argCairoT` cr) \pcr -> c_cairo_set_line_width pcr w
+cairoSetLineWidth cr w = argCairoT cr \pcr -> c_cairo_set_line_width pcr w
 
 foreign import ccall "cairo_stroke" c_cairo_stroke :: Ptr (CairoT s) -> IO ()
 
 cairoStroke :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoStroke = argCairoT c_cairo_stroke
+cairoStroke = (`argCairoT` c_cairo_stroke)
 
 foreign import ccall "cairo_fill" c_cairo_fill :: Ptr (CairoT s) -> IO ()
 
 cairoFill :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoFill = argCairoT c_cairo_fill
+cairoFill = (`argCairoT` c_cairo_fill)
 
 foreign import ccall "cairo_paint" c_cairo_paint ::
 	Ptr (CairoT s) -> IO ()
 
 cairoPaint :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoPaint = argCairoT c_cairo_paint
+cairoPaint = (`argCairoT` c_cairo_paint)
 
 foreign import ccall "cairo_paint_with_alpha" c_cairo_paint_with_alpha ::
 	Ptr (CairoT s) -> #{type double} -> IO ()
 
 cairoPaintWithAlpha :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
-cairoPaintWithAlpha cr a = argCairoT (\pcr -> c_cairo_paint_with_alpha pcr a) cr
+cairoPaintWithAlpha cr a = argCairoT cr \pcr -> c_cairo_paint_with_alpha pcr a
 
 foreign import ccall "cairo_set_source" c_cairo_set_source ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
@@ -73,7 +73,7 @@ foreign import ccall "cairo_push_group" c_cairo_push_group ::
 	Ptr (CairoT s) -> IO ()
 
 cairoPushGroup :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoPushGroup = argCairoT c_cairo_push_group
+cairoPushGroup = (`argCairoT` c_cairo_push_group)
 
 foreign import ccall "cairo_pop_group_to_source" c_cairo_pop_group_to_source ::
 	Ptr (CairoT s) -> IO ()

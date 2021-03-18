@@ -31,14 +31,14 @@ foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr (CairoT s) -> IO ()
 
 cairoSetSourceRgb :: PrimMonad m => CairoT (PrimState m) -> Rgb -> m ()
 cairoSetSourceRgb cr (RgbDouble r g b) =
-	argCairoT (\pcr -> c_cairo_set_source_rgb pcr r g b) cr
+	argCairoT cr \pcr -> c_cairo_set_source_rgb pcr r g b
 
 foreign import ccall "cairo_set_source_rgb" c_cairo_set_source_rgb ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> IO ()
 
 cairoSetSourceRgba :: PrimMonad m => CairoT (PrimState m) -> Rgba -> m ()
 cairoSetSourceRgba cr (RgbaDouble r g b a) =
-	argCairoT (\pcr -> c_cairo_set_source_rgba pcr r g b a) cr
+	argCairoT cr \pcr -> c_cairo_set_source_rgba pcr r g b a
 
 foreign import ccall "cairo_set_source_rgba" c_cairo_set_source_rgba ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
