@@ -3,7 +3,7 @@
 
 module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoCreate,
-	cairoSetSourceRgb
+	cairoSetSourceRgb, cairoSetSourceRgba
 	) where
 
 import Foreign.Ptr
@@ -29,9 +29,16 @@ foreign import ccall "cairo_create"
 	c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
 foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr (CairoT s) -> IO ()
 
-foreign import ccall "cairo_set_source_rgb" c_cairo_set_source_rgb ::
-	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> IO ()
-
 cairoSetSourceRgb :: PrimMonad m => CairoT (PrimState m) -> Rgb -> m ()
 cairoSetSourceRgb cr (RgbDouble r g b) =
 	argCairoT (\pcr -> c_cairo_set_source_rgb pcr r g b) cr
+
+foreign import ccall "cairo_set_source_rgb" c_cairo_set_source_rgb ::
+	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> IO ()
+
+cairoSetSourceRgba :: PrimMonad m => CairoT (PrimState m) -> Rgba -> m ()
+cairoSetSourceRgba cr (RgbaDouble r g b a) =
+	argCairoT (\pcr -> c_cairo_set_source_rgba pcr r g b a) cr
+
+foreign import ccall "cairo_set_source_rgba" c_cairo_set_source_rgba ::
+	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
