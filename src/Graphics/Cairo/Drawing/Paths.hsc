@@ -21,7 +21,7 @@ import Data.CairoContext
 
 cairoMoveTo, cairoLineTo, cairoRelLineTo :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
 cairoMoveTo cr x y = (`argCairoT` cr) \pcr -> c_cairo_move_to pcr x y
-cairoLineTo cr@(CairoT fcr) x y = unPrimIo $ withForeignPtr fcr (\pcr -> c_cairo_line_to pcr x y) <* raiseIfError cr
+cairoLineTo cr@(CairoT fcr) x y = unsafeIOToPrim $ withForeignPtr fcr (\pcr -> c_cairo_line_to pcr x y) <* raiseIfError cr
 cairoRelLineTo cr x y = (`argCairoT` cr) \pcr -> c_cairo_rel_line_to pcr x y
 
 foreign import ccall "cairo_move_to" c_cairo_move_to ::

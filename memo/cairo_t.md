@@ -162,3 +162,5 @@ todo
 * [x] move the function `makeCairoT` to module `...CairoT.Basic`
 * [x] move the data type `CairoT` to module `Data.CairoContext`
 * [x] move the data type `CairoSurfaceT` to module `...Surfaces.CairoSurfaceT`
+* [ ] move argCairoPatternT and returnCairoPatternT to `...CairoPatternT`
+* [ ] move argCairoT to `...CairoT`

@@ -24,7 +24,6 @@ import Data.Word
 import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT
-import Graphics.Cairo.Monad
 import Graphics.Cairo.Values
 
 import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
@@ -90,7 +89,7 @@ foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface
 
 cairoImageSurfaceCreateForCairoImage ::
 	PrimMonad m => CairoImage -> m (CairoSurfaceT (PrimState m))
-cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unPrimIo do
+cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unsafeIOToPrim do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
 	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
@@ -99,7 +98,7 @@ cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unPrimIo do
 
 cairoImageSurfaceCreateForCairoImageMut ::
 	PrimMonad m => CairoImageMut (PrimState m) -> m (CairoSurfaceT (PrimState m))
-cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unPrimIo do
+cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unsafeIOToPrim do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
 	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
@@ -110,7 +109,7 @@ foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_da
 	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})
 
 argCairoSurfaceT :: PrimMonad m => (Ptr (CairoSurfaceT (PrimState m)) -> IO a) -> CairoSurfaceT (PrimState m) -> m a
-argCairoSurfaceT io (CairoSurfaceT fs) = unPrimIo $ withForeignPtr fs io
+argCairoSurfaceT io (CairoSurfaceT fs) = unsafeIOToPrim $ withForeignPtr fs io
 
 returnCairoSurfaceT :: PrimMonad m => IO (Ptr (CairoSurfaceT (PrimState m))) -> m (CairoSurfaceT (PrimState m))
-returnCairoSurfaceT io = unPrimIo $ makeCairoSurfaceT =<< io
+returnCairoSurfaceT io = unsafeIOToPrim $ makeCairoSurfaceT =<< io

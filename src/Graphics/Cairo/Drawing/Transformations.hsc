@@ -7,26 +7,24 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
-import Graphics.Cairo.Monad
-
 import Data.CairoContext
 
 foreign import ccall "cairo_translate" c_cairo_translate :: Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
 
 cairoTranslate :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
-cairoTranslate (CairoT fcr) tx ty = unPrimIo $ withForeignPtr fcr \cr -> c_cairo_translate cr tx ty
+cairoTranslate (CairoT fcr) tx ty = unsafeIOToPrim $ withForeignPtr fcr \cr -> c_cairo_translate cr tx ty
 
 foreign import ccall "cairo_scale" c_cairo_scale :: Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
 
 cairoScale :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
-cairoScale (CairoT fcr) sx sy = unPrimIo $ withForeignPtr fcr \cr -> c_cairo_scale cr sx sy
+cairoScale (CairoT fcr) sx sy = unsafeIOToPrim $ withForeignPtr fcr \cr -> c_cairo_scale cr sx sy
 
 foreign import ccall "cairo_rotate" c_cairo_rotate :: Ptr (CairoT s) -> #{type double} -> IO ()
 
 cairoRotate :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
-cairoRotate (CairoT fcr) a = unPrimIo $ withForeignPtr fcr \cr -> c_cairo_rotate cr a
+cairoRotate (CairoT fcr) a = unsafeIOToPrim $ withForeignPtr fcr \cr -> c_cairo_rotate cr a
 
 foreign import ccall "cairo_identity_matrix" c_cairo_identity_matrix :: Ptr (CairoT s) -> IO ()
 
 cairoIdentityMatrix :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoIdentityMatrix (CairoT fcr) = unPrimIo $ withForeignPtr fcr c_cairo_identity_matrix
+cairoIdentityMatrix (CairoT fcr) = unsafeIOToPrim $ withForeignPtr fcr c_cairo_identity_matrix

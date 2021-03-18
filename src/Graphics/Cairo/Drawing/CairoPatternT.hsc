@@ -58,5 +58,5 @@ foreign import ccall "cairo_pattern_create_for_surface" c_cairo_pattern_create_f
 
 cairoPatternCreateForSurface :: PrimMonad m =>
 	CairoSurfaceT (PrimState m) -> m (CairoPatternT (PrimState m))
-cairoPatternCreateForSurface (CairoSurfaceT fs) = unPrimIo
+cairoPatternCreateForSurface (CairoSurfaceT fs) = unsafeIOToPrim
 	$ withForeignPtr fs \s -> makeCairoPatternT =<< c_cairo_pattern_create_for_surface s
