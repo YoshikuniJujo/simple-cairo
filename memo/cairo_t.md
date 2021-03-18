@@ -169,5 +169,6 @@ todo
 * [x] move argCairoPatternT and returnCairoPatternT to `...CairoPatternT`
 * [x] move argCairoT to `...CairoT`
 * [x] flip argument of argCairoT
+* [x] rename the function argCairoT to withCairoT
 * [ ] use CairoFormatT pattens of the package cairo-image
 	instead of CairoFormatT values of the module Graphics.Cairo.Values

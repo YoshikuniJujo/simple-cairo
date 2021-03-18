@@ -30,20 +30,20 @@ foreign import ccall "cairo_select_font_face" c_cairo_select_font_face ::
 cairoSelectFontFace :: PrimMonad m =>
 	CairoT (PrimState m) -> T.Text -> CairoFontSlantT -> CairoFontWeightT -> m ()
 cairoSelectFontFace cr ff (CairoFontSlantT sl) (CairoFontWeightT wt) =
-	argCairoT cr \pcr -> encode ff \cs ->
+	withCairoT cr \pcr -> encode ff \cs ->
 		c_cairo_select_font_face pcr cs sl wt
 
 foreign import ccall "cairo_set_font_size" c_cairo_set_font_size ::
 	Ptr (CairoT s) -> #{type double} -> IO ()
 
 cairoSetFontSize :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
-cairoSetFontSize cr fs = argCairoT cr \pcr -> c_cairo_set_font_size pcr fs
+cairoSetFontSize cr fs = withCairoT cr \pcr -> c_cairo_set_font_size pcr fs
 
 foreign import ccall "cairo_text_extents" c_cairo_text_extents ::
 	Ptr (CairoT s) -> CString -> Ptr CairoTextExtentsT -> IO ()
 
 cairoTextExtents :: PrimMonad m => CairoT (PrimState m) -> T.Text -> m CairoTextExtentsT
-cairoTextExtents cr t = argCairoT cr \pcr ->
+cairoTextExtents cr t = withCairoT cr \pcr ->
 	encode t \cs -> alloca \p -> c_cairo_text_extents pcr cs p *> peek p
 
 encode :: T.Text -> (CString -> IO a) -> IO a
@@ -53,4 +53,4 @@ foreign import ccall "cairo_show_text" c_cairo_show_text ::
 	Ptr (CairoT s) -> CString -> IO ()
 
 cairoShowText :: PrimMonad m => CairoT (PrimState m) -> T.Text -> m ()
-cairoShowText cr t = argCairoT cr \pcr -> encode t \cs -> c_cairo_show_text pcr cs
+cairoShowText cr t = withCairoT cr \pcr -> encode t \cs -> c_cairo_show_text pcr cs
