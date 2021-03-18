@@ -11,6 +11,7 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
+import Graphics.Cairo.Surfaces.CairoSurfaceT
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 

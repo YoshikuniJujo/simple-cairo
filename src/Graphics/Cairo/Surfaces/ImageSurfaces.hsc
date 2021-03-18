@@ -23,8 +23,8 @@ import Control.Monad.Primitive
 import Data.Word
 import Data.Int
 
+import Graphics.Cairo.Surfaces.CairoSurfaceT
 import Graphics.Cairo.Monad
-import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
 import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
@@ -105,3 +105,12 @@ cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unPrimIo do
 	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
 	makeCairoSurfaceT' sp p
 	where n = fromIntegral $ s * h
+
+foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_data ::
+	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})
+
+argCairoSurfaceT :: PrimMonad m => (Ptr (CairoSurfaceT (PrimState m)) -> IO a) -> CairoSurfaceT (PrimState m) -> m a
+argCairoSurfaceT io (CairoSurfaceT fs) = unPrimIo $ withForeignPtr fs io
+
+returnCairoSurfaceT :: PrimMonad m => IO (Ptr (CairoSurfaceT (PrimState m))) -> m (CairoSurfaceT (PrimState m))
+returnCairoSurfaceT io = unPrimIo $ makeCairoSurfaceT =<< io

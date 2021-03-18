@@ -9,8 +9,8 @@ import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
 import Control.Monad.Primitive
-import Graphics.Cairo.Types
 
+import Graphics.Cairo.Surfaces.CairoSurfaceT
 import Graphics.Cairo.Exception
 import Graphics.Cairo.Monad
 
