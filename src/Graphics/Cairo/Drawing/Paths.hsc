@@ -14,7 +14,8 @@ import Control.Monad.Primitive
 
 import Graphics.Cairo.Exception
 import Graphics.Cairo.Monad
-import Graphics.Cairo.Types
+
+import Data.CairoContext
 
 #include <cairo.h>
 

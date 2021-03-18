@@ -1,15 +1,20 @@
 {-# LANGUAGE BlockArguments #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.Drawing.CairoT.Basic where
+module Graphics.Cairo.Drawing.CairoT.Basic (
+	cairoCreate
+	) where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr
+import Foreign.ForeignPtr hiding (newForeignPtr)
+import Foreign.Concurrent
 import Control.Monad.Primitive
 import Graphics.Cairo.Types
 
 import Graphics.Cairo.Exception
 import Graphics.Cairo.Monad
+
+import Data.CairoContext
 
 foreign import ccall "cairo_create" c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
 
@@ -17,3 +22,8 @@ cairoCreate :: PrimMonad m => CairoSurfaceT (PrimState m) -> m (CairoT (PrimStat
 cairoCreate (CairoSurfaceT fs) = unPrimIo do
 	cr <- makeCairoT =<< withForeignPtr fs c_cairo_create
 	cr <$ raiseIfError cr
+
+makeCairoT :: Ptr (CairoT s) -> IO (CairoT s)
+makeCairoT p = CairoT <$> newForeignPtr p (c_cairo_destroy p)
+
+foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr (CairoT s) -> IO ()

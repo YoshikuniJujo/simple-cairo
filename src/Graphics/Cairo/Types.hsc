@@ -11,13 +11,6 @@ import Data.Int
 
 #include <cairo.h>
 
-newtype CairoT s = CairoT (ForeignPtr (CairoT s)) deriving Show
-
-makeCairoT :: Ptr (CairoT s) -> IO (CairoT s)
-makeCairoT p = CairoT <$> newForeignPtr p (c_cairo_destroy p)
-
-foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr (CairoT s) -> IO ()
-
 newtype CairoSurfaceT s = CairoSurfaceT (ForeignPtr (CairoSurfaceT s)) deriving Show
 
 makeCairoSurfaceT :: Ptr (CairoSurfaceT s) -> IO (CairoSurfaceT s)

@@ -20,6 +20,8 @@ import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 import Graphics.Cairo.Values
 
+import Data.CairoContext
+
 #include <cairo.h>
 
 foreign import ccall "cairo_select_font_face" c_cairo_select_font_face ::

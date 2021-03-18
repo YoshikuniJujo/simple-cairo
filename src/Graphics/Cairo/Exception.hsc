@@ -12,6 +12,8 @@ import Control.Exception.Hierarchy
 import Data.Word
 import Graphics.Cairo.Types
 
+import Data.CairoContext
+
 #include <cairo.h>
 
 data CairoStatusNoMemory = CairoStatusNoMemory deriving Show

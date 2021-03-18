@@ -8,7 +8,8 @@ import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Monad
-import Graphics.Cairo.Types
+
+import Data.CairoContext
 
 foreign import ccall "cairo_translate" c_cairo_translate :: Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
 

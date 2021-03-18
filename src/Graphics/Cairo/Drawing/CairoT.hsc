@@ -28,6 +28,8 @@ import Graphics.Cairo.Types
 
 import Graphics.Cairo.Drawing.CairoT.Basic
 
+import Data.CairoContext
+
 foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
 	Ptr (CairoT s) -> #{type double} -> IO ()
 

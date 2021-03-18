@@ -156,6 +156,8 @@ todo
 	+ [ ] others
 * [ ] review the function `cairo_create`
 	+ [ ] reconsider the module which has the function `unPrimIO`
-	+ [ ] reconsider the module which has the function `makeCairoT`
+	+ [x] reconsider the module which has the function `makeCairoT`
 	+ [ ] reconsider the module which has the function `raiseIfError`
 	+ [ ] reconsider the function `cairo_create`
+* [x] move the function `makeCairoT` to module `...CairoT.Basic`
+* [x] move the data type `CairoT` to module `Data.CairoContext`
