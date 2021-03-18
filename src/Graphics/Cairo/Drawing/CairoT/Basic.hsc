@@ -15,14 +15,13 @@ import Graphics.Cairo.Exception
 
 import Data.CairoContext
 
-foreign import ccall "cairo_create" c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
-
-cairoCreate :: PrimMonad m => CairoSurfaceT (PrimState m) -> m (CairoT (PrimState m))
-cairoCreate (CairoSurfaceT fs) = unsafeIOToPrim do
-	cr <- makeCairoT =<< withForeignPtr fs c_cairo_create
+cairoCreate :: PrimMonad m =>
+	CairoSurfaceT (PrimState m) -> m (CairoT (PrimState m))
+cairoCreate (CairoSurfaceT sr) = unsafeIOToPrim do
+	cr <- withForeignPtr sr c_cairo_create >>= \pcr ->
+		CairoT <$> newForeignPtr pcr (c_cairo_destroy pcr)
 	cr <$ raiseIfError cr
 
-makeCairoT :: Ptr (CairoT s) -> IO (CairoT s)
-makeCairoT p = CairoT <$> newForeignPtr p (c_cairo_destroy p)
-
+foreign import ccall "cairo_create"
+	c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
 foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr (CairoT s) -> IO ()

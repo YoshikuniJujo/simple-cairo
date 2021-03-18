@@ -154,13 +154,13 @@ todo
 	to module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_create`
 	+ [ ] others
-* [ ] review the function `cairo_create`
-	+ [ ] reconsider the module which has the function `unPrimIO`
+* [x] review the function `cairo_create`
+	+ [x] reconsider the module which has the function `unPrimIO`
 	+ [x] reconsider the module which has the function `makeCairoT`
-	+ [ ] reconsider the module which has the function `raiseIfError`
-	+ [ ] reconsider the function `cairo_create`
+	+ [x] reconsider the module which has the function `raiseIfError`
+	+ [x] reconsider the function `cairo_create`
 * [x] move the function `makeCairoT` to module `...CairoT.Basic`
 * [x] move the data type `CairoT` to module `Data.CairoContext`
 * [x] move the data type `CairoSurfaceT` to module `...Surfaces.CairoSurfaceT`
-* [ ] move argCairoPatternT and returnCairoPatternT to `...CairoPatternT`
-* [ ] move argCairoT to `...CairoT`
+* [x] move argCairoPatternT and returnCairoPatternT to `...CairoPatternT`
+* [x] move argCairoT to `...CairoT`
