@@ -23,7 +23,6 @@ import Control.Monad.Primitive
 import Data.Color
 
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 
 import Graphics.Cairo.Drawing.CairoT.Basic

@@ -5,7 +5,6 @@ module Graphics.Cairo.Types where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
-import Foreign.Marshal
 import Foreign.Storable
 import Data.Int
 

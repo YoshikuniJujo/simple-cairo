@@ -12,7 +12,6 @@ import Data.Word
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Types
 
 #include <cairo.h>
 

@@ -13,7 +13,6 @@ import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Monad
 
 import Data.CairoContext
 
