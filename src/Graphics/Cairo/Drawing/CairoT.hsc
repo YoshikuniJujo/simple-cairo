@@ -26,12 +26,7 @@ import Graphics.Cairo.Exception
 import Graphics.Cairo.Monad
 import Graphics.Cairo.Types
 
-foreign import ccall "cairo_create" c_cairo_create :: Ptr (CairoSurfaceT s) -> IO (Ptr (CairoT s))
-
-cairoCreate :: PrimMonad m => CairoSurfaceT (PrimState m) -> m (CairoT (PrimState m))
-cairoCreate (CairoSurfaceT fs) = unPrimIo do
-	cr <- makeCairoT =<< withForeignPtr fs c_cairo_create
-	cr <$ raiseIfError cr
+import Graphics.Cairo.Drawing.CairoT.Basic
 
 foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
 	Ptr (CairoT s) -> #{type double} -> IO ()

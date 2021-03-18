@@ -66,18 +66,42 @@ functions
 necessary
 ----------
 
-* [ ] cairo\_create
-* [ ] cairo\_set\_source\_rgb
-* [ ] cairo\_set\_source\_rgba
-* [ ] cairo\_set\_source
-* [ ] cairo\_set\_source\_surface
-* [ ] cairo\_set\_fill\_rule
-* [ ] cairo\_set\_line\_cap
-* [ ] cairo\_set\_line\_join
-* [ ] cairo\_set\_line\_width
-* [ ] cairo\_set\_miter\_limit
-* [ ] cairo\_set\_operator
-* ...
+* [ ] basic
+	+ [ ] cairo\_create
+	+ [ ] source
+		- [ ] cairo\_set\_source\_rgb
+		- [ ] cairo\_set\_source\_rgba
+		- [ ] cairo\_set\_source
+		- [ ] cairo\_set\_source\_surface
+	+ [ ] stroke
+		- [ ] cairo\_stroke
+		- [ ] cairo\_stroke\_preserve
+		- [ ] cairo\_stroke\_extents
+		- [ ] cairo\_in\_stroke
+	+ [ ] fill
+		- [ ] cairo\_fill
+		- [ ] cairo\_fill\_preserve
+		- [ ] cairo\_fill\_extents
+		- [ ] cairo\_in\_fill
+	+ [ ] paint
+		- [ ] cairo\_paint
+		- [ ] cairo\_paint\_with\_alpha
+	+ [ ] mask
+		- [ ] cairo\_mask
+		- [ ] cairo\_mask\_surface
+* [ ] clip
+	+ [ ] cairo\_clip
+	+ [ ] cairo\_clip\_preserve
+	+ [ ] cairo\_clip\_extents
+	+ [ ] cairo\_in\_clip
+	+ [ ] cairo\_reset\_clip
+* [ ] setting
+	+ [ ] cairo\_set\_fill\_rule
+	+ [ ] cairo\_set\_line\_cap
+	+ [ ] cairo\_set\_line\_join
+	+ [ ] cairo\_set\_line\_width
+	+ [ ] cairo\_set\_miter\_limit
+	+ [ ] cairo\_set\_operator
 
 optional
 --------
@@ -102,17 +126,36 @@ optional
 * [ ] cairo\_get\_line\_width
 * [ ] cairo\_get\_miter\_limit
 * [ ] cairo\_get\_operator
-* ...
+* [ ] cairo\_set\_tolerance
+* [ ] cairo\_get\_tolerance
+* [ ] cairo\_rectangle\_list\_destroy
+* [ ] cairo\_copy\_clip\_rectangle\_list
+* [ ] cairo\_copy\_page
+* [ ] cairo\_show\_page
+* [ ] cairo\_set\_user\_data
+* [ ] cairo\_get\_user\_data
 
 for GC
 ------
 
 * [ ] cairo\_reference
 * [ ] cairo\_destroy
-* ...
+* [ ] cairo\_get\_reference\_count
 
 for exception
 -------------
 
 * [ ] cairo\_status
-* ...
+
+todo
+----
+
+* [ ] move function from module Graphics.Cairo.Drawing.CairoT
+	to module Graphics.Cairo.Drawing.CairoT.Basic
+	+ [x] function `cairo_create`
+	+ [ ] others
+* [ ] review the function `cairo_create`
+	+ [ ] reconsider the module which has the function `unPrimIO`
+	+ [ ] reconsider the module which has the function `makeCairoT`
+	+ [ ] reconsider the module which has the function `raiseIfError`
+	+ [ ] reconsider the function `cairo_create`
