@@ -67,9 +67,9 @@ necessary
 ----------
 
 * [ ] basic
-	+ [ ] cairo\_create
+	+ [x] cairo\_create
 	+ [ ] source
-		- [ ] cairo\_set\_source\_rgb
+		- [x] cairo\_set\_source\_rgb
 		- [ ] cairo\_set\_source\_rgba
 		- [ ] cairo\_set\_source
 		- [ ] cairo\_set\_source\_surface
@@ -153,6 +153,10 @@ todo
 * [ ] move function from module Graphics.Cairo.Drawing.CairoT
 	to module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_create`
+	+ [x] function `cairo_set_source_rgb`
+	+ [ ] function `cairo_set_source_rgba`
+	+ [ ] function `cairo_set_source`
+	+ [ ] function `cairo_set_source_surface`
 	+ [ ] others
 * [x] review the function `cairo_create`
 	+ [x] reconsider the module which has the function `unPrimIO`
@@ -164,3 +168,5 @@ todo
 * [x] move the data type `CairoSurfaceT` to module `...Surfaces.CairoSurfaceT`
 * [x] move argCairoPatternT and returnCairoPatternT to `...CairoPatternT`
 * [x] move argCairoT to `...CairoT`
+* [ ] use CairoFormatT pattens of the package cairo-image
+	instead of CairoFormatT values of the module Graphics.Cairo.Values

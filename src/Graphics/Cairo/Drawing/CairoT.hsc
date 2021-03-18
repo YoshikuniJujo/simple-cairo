@@ -35,13 +35,6 @@ foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
 cairoSetLineWidth :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
 cairoSetLineWidth cr w = (`argCairoT` cr) \pcr -> c_cairo_set_line_width pcr w
 
-foreign import ccall "cairo_set_source_rgb" c_cairo_set_source_rgb ::
-	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> IO ()
-
-cairoSetSourceRgb :: PrimMonad m => CairoT (PrimState m) -> Rgb -> m ()
-cairoSetSourceRgb cr (RgbDouble r g b) =
-	argCairoT (\pcr -> c_cairo_set_source_rgb pcr r g b) cr
-
 foreign import ccall "cairo_set_source_rgba" c_cairo_set_source_rgba ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
