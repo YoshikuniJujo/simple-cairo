@@ -41,6 +41,9 @@ todo
 	+ [ ] Transformations
 * [ ] Surfaces
 	+ [ ] Image Surfaces
+	+ [ ] SVG Surfaces
+		- [x] cairo\_svg\_surface\_create
+		- [ ] cairo\_svg\_surface\_create\_for\_stream
 
 old
 ---

@@ -14,6 +14,8 @@ import Graphics.Cairo.Types
 
 import Data.CairoContext
 
+import Graphics.Cairo.Surfaces.CairoSurfaceT
+
 #include <cairo.h>
 
 data CairoStatusNoMemory = CairoStatusNoMemory deriving Show
@@ -58,6 +60,11 @@ raiseIfErrorRegion (CairoRegionT fr) = withForeignPtr fr \r -> cairoStatusToThro
 
 foreign import ccall "cairo_region_status" c_cairo_region_status ::
 	Ptr (CairoRegionT s) -> IO #type cairo_status_t
+
+foreign import ccall "cairo_surface_status" c_cairo_surface_status :: Ptr (CairoSurfaceT s) -> IO #type cairo_status_t
+
+raiseIfErrorSurface :: CairoSurfaceT s -> IO ()
+raiseIfErrorSurface (CairoSurfaceT fsr) = withForeignPtr fsr \sr -> cairoStatusToThrowError =<< c_cairo_surface_status sr
 
 cairoStatusToThrowError :: #{type cairo_status_t} -> IO ()
 cairoStatusToThrowError = \case
