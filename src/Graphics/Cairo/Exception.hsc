@@ -87,6 +87,11 @@ cairoStatusToThrowError = \case
 	CAIRO_STATUS_NO_MEMORY, CAIRO_STATUS_INVALID_RESTORE, \
 	CAIRO_STATUS_INVALID_POP_GROUP, CAIRO_STATUS_NO_CURRENT_POINT
 
+tryCairoWriteFunc :: IO a -> IO #{type cairo_status_t}
+tryCairoWriteFunc io = (<$> try io) \case
+	Left CairoStatusWriteError -> #{const CAIRO_STATUS_WRITE_ERROR}
+	Right _ -> #{const CAIRO_STATUS_SUCCESS}
+
 {-
 pattern CairoStatusSuccess :: CairoStatusT
 pattern CairoStatusSuccess = CairoStatusT #const CAIRO_STATUS_SUCCESS
