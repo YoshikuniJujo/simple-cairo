@@ -55,13 +55,6 @@ foreign import ccall "cairo_paint_with_alpha" c_cairo_paint_with_alpha ::
 cairoPaintWithAlpha :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
 cairoPaintWithAlpha cr a = withCairoT cr \pcr -> c_cairo_paint_with_alpha pcr a
 
-foreign import ccall "cairo_set_source" c_cairo_set_source ::
-	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
-
-cairoSetSource :: PrimMonad m => CairoT s -> CairoPatternT s -> m ()
-cairoSetSource (CairoT fcr) (CairoPatternT fpt) = unsafeIOToPrim
-	$ withForeignPtr fcr \cr -> withForeignPtr fpt \pt -> c_cairo_set_source cr pt
-
 foreign import ccall "cairo_mask" c_cairo_mask ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
 

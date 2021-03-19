@@ -155,7 +155,7 @@ todo
 	+ [x] function `cairo_create`
 	+ [x] function `cairo_set_source_rgb`
 	+ [x] function `cairo_set_source_rgba`
-	+ [ ] function `cairo_set_source`
+	+ [x] function `cairo_set_source`
 	+ [ ] function `cairo_set_source_surface`
 	+ [ ] others
 * [x] review the function `cairo_create`
@@ -170,5 +170,7 @@ todo
 * [x] move argCairoT to `...CairoT`
 * [x] flip argument of argCairoT
 * [x] rename the function argCairoT to withCairoT
+* [ ] use Color in CairoPatternT
+* [ ] move CairoPatternT to the module Graphics.Cairo.Drawing.CairoPatternT
 * [ ] use CairoFormatT pattens of the package cairo-image
 	instead of CairoFormatT values of the module Graphics.Cairo.Values
