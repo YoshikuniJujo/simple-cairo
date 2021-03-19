@@ -3,7 +3,8 @@
 
 module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoCreate,
-	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface
+	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
+	cairoStroke
 	) where
 
 import Foreign.Ptr
@@ -58,3 +59,8 @@ cairoSetSourceSurface (CairoT fcr) (CairoSurfaceT fsr) x y = unsafeIOToPrim
 
 foreign import ccall "cairo_set_source_surface" c_cairo_set_source_surface ::
 	Ptr (CairoT s) -> Ptr (CairoSurfaceT s) -> CDouble -> CDouble -> IO ()
+
+cairoStroke :: PrimMonad m => CairoT (PrimState m) -> m ()
+cairoStroke = (`withCairoT` c_cairo_stroke)
+
+foreign import ccall "cairo_stroke" c_cairo_stroke :: Ptr (CairoT s) -> IO ()

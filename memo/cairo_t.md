@@ -74,7 +74,7 @@ necessary
 		- [x] cairo\_set\_source
 		- [x] cairo\_set\_source\_surface
 	+ [ ] stroke
-		- [ ] cairo\_stroke
+		- [x] cairo\_stroke
 		- [ ] cairo\_stroke\_preserve
 		- [ ] cairo\_stroke\_extents
 		- [ ] cairo\_in\_stroke
@@ -157,9 +157,13 @@ todo
 	+ [x] function `cairo_set_source_rgb`
 	+ [x] function `cairo_set_source_rgba`
 	+ [x] function `cairo_set_source`
+	+ [x] function `cairo_stroke`
 	+ [ ] others
 * [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
+	+ [ ] function `cairo_stroke_preserve`
+	+ [ ] function `cairo_stroke_extents`
+	+ [ ] function `cairo_in_stroke`
 	+ [ ] others
 * [x] review the function `cairo_create`
 	+ [x] reconsider the module which has the function `unPrimIO`
