@@ -68,11 +68,11 @@ necessary
 
 * [ ] basic
 	+ [x] cairo\_create
-	+ [ ] source
+	+ [x] source
 		- [x] cairo\_set\_source\_rgb
-		- [ ] cairo\_set\_source\_rgba
-		- [ ] cairo\_set\_source
-		- [ ] cairo\_set\_source\_surface
+		- [x] cairo\_set\_source\_rgba
+		- [x] cairo\_set\_source
+		- [x] cairo\_set\_source\_surface
 	+ [ ] stroke
 		- [ ] cairo\_stroke
 		- [ ] cairo\_stroke\_preserve
@@ -89,6 +89,9 @@ necessary
 	+ [ ] mask
 		- [ ] cairo\_mask
 		- [ ] cairo\_mask\_surface
+* [ ] save and restore
+	+ [ ] cairo\_save
+	+ [ ] cairo\_restore
 * [ ] clip
 	+ [ ] cairo\_clip
 	+ [ ] cairo\_clip\_preserve
@@ -96,6 +99,7 @@ necessary
 	+ [ ] cairo\_in\_clip
 	+ [ ] cairo\_reset\_clip
 * [ ] setting
+	+ [ ] cairo\_set\_dash
 	+ [ ] cairo\_set\_fill\_rule
 	+ [ ] cairo\_set\_line\_cap
 	+ [ ] cairo\_set\_line\_join
@@ -106,8 +110,6 @@ necessary
 optional
 --------
 
-* [ ] cairo\_save
-* [ ] cairo\_restore
 * [ ] cairo\_get\_target
 * [ ] cairo\_push\_group
 * [ ] cairo\_push\_group\_with\_content
@@ -117,7 +119,6 @@ optional
 * [ ] cairo\_get\_source
 * [ ] cairo\_set\_antialias
 * [ ] cairo\_get\_antialias
-* [ ] cairo\_set\_dash
 * [ ] cairo\_get\_dash\_count
 * [ ] cairo\_get\_dash
 * [ ] cairo\_get\_fill\_rule
@@ -156,7 +157,9 @@ todo
 	+ [x] function `cairo_set_source_rgb`
 	+ [x] function `cairo_set_source_rgba`
 	+ [x] function `cairo_set_source`
-	+ [ ] function `cairo_set_source_surface`
+	+ [ ] others
+* [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
+	+ [x] function `cairo_set_source_surface`
 	+ [ ] others
 * [x] review the function `cairo_create`
 	+ [x] reconsider the module which has the function `unPrimIO`

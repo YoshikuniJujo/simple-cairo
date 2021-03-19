@@ -7,7 +7,7 @@ module Graphics.Cairo.Drawing.CairoT (
 	-- * Push and Pop Group
 	cairoPushGroup, cairoPopGroup, cairoPopGroupToSource,
 	-- * Set Source
-	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource,
+	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
 	-- * Set Attribute
 	cairoSetLineWidth,
 	-- * Verb
