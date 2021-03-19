@@ -19,6 +19,12 @@ makeCairoSurfaceT' ps p = CairoSurfaceT <$> newForeignPtr ps (free p >> c_cairo_
 foreign import ccall "cairo_surface_destroy" c_cairo_surface_destroy ::
 	Ptr (CairoSurfaceT s) -> IO ()
 
+cairoSurfaceFinish :: PrimMonad m => CairoSurfaceT (PrimState m) -> m ()
+cairoSurfaceFinish (CairoSurfaceT fsr) = unsafeIOToPrim $ withForeignPtr fsr c_cairo_surface_finish
+
+foreign import ccall "cairo_surface_finish" c_cairo_surface_finish ::
+	Ptr (CairoSurfaceT s) -> IO ()
+
 cairoSurfaceFlush :: PrimMonad m => CairoSurfaceT (PrimState m) -> m ()
 cairoSurfaceFlush (CairoSurfaceT fsr) = unsafeIOToPrim $ withForeignPtr fsr c_cairo_surface_flush
 
