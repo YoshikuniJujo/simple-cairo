@@ -5,7 +5,7 @@
 module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoCreate,
 	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
-	cairoStroke, cairoStrokePreserve, cairoStrokeExtents,
+	cairoStroke, cairoStrokePreserve, cairoStrokeExtents, cairoInStroke,
 
 	CairoExtents(..),
 	pattern CairoExtentsLeftTopWidthHeight, cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight
@@ -18,6 +18,7 @@ import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT
 import Graphics.Cairo.Exception
@@ -26,6 +27,8 @@ import Data.Color
 import Data.CairoContext
 
 import Graphics.Cairo.Types
+
+#include <cairo.h>
 
 cairoCreate :: PrimMonad m =>
 	CairoSurfaceT (PrimState m) -> m (CairoT (PrimState m))
@@ -99,3 +102,9 @@ pattern CairoExtentsLeftTopWidthHeight {
 
 cairoExtentsLeftTopWidthHeight :: CairoExtents -> (CDouble, CDouble, CDouble, CDouble)
 cairoExtentsLeftTopWidthHeight (CairoExtentsLeftTopRightBottom l t r b) = (l, t, r - l, b - t)
+
+cairoInStroke :: PrimMonad m => CairoT (PrimState m) -> CDouble -> CDouble -> m Bool
+cairoInStroke cr x y = withCairoT cr \pcr -> (/= 0) <$> c_cairo_in_stroke pcr x y
+
+foreign import ccall "cairo_in_stroke" c_cairo_in_stroke ::
+	Ptr (CairoT s) -> CDouble -> CDouble -> IO #{type cairo_bool_t}

@@ -73,11 +73,11 @@ necessary
 		- [x] cairo\_set\_source\_rgba
 		- [x] cairo\_set\_source
 		- [x] cairo\_set\_source\_surface
-	+ [ ] stroke
+	+ [x] stroke
 		- [x] cairo\_stroke
 		- [x] cairo\_stroke\_preserve
 		- [x] cairo\_stroke\_extents
-		- [ ] cairo\_in\_stroke
+		- [x] cairo\_in\_stroke
 	+ [ ] fill
 		- [ ] cairo\_fill
 		- [ ] cairo\_fill\_preserve
@@ -158,12 +158,16 @@ todo
 	+ [x] function `cairo_set_source_rgba`
 	+ [x] function `cairo_set_source`
 	+ [x] function `cairo_stroke`
+	+ [ ] function `cairo_fill`
 	+ [ ] others
 * [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
 	+ [x] function `cairo_stroke_preserve`
 	+ [x] function `cairo_stroke_extents`
-	+ [ ] function `cairo_in_stroke`
+	+ [x] function `cairo_in_stroke`
+	+ [ ] function `cairo_fill_preserve`
+	+ [ ] function `cairo_fill_extents`
+	+ [ ] function `cairo_in_fill`
 	+ [ ] others
 * [x] review the function `cairo_create`
 	+ [x] reconsider the module which has the function `unPrimIO`
