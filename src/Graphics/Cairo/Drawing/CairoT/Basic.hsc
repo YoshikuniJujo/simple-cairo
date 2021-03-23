@@ -8,7 +8,7 @@ module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoStroke, cairoStrokePreserve, cairoStrokeExtents, cairoInStroke,
 	cairoFill, cairoFillPreserve, cairoFillExtents, cairoInFill,
 	cairoPaint, cairoPaintWithAlpha,
-	cairoMask,
+	cairoMask, cairoMaskSurface,
 
 	CairoExtents(..),
 	pattern CairoExtentsLeftTopWidthHeight, cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight
@@ -153,3 +153,10 @@ cairoMask (CairoT fcr) (CairoPatternT fpt) = unsafeIOToPrim
 
 foreign import ccall "cairo_mask" c_cairo_mask ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
+
+cairoMaskSurface :: PrimMonad m => CairoT s -> CairoSurfaceT s -> CDouble -> CDouble -> m ()
+cairoMaskSurface (CairoT fcr) (CairoSurfaceT fsr) x y = unsafeIOToPrim
+	$ withForeignPtr fcr \cr -> withForeignPtr fsr \sr -> c_cairo_mask_surface cr sr x y
+
+foreign import ccall "cairo_mask_surface" c_cairo_mask_surface ::
+	Ptr (CairoT s) -> Ptr (CairoSurfaceT s) -> CDouble -> CDouble -> IO ()

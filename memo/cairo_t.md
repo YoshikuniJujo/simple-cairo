@@ -66,7 +66,7 @@ functions
 necessary
 ----------
 
-* [ ] basic
+* [x] basic
 	+ [x] cairo\_create
 	+ [x] source
 		- [x] cairo\_set\_source\_rgb
@@ -86,9 +86,9 @@ necessary
 	+ [x] paint
 		- [x] cairo\_paint
 		- [x] cairo\_paint\_with\_alpha
-	+ [ ] mask
+	+ [x] mask
 		- [x] cairo\_mask
-		- [ ] cairo\_mask\_surface
+		- [x] cairo\_mask\_surface
 * [ ] save and restore
 	+ [ ] cairo\_save
 	+ [ ] cairo\_restore
@@ -151,7 +151,7 @@ for exception
 todo
 ----
 
-* [ ] move function from module Graphics.Cairo.Drawing.CairoT
+* [x] move function from module Graphics.Cairo.Drawing.CairoT
 	to module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_create`
 	+ [x] function `cairo_set_source_rgb`
@@ -162,8 +162,7 @@ todo
 	+ [x] function `cairo_paint`
 	+ [x] function `cairo_paint_with_alpha`
 	+ [x] function `cairo_mask`
-	+ [ ] others
-* [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
+* [x] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
 	+ [x] function `cairo_stroke_preserve`
 	+ [x] function `cairo_stroke_extents`
@@ -171,13 +170,15 @@ todo
 	+ [x] function `cairo_fill_preserve`
 	+ [x] function `cairo_fill_extents`
 	+ [x] function `cairo_in_fill`
-	+ [ ] function `cairo_mask_surface`
-	+ [ ] others
+	+ [x] function `cairo_mask_surface`
 * [x] review the function `cairo_create`
 	+ [x] reconsider the module which has the function `unPrimIO`
 	+ [x] reconsider the module which has the function `makeCairoT`
 	+ [x] reconsider the module which has the function `raiseIfError`
 	+ [x] reconsider the function `cairo_create`
+* [ ] create function in module Graphics.Cairo.Drawing.CairoT.SaveAndRestore
+	+ [ ] function `cairo_save`
+	+ [ ] function `cairo_restore`
 * [x] move the function `makeCairoT` to module `...CairoT.Basic`
 * [x] move the data type `CairoT` to module `Data.CairoContext`
 * [x] move the data type `CairoSurfaceT` to module `...Surfaces.CairoSurfaceT`
