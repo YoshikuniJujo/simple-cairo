@@ -89,9 +89,9 @@ necessary
 	+ [x] mask
 		- [x] cairo\_mask
 		- [x] cairo\_mask\_surface
-* [ ] save and restore
-	+ [ ] cairo\_save
-	+ [ ] cairo\_restore
+* [x] save and restore
+	+ [x] cairo\_save
+	+ [x] cairo\_restore
 * [ ] clip
 	+ [ ] cairo\_clip
 	+ [ ] cairo\_clip\_preserve
@@ -176,9 +176,15 @@ todo
 	+ [x] reconsider the module which has the function `makeCairoT`
 	+ [x] reconsider the module which has the function `raiseIfError`
 	+ [x] reconsider the function `cairo_create`
-* [ ] create function in module Graphics.Cairo.Drawing.CairoT.SaveAndRestore
-	+ [ ] function `cairo_save`
-	+ [ ] function `cairo_restore`
+* [x] create function in module Graphics.Cairo.Drawing.CairoT.SaveAndRestore
+	+ [x] function `cairo_save`
+	+ [x] function `cairo_restore`
+* [ ] create function in module Graphics.Cairo.Drawing.CairoT.Clip
+	+ [ ] function `cairo_clip`
+	+ [ ] function `cairo_clip_preserve`
+	+ [ ] function `cairo_clip_extents`
+	+ [ ] function `cairo_in_clip`
+	+ [ ] function `cairo_reset_clip`
 * [x] move the function `makeCairoT` to module `...CairoT.Basic`
 * [x] move the data type `CairoT` to module `Data.CairoContext`
 * [x] move the data type `CairoSurfaceT` to module `...Surfaces.CairoSurfaceT`
