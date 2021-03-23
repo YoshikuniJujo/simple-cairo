@@ -198,7 +198,7 @@ todo
 	+ [x] function `cairo_set_line_width`
 * [ ] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
 	+ [ ] function `cairo_set_dash`
-		- [ ] use `withArrayLen`
+		- [x] use `withArrayLen`
 		- [ ] throw `CAIRO_STATU_INVALID_DASH`
 	+ [ ] function `cairo_set_fill_rule`
 	+ [ ] function `cairo_set_line_cap`
