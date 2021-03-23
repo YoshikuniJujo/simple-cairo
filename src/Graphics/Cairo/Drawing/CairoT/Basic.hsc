@@ -6,7 +6,7 @@ module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoCreate,
 	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
 	cairoStroke, cairoStrokePreserve, cairoStrokeExtents, cairoInStroke,
-	cairoFill,
+	cairoFill, cairoFillPreserve,
 
 	CairoExtents(..),
 	pattern CairoExtentsLeftTopWidthHeight, cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight
@@ -114,3 +114,8 @@ cairoFill :: PrimMonad m => CairoT (PrimState m) -> m ()
 cairoFill = (`withCairoT` c_cairo_fill)
 
 foreign import ccall "cairo_fill" c_cairo_fill :: Ptr (CairoT s) -> IO ()
+
+cairoFillPreserve :: PrimMonad m => CairoT (PrimState m) -> m ()
+cairoFillPreserve = (`withCairoT` c_cairo_fill_preserve)
+
+foreign import ccall "cairo_fill_preserve" c_cairo_fill_preserve :: Ptr (CairoT s) -> IO ()

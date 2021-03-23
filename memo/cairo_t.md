@@ -80,7 +80,7 @@ necessary
 		- [x] cairo\_in\_stroke
 	+ [ ] fill
 		- [x] cairo\_fill
-		- [ ] cairo\_fill\_preserve
+		- [x] cairo\_fill\_preserve
 		- [ ] cairo\_fill\_extents
 		- [ ] cairo\_in\_fill
 	+ [ ] paint
@@ -165,7 +165,7 @@ todo
 	+ [x] function `cairo_stroke_preserve`
 	+ [x] function `cairo_stroke_extents`
 	+ [x] function `cairo_in_stroke`
-	+ [ ] function `cairo_fill_preserve`
+	+ [x] function `cairo_fill_preserve`
 	+ [ ] function `cairo_fill_extents`
 	+ [ ] function `cairo_in_fill`
 	+ [ ] others
