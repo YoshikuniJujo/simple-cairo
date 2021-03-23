@@ -34,18 +34,6 @@ foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
 cairoSetLineWidth :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
 cairoSetLineWidth cr w = withCairoT cr \pcr -> c_cairo_set_line_width pcr w
 
-foreign import ccall "cairo_paint" c_cairo_paint ::
-	Ptr (CairoT s) -> IO ()
-
-cairoPaint :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoPaint = (`withCairoT` c_cairo_paint)
-
-foreign import ccall "cairo_paint_with_alpha" c_cairo_paint_with_alpha ::
-	Ptr (CairoT s) -> #{type double} -> IO ()
-
-cairoPaintWithAlpha :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
-cairoPaintWithAlpha cr a = withCairoT cr \pcr -> c_cairo_paint_with_alpha pcr a
-
 foreign import ccall "cairo_mask" c_cairo_mask ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
 

@@ -7,6 +7,7 @@ module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
 	cairoStroke, cairoStrokePreserve, cairoStrokeExtents, cairoInStroke,
 	cairoFill, cairoFillPreserve, cairoFillExtents, cairoInFill,
+	cairoPaint, cairoPaintWithAlpha,
 
 	CairoExtents(..),
 	pattern CairoExtentsLeftTopWidthHeight, cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight
@@ -133,3 +134,14 @@ cairoInFill cr x y = withCairoT cr \pcr -> (/= 0) <$> c_cairo_in_fill pcr x y
 
 foreign import ccall "cairo_in_fill" c_cairo_in_fill ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> IO #{type cairo_bool_t}
+
+cairoPaint :: PrimMonad m => CairoT (PrimState m) -> m ()
+cairoPaint = (`withCairoT` c_cairo_paint)
+
+foreign import ccall "cairo_paint" c_cairo_paint :: Ptr (CairoT s) -> IO ()
+
+cairoPaintWithAlpha :: PrimMonad m => CairoT (PrimState m) -> CDouble -> m ()
+cairoPaintWithAlpha cr a = withCairoT cr \pcr -> c_cairo_paint_with_alpha pcr a
+
+foreign import ccall "cairo_paint_with_alpha" c_cairo_paint_with_alpha ::
+	Ptr (CairoT s) -> CDouble -> IO ()

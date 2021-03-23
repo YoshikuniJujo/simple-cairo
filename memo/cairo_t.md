@@ -83,9 +83,9 @@ necessary
 		- [x] cairo\_fill\_preserve
 		- [x] cairo\_fill\_extents
 		- [x] cairo\_in\_fill
-	+ [ ] paint
-		- [ ] cairo\_paint
-		- [ ] cairo\_paint\_with\_alpha
+	+ [x] paint
+		- [x] cairo\_paint
+		- [x] cairo\_paint\_with\_alpha
 	+ [ ] mask
 		- [ ] cairo\_mask
 		- [ ] cairo\_mask\_surface
@@ -159,8 +159,8 @@ todo
 	+ [x] function `cairo_set_source`
 	+ [x] function `cairo_stroke`
 	+ [x] function `cairo_fill`
-	+ [ ] function `cairo_paint`
-	+ [ ] function `cairo_paint_with_alpha`
+	+ [x] function `cairo_paint`
+	+ [x] function `cairo_paint_with_alpha`
 	+ [ ] others
 * [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
