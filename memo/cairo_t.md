@@ -103,7 +103,7 @@ necessary
 	+ [ ] cairo\_set\_fill\_rule
 	+ [ ] cairo\_set\_line\_cap
 	+ [ ] cairo\_set\_line\_join
-	+ [ ] cairo\_set\_line\_width
+	+ [x] cairo\_set\_line\_width
 	+ [ ] cairo\_set\_miter\_limit
 	+ [ ] cairo\_set\_operator
 
@@ -195,9 +195,11 @@ todo
 * [x] rename the function argCairoT to withCairoT
 * [ ] move a function from Graphics.Cairo.Drawing.CairoT
 	to Graphics.Cairo.Drawing.CairoT.Setting
-	+ [ ] function `cairo_set_line_width`
+	+ [x] function `cairo_set_line_width`
 * [ ] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
 	+ [ ] function `cairo_set_dash`
+		- [ ] use `withArrayLen`
+		- [ ] throw `CAIRO_STATU_INVALID_DASH`
 	+ [ ] function `cairo_set_fill_rule`
 	+ [ ] function `cairo_set_line_cap`
 	+ [ ] function `cairo_set_line_join`

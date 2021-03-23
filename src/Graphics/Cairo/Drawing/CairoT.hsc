@@ -15,8 +15,6 @@ module Graphics.Cairo.Drawing.CairoT (
 	cairoStroke, cairoStrokePreserve, cairoStrokeExtents,
 	) where
 
-#include <cairo.h>
-
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Monad.Primitive
@@ -25,14 +23,9 @@ import Graphics.Cairo.Exception
 import Graphics.Cairo.Types
 
 import Graphics.Cairo.Drawing.CairoT.Basic
+import Graphics.Cairo.Drawing.CairoT.Setting
 
 import Data.CairoContext
-
-foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
-	Ptr (CairoT s) -> #{type double} -> IO ()
-
-cairoSetLineWidth :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
-cairoSetLineWidth cr w = withCairoT cr \pcr -> c_cairo_set_line_width pcr w
 
 foreign import ccall "cairo_push_group" c_cairo_push_group ::
 	Ptr (CairoT s) -> IO ()
