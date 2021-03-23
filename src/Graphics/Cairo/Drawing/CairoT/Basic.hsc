@@ -6,6 +6,7 @@ module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoCreate,
 	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
 	cairoStroke, cairoStrokePreserve, cairoStrokeExtents, cairoInStroke,
+	cairoFill,
 
 	CairoExtents(..),
 	pattern CairoExtentsLeftTopWidthHeight, cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight
@@ -108,3 +109,8 @@ cairoInStroke cr x y = withCairoT cr \pcr -> (/= 0) <$> c_cairo_in_stroke pcr x 
 
 foreign import ccall "cairo_in_stroke" c_cairo_in_stroke ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> IO #{type cairo_bool_t}
+
+cairoFill :: PrimMonad m => CairoT (PrimState m) -> m ()
+cairoFill = (`withCairoT` c_cairo_fill)
+
+foreign import ccall "cairo_fill" c_cairo_fill :: Ptr (CairoT s) -> IO ()

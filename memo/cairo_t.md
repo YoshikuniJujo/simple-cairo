@@ -79,7 +79,7 @@ necessary
 		- [x] cairo\_stroke\_extents
 		- [x] cairo\_in\_stroke
 	+ [ ] fill
-		- [ ] cairo\_fill
+		- [x] cairo\_fill
 		- [ ] cairo\_fill\_preserve
 		- [ ] cairo\_fill\_extents
 		- [ ] cairo\_in\_fill
@@ -158,7 +158,7 @@ todo
 	+ [x] function `cairo_set_source_rgba`
 	+ [x] function `cairo_set_source`
 	+ [x] function `cairo_stroke`
-	+ [ ] function `cairo_fill`
+	+ [x] function `cairo_fill`
 	+ [ ] others
 * [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
