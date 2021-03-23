@@ -11,7 +11,8 @@ module Graphics.Cairo.Drawing.CairoT (
 	-- * Set Attribute
 	cairoSetLineWidth,
 	-- * Verb
-	cairoFill, cairoMask, cairoPaint, cairoPaintWithAlpha, cairoStroke,
+	cairoFill, cairoMask, cairoPaint, cairoPaintWithAlpha,
+	cairoStroke, cairoStrokePreserve,
 	) where
 
 #include <cairo.h>
