@@ -99,7 +99,7 @@ necessary
 	+ [x] cairo\_in\_clip
 	+ [x] cairo\_reset\_clip
 * [ ] setting
-	+ [ ] cairo\_set\_dash
+	+ [x] cairo\_set\_dash
 	+ [ ] cairo\_set\_fill\_rule
 	+ [ ] cairo\_set\_line\_cap
 	+ [ ] cairo\_set\_line\_join
@@ -197,9 +197,9 @@ todo
 	to Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_line_width`
 * [ ] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
-	+ [ ] function `cairo_set_dash`
+	+ [x] function `cairo_set_dash`
 		- [x] use `withArrayLen`
-		- [ ] throw `CAIRO_STATU_INVALID_DASH`
+		- [x] throw `CAIRO_STATU_INVALID_DASH`
 	+ [ ] function `cairo_set_fill_rule`
 	+ [ ] function `cairo_set_line_cap`
 	+ [ ] function `cairo_set_line_join`
