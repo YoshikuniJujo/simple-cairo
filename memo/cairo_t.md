@@ -87,7 +87,7 @@ necessary
 		- [x] cairo\_paint
 		- [x] cairo\_paint\_with\_alpha
 	+ [ ] mask
-		- [ ] cairo\_mask
+		- [x] cairo\_mask
 		- [ ] cairo\_mask\_surface
 * [ ] save and restore
 	+ [ ] cairo\_save
@@ -161,6 +161,7 @@ todo
 	+ [x] function `cairo_fill`
 	+ [x] function `cairo_paint`
 	+ [x] function `cairo_paint_with_alpha`
+	+ [x] function `cairo_mask`
 	+ [ ] others
 * [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
@@ -170,6 +171,7 @@ todo
 	+ [x] function `cairo_fill_preserve`
 	+ [x] function `cairo_fill_extents`
 	+ [x] function `cairo_in_fill`
+	+ [ ] function `cairo_mask_surface`
 	+ [ ] others
 * [x] review the function `cairo_create`
 	+ [x] reconsider the module which has the function `unPrimIO`

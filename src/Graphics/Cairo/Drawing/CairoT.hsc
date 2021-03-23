@@ -34,13 +34,6 @@ foreign import ccall "cairo_set_line_width" c_cairo_set_line_width ::
 cairoSetLineWidth :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> m ()
 cairoSetLineWidth cr w = withCairoT cr \pcr -> c_cairo_set_line_width pcr w
 
-foreign import ccall "cairo_mask" c_cairo_mask ::
-	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
-
-cairoMask :: PrimMonad m => CairoT s -> CairoPatternT s -> m ()
-cairoMask (CairoT fcr) (CairoPatternT fpt) = unsafeIOToPrim
-	$ withForeignPtr fcr \cr -> withForeignPtr fpt \pt -> c_cairo_mask cr pt
-
 foreign import ccall "cairo_push_group" c_cairo_push_group ::
 	Ptr (CairoT s) -> IO ()
 
