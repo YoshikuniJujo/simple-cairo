@@ -185,6 +185,7 @@ todo
 	+ [ ] function `cairo_clip_extents`
 	+ [ ] function `cairo_in_clip`
 	+ [ ] function `cairo_reset_clip`
+* [x] separate extents from Graphics.Cairo.Drawing.CairoT.Basic
 * [x] move the function `makeCairoT` to module `...CairoT.Basic`
 * [x] move the data type `CairoT` to module `Data.CairoContext`
 * [x] move the data type `CairoSurfaceT` to module `...Surfaces.CairoSurfaceT`

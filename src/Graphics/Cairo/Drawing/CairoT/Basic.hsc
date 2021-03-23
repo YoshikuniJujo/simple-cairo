@@ -25,6 +25,7 @@ import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT
 import Graphics.Cairo.Exception
+import Graphics.Cairo.Drawing.CairoT.Extents
 
 import Data.Color
 import Data.CairoContext
@@ -89,22 +90,6 @@ cairoStrokeExtents = flip withCairoT \pcr -> alloca \x1 -> alloca \y1 -> alloca 
 
 foreign import ccall "cairo_stroke_extents" c_cairo_stroke_extents ::
 	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO ()
-
-data CairoExtents = CairoExtentsLeftTopRightBottom {
-	cairoExtentsLeftX :: CDouble,
-	cairoExtentsTopY :: CDouble,
-	cairoExtentsRightX :: CDouble,
-	cairoExtentsBottomY :: CDouble } deriving Show
-
-pattern CairoExtentsLeftTopWidthHeight :: CDouble -> CDouble -> CDouble -> CDouble -> CairoExtents
-pattern CairoExtentsLeftTopWidthHeight {
-	cairoExtentsLeft, cairoExtentsTop,
-	cairoExtentsWidth, cairoExtentsHeight } <-
-	(cairoExtentsLeftTopWidthHeight -> (cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight)) where 
-	CairoExtentsLeftTopWidthHeight l t w h = CairoExtentsLeftTopRightBottom l t (l + w) (t + h)
-
-cairoExtentsLeftTopWidthHeight :: CairoExtents -> (CDouble, CDouble, CDouble, CDouble)
-cairoExtentsLeftTopWidthHeight (CairoExtentsLeftTopRightBottom l t r b) = (l, t, r - l, b - t)
 
 cairoInStroke :: PrimMonad m => CairoT (PrimState m) -> CDouble -> CDouble -> m Bool
 cairoInStroke cr x y = withCairoT cr \pcr -> (/= 0) <$> c_cairo_in_stroke pcr x y
