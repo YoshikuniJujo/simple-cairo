@@ -6,7 +6,7 @@ module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoCreate,
 	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
 	cairoStroke, cairoStrokePreserve, cairoStrokeExtents, cairoInStroke,
-	cairoFill, cairoFillPreserve,
+	cairoFill, cairoFillPreserve, cairoFillExtents, cairoInFill,
 
 	CairoExtents(..),
 	pattern CairoExtentsLeftTopWidthHeight, cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight
@@ -119,3 +119,17 @@ cairoFillPreserve :: PrimMonad m => CairoT (PrimState m) -> m ()
 cairoFillPreserve = (`withCairoT` c_cairo_fill_preserve)
 
 foreign import ccall "cairo_fill_preserve" c_cairo_fill_preserve :: Ptr (CairoT s) -> IO ()
+
+cairoFillExtents :: PrimMonad m => CairoT (PrimState m) -> m CairoExtents
+cairoFillExtents = flip withCairoT \pcr -> alloca \x1 -> alloca \y1 -> alloca \x2 -> alloca \y2 -> do
+	c_cairo_fill_extents pcr x1 y1 x2 y2
+	CairoExtentsLeftTopRightBottom <$> peek x1 <*> peek y1 <*> peek x2 <*> peek y2
+
+foreign import ccall "cairo_fill_extents" c_cairo_fill_extents ::
+	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+cairoInFill :: PrimMonad m => CairoT (PrimState m) -> CDouble -> CDouble -> m Bool
+cairoInFill cr x y = withCairoT cr \pcr -> (/= 0) <$> c_cairo_in_fill pcr x y
+
+foreign import ccall "cairo_in_fill" c_cairo_in_fill ::
+	Ptr (CairoT s) -> CDouble -> CDouble -> IO #{type cairo_bool_t}
