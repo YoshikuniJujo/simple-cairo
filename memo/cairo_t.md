@@ -93,7 +93,7 @@ necessary
 	+ [x] cairo\_save
 	+ [x] cairo\_restore
 * [ ] clip
-	+ [ ] cairo\_clip
+	+ [x] cairo\_clip
 	+ [ ] cairo\_clip\_preserve
 	+ [ ] cairo\_clip\_extents
 	+ [ ] cairo\_in\_clip
@@ -180,7 +180,7 @@ todo
 	+ [x] function `cairo_save`
 	+ [x] function `cairo_restore`
 * [ ] create function in module Graphics.Cairo.Drawing.CairoT.Clip
-	+ [ ] function `cairo_clip`
+	+ [x] function `cairo_clip`
 	+ [ ] function `cairo_clip_preserve`
 	+ [ ] function `cairo_clip_extents`
 	+ [ ] function `cairo_in_clip`
