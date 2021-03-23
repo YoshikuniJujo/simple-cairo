@@ -76,7 +76,7 @@ necessary
 	+ [ ] stroke
 		- [x] cairo\_stroke
 		- [x] cairo\_stroke\_preserve
-		- [ ] cairo\_stroke\_extents
+		- [x] cairo\_stroke\_extents
 		- [ ] cairo\_in\_stroke
 	+ [ ] fill
 		- [ ] cairo\_fill
@@ -162,7 +162,7 @@ todo
 * [ ] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
 	+ [x] function `cairo_stroke_preserve`
-	+ [ ] function `cairo_stroke_extents`
+	+ [x] function `cairo_stroke_extents`
 	+ [ ] function `cairo_in_stroke`
 	+ [ ] others
 * [x] review the function `cairo_create`

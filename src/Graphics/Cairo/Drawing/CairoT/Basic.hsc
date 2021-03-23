@@ -1,15 +1,21 @@
 {-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Drawing.CairoT.Basic (
 	cairoCreate,
 	cairoSetSourceRgb, cairoSetSourceRgba, cairoSetSource, cairoSetSourceSurface,
-	cairoStroke, cairoStrokePreserve,
+	cairoStroke, cairoStrokePreserve, cairoStrokeExtents,
+
+	CairoExtents(..),
+	pattern CairoExtentsLeftTopWidthHeight, cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight
 	) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Foreign.Marshal
+import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
 
@@ -69,3 +75,27 @@ cairoStrokePreserve :: PrimMonad m => CairoT (PrimState m) -> m ()
 cairoStrokePreserve = (`withCairoT` c_cairo_stroke_preserve)
 
 foreign import ccall "cairo_stroke_preserve" c_cairo_stroke_preserve :: Ptr (CairoT s) -> IO ()
+
+cairoStrokeExtents :: PrimMonad m => CairoT (PrimState m) -> m CairoExtents
+cairoStrokeExtents = flip withCairoT \pcr -> alloca \x1 -> alloca \y1 -> alloca \x2 -> alloca \y2 -> do
+	c_cairo_stroke_extents pcr x1 y1 x2 y2
+	CairoExtentsLeftTopRightBottom <$> peek x1 <*> peek y1 <*> peek x2 <*> peek y2
+
+foreign import ccall "cairo_stroke_extents" c_cairo_stroke_extents ::
+	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+data CairoExtents = CairoExtentsLeftTopRightBottom {
+	cairoExtentsLeftX :: CDouble,
+	cairoExtentsTopY :: CDouble,
+	cairoExtentsRightX :: CDouble,
+	cairoExtentsBottomY :: CDouble } deriving Show
+
+pattern CairoExtentsLeftTopWidthHeight :: CDouble -> CDouble -> CDouble -> CDouble -> CairoExtents
+pattern CairoExtentsLeftTopWidthHeight {
+	cairoExtentsLeft, cairoExtentsTop,
+	cairoExtentsWidth, cairoExtentsHeight } <-
+	(cairoExtentsLeftTopWidthHeight -> (cairoExtentsLeft, cairoExtentsTop, cairoExtentsWidth, cairoExtentsHeight)) where 
+	CairoExtentsLeftTopWidthHeight l t w h = CairoExtentsLeftTopRightBottom l t (l + w) (t + h)
+
+cairoExtentsLeftTopWidthHeight :: CairoExtents -> (CDouble, CDouble, CDouble, CDouble)
+cairoExtentsLeftTopWidthHeight (CairoExtentsLeftTopRightBottom l t r b) = (l, t, r - l, b - t)

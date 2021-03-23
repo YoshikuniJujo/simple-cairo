@@ -12,7 +12,7 @@ module Graphics.Cairo.Drawing.CairoT (
 	cairoSetLineWidth,
 	-- * Verb
 	cairoFill, cairoMask, cairoPaint, cairoPaintWithAlpha,
-	cairoStroke, cairoStrokePreserve,
+	cairoStroke, cairoStrokePreserve, cairoStrokeExtents,
 	) where
 
 #include <cairo.h>
