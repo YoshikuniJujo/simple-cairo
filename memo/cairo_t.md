@@ -92,12 +92,12 @@ necessary
 * [x] save and restore
 	+ [x] cairo\_save
 	+ [x] cairo\_restore
-* [ ] clip
+* [x] clip
 	+ [x] cairo\_clip
 	+ [x] cairo\_clip\_preserve
-	+ [ ] cairo\_clip\_extents
-	+ [ ] cairo\_in\_clip
-	+ [ ] cairo\_reset\_clip
+	+ [x] cairo\_clip\_extents
+	+ [x] cairo\_in\_clip
+	+ [x] cairo\_reset\_clip
 * [ ] setting
 	+ [ ] cairo\_set\_dash
 	+ [ ] cairo\_set\_fill\_rule
@@ -179,12 +179,12 @@ todo
 * [x] create function in module Graphics.Cairo.Drawing.CairoT.SaveAndRestore
 	+ [x] function `cairo_save`
 	+ [x] function `cairo_restore`
-* [ ] create function in module Graphics.Cairo.Drawing.CairoT.Clip
+* [x] create function in module Graphics.Cairo.Drawing.CairoT.Clip
 	+ [x] function `cairo_clip`
 	+ [x] function `cairo_clip_preserve`
-	+ [ ] function `cairo_clip_extents`
-	+ [ ] function `cairo_in_clip`
-	+ [ ] function `cairo_reset_clip`
+	+ [x] function `cairo_clip_extents`
+	+ [x] function `cairo_in_clip`
+	+ [x] function `cairo_reset_clip`
 * [x] separate extents from Graphics.Cairo.Drawing.CairoT.Basic
 * [x] move the function `makeCairoT` to module `...CairoT.Basic`
 * [x] move the data type `CairoT` to module `Data.CairoContext`
@@ -193,6 +193,16 @@ todo
 * [x] move argCairoT to `...CairoT`
 * [x] flip argument of argCairoT
 * [x] rename the function argCairoT to withCairoT
+* [ ] move a function from Graphics.Cairo.Drawing.CairoT
+	to Graphics.Cairo.Drawing.CairoT.Setting
+	+ [ ] function `cairo_set_line_width`
+* [ ] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
+	+ [ ] function `cairo_set_dash`
+	+ [ ] function `cairo_set_fill_rule`
+	+ [ ] function `cairo_set_line_cap`
+	+ [ ] function `cairo_set_line_join`
+	+ [ ] function `cairo_set_miter_limit`
+	+ [ ] function `cairo_set_operator`
 * [ ] use Color in CairoPatternT
 * [ ] move CairoPatternT to the module Graphics.Cairo.Drawing.CairoPatternT
 * [ ] use CairoFormatT pattens of the package cairo-image
