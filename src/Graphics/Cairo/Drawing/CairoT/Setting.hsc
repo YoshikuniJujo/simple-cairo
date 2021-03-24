@@ -1,4 +1,5 @@
 {-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIOnS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Drawing.CairoT.Setting where
@@ -8,8 +9,11 @@ import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Word
 import Data.CairoContext
 import Graphics.Cairo.Exception
+
+#include <cairo.h>
 
 class CairoSetting s where
 	cairoSet :: PrimMonad m => CairoT (PrimState m) -> s -> m ()
@@ -55,3 +59,23 @@ foreign import ccall "cairo_get_dash_count" c_cairo_get_dash_count :: Ptr (Cairo
 
 foreign import ccall "cairo_get_dash" c_cairo_get_dash ::
 	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+newtype FillRule = FillRule #{type cairo_fill_rule_t} deriving Show
+
+pattern FillRuleWinding :: FillRule
+pattern FillRuleWinding <- FillRule #{const CAIRO_FILL_RULE_WINDING} where
+	FillRuleWinding = FillRule #{const CAIRO_FILL_RULE_WINDING}
+
+pattern FillRuleEvenOdd :: FillRule
+pattern FillRuleEvenOdd <- FillRule #{const CAIRO_FILL_RULE_EVEN_ODD} where
+	FillRuleEvenOdd = FillRule #{const CAIRO_FILL_RULE_EVEN_ODD}
+
+instance CairoSetting FillRule where
+	cairoSet cr (FillRule fr) = withCairoT cr \pcr -> c_cairo_set_fill_rule pcr fr
+	cairoGet cr = FillRule <$> withCairoT cr c_cairo_get_fill_rule
+
+foreign import ccall "cairo_set_fill_rule" c_cairo_set_fill_rule ::
+	Ptr (CairoT s) -> #{type cairo_fill_rule_t} -> IO ()
+
+foreign import ccall "cairo_get_fill_rule" c_cairo_get_fill_rule ::
+	Ptr (CairoT s) -> IO #{type cairo_fill_rule_t}
