@@ -98,15 +98,15 @@ necessary
 	+ [x] cairo\_clip\_extents
 	+ [x] cairo\_in\_clip
 	+ [x] cairo\_reset\_clip
-* [ ] setting
+* [x] setting
 	+ [x] cairo\_set\_line\_width
 	+ [x] cairo\_set\_dash
 	+ [x] cairo\_set\_fill\_rule
 	+ [x] cairo\_set\_line\_cap
 	+ [x] cairo\_set\_line\_join
 	+ [x] cairo\_set\_miter\_limit
-	+ [ ] cairo\_set\_operator
-* [ ] getting
+	+ [x] cairo\_set\_operator
+* [x] getting
 	+ [x] cairo\_get\_line\_width
 	+ [x] cairo\_get\_dash\_count
 	+ [x] cairo\_get\_dash
@@ -114,7 +114,7 @@ necessary
 	+ [x] cairo\_get\_line\_cap
 	+ [x] cairo\_get\_line\_join
 	+ [x] cairo\_get\_miter\_limit
-	+ [ ] cairo\_get\_operator
+	+ [x] cairo\_get\_operator
 
 optional
 --------
@@ -194,7 +194,7 @@ todo
 * [x] move argCairoT to `...CairoT`
 * [x] flip argument of argCairoT
 * [x] rename the function argCairoT to withCairoT
-* [ ] move a function from Graphics.Cairo.Drawing.CairoT
+* [x] move a function from Graphics.Cairo.Drawing.CairoT
 	to Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_line_width`
 * [x] define `class CairoSetting`
@@ -229,7 +229,7 @@ todo
 	+ [ ] `pattern OperatorHslSaturation`
 	+ [ ] `pattern OperatorHslColor`
 	+ [ ] `pattern OperatorHslLuminosity`
-* [ ] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
+* [x] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_dash`
 		- [x] use `withArrayLen`
 		- [x] throw `CAIRO_STATU_INVALID_DASH`
@@ -239,7 +239,7 @@ todo
 	+ [x] function `cairo_set_line_cap`
 	+ [x] function `cairo_set_line_join`
 	+ [x] function `cairo_set_miter_limit`
-	+ [ ] function `cairo_set_operator`
+	+ [x] function `cairo_set_operator`
 * [ ] use Color in CairoPatternT
 * [ ] move CairoPatternT to the module Graphics.Cairo.Drawing.CairoPatternT
 * [ ] use CairoFormatT pattens of the package cairo-image

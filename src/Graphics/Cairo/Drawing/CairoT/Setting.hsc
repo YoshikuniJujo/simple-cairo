@@ -13,6 +13,8 @@ import Data.Word
 import Data.CairoContext
 import Graphics.Cairo.Exception
 
+import Graphics.Cairo.Drawing.CairoT.CairoOperatorT
+
 #include <cairo.h>
 
 class CairoSetting s where
@@ -140,3 +142,13 @@ foreign import ccall "cairo_set_miter_limit" c_cairo_set_miter_limit ::
 
 foreign import ccall "cairo_get_miter_limit" c_cairo_get_miter_limit ::
 	Ptr (CairoT s) -> IO CDouble
+
+instance CairoSetting Operator where
+	cairoSet cr (Operator o) = withCairoT cr (`c_cairo_set_operator` o)
+	cairoGet cr = Operator <$> withCairoT cr c_cairo_get_operator
+
+foreign import ccall "cairo_set_operator" c_cairo_set_operator ::
+	Ptr (CairoT s) -> #{type cairo_operator_t} -> IO ()
+
+foreign import ccall "cairo_get_operator" c_cairo_get_operator ::
+	Ptr (CairoT s) -> IO #{type cairo_operator_t}
