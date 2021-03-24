@@ -79,3 +79,28 @@ foreign import ccall "cairo_set_fill_rule" c_cairo_set_fill_rule ::
 
 foreign import ccall "cairo_get_fill_rule" c_cairo_get_fill_rule ::
 	Ptr (CairoT s) -> IO #{type cairo_fill_rule_t}
+
+newtype LineCap = LineCap {
+	getLineCap :: #{type cairo_line_cap_t} } deriving Show
+
+pattern LineCapButt :: LineCap
+pattern LineCapButt <- LineCap #{const CAIRO_LINE_CAP_BUTT} where
+	LineCapButt = LineCap #{const CAIRO_LINE_CAP_BUTT}
+
+pattern LineCapRound :: LineCap
+pattern LineCapRound <- LineCap #{const CAIRO_LINE_CAP_ROUND} where
+	LineCapRound = LineCap #{const CAIRO_LINE_CAP_ROUND}
+
+pattern LineCapSquare :: LineCap
+pattern LineCapSquare <- LineCap #{const CAIRO_LINE_CAP_SQUARE} where
+	LineCapSquare = LineCap #{const CAIRO_LINE_CAP_SQUARE}
+
+instance CairoSetting LineCap where
+	cairoSet cr (LineCap c) = withCairoT cr (`c_cairo_set_line_cap` c)
+	cairoGet cr = LineCap <$> withCairoT cr c_cairo_get_line_cap
+
+foreign import ccall "cairo_set_line_cap" c_cairo_set_line_cap ::
+	Ptr (CairoT s) -> #{type cairo_line_cap_t} -> IO ()
+
+foreign import ccall "cairo_get_line_cap" c_cairo_get_line_cap ::
+	Ptr (CairoT s) -> IO #{type cairo_line_cap_t}

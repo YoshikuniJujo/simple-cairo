@@ -102,7 +102,7 @@ necessary
 	+ [x] cairo\_set\_line\_width
 	+ [x] cairo\_set\_dash
 	+ [x] cairo\_set\_fill\_rule
-	+ [ ] cairo\_set\_line\_cap
+	+ [x] cairo\_set\_line\_cap
 	+ [ ] cairo\_set\_line\_join
 	+ [ ] cairo\_set\_miter\_limit
 	+ [ ] cairo\_set\_operator
@@ -111,7 +111,7 @@ necessary
 	+ [x] cairo\_get\_dash\_count
 	+ [x] cairo\_get\_dash
 	+ [x] cairo\_get\_fill\_rule
-	+ [ ] cairo\_get\_line\_cap
+	+ [x] cairo\_get\_line\_cap
 	+ [ ] cairo\_get\_line\_join
 	+ [ ] cairo\_get\_miter\_limit
 	+ [ ] cairo\_get\_operator
@@ -205,7 +205,7 @@ todo
 	+ [x] function `cairo_get_line_width`
 	+ [x] function `cairo_get_dash_count` and `cairo_get_dash`
 	+ [x] function `cairo_set_fill_rule`
-	+ [ ] function `cairo_set_line_cap`
+	+ [x] function `cairo_set_line_cap`
 	+ [ ] function `cairo_set_line_join`
 	+ [ ] function `cairo_set_miter_limit`
 	+ [ ] function `cairo_set_operator`
