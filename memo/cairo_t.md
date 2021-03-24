@@ -104,7 +104,7 @@ necessary
 	+ [x] cairo\_set\_fill\_rule
 	+ [x] cairo\_set\_line\_cap
 	+ [x] cairo\_set\_line\_join
-	+ [ ] cairo\_set\_miter\_limit
+	+ [x] cairo\_set\_miter\_limit
 	+ [ ] cairo\_set\_operator
 * [ ] getting
 	+ [x] cairo\_get\_line\_width
@@ -113,7 +113,7 @@ necessary
 	+ [x] cairo\_get\_fill\_rule
 	+ [x] cairo\_get\_line\_cap
 	+ [x] cairo\_get\_line\_join
-	+ [ ] cairo\_get\_miter\_limit
+	+ [x] cairo\_get\_miter\_limit
 	+ [ ] cairo\_get\_operator
 
 optional
@@ -207,7 +207,7 @@ todo
 	+ [x] function `cairo_set_fill_rule`
 	+ [x] function `cairo_set_line_cap`
 	+ [x] function `cairo_set_line_join`
-	+ [ ] function `cairo_set_miter_limit`
+	+ [x] function `cairo_set_miter_limit`
 	+ [ ] function `cairo_set_operator`
 * [ ] use Color in CairoPatternT
 * [ ] move CairoPatternT to the module Graphics.Cairo.Drawing.CairoPatternT

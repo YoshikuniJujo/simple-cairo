@@ -128,3 +128,15 @@ foreign import ccall "cairo_set_line_join" c_cairo_set_line_join ::
 
 foreign import ccall "cairo_get_line_join" c_cairo_get_line_join ::
 	Ptr (CairoT s) -> IO #{type cairo_line_join_t}
+
+newtype MiterLimit = MiterLimit CDouble deriving Show
+
+instance CairoSetting MiterLimit where
+	cairoSet cr (MiterLimit ml) = withCairoT cr (`c_cairo_set_miter_limit` ml)
+	cairoGet cr = MiterLimit <$> withCairoT cr c_cairo_get_miter_limit
+
+foreign import ccall "cairo_set_miter_limit" c_cairo_set_miter_limit ::
+	Ptr (CairoT s) -> CDouble -> IO ()
+
+foreign import ccall "cairo_get_miter_limit" c_cairo_get_miter_limit ::
+	Ptr (CairoT s) -> IO CDouble
