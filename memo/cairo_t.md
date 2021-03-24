@@ -99,13 +99,22 @@ necessary
 	+ [x] cairo\_in\_clip
 	+ [x] cairo\_reset\_clip
 * [ ] setting
+	+ [x] cairo\_set\_line\_width
 	+ [x] cairo\_set\_dash
 	+ [ ] cairo\_set\_fill\_rule
 	+ [ ] cairo\_set\_line\_cap
 	+ [ ] cairo\_set\_line\_join
-	+ [x] cairo\_set\_line\_width
 	+ [ ] cairo\_set\_miter\_limit
 	+ [ ] cairo\_set\_operator
+* [ ] getting
+	+ [ ] cairo\_get\_line\_width
+	+ [ ] cairo\_get\_dash\_count
+	+ [ ] cairo\_get\_dash
+	+ [ ] cairo\_get\_fill\_rule
+	+ [ ] cairo\_get\_line\_cap
+	+ [ ] cairo\_get\_line\_join
+	+ [ ] cairo\_get\_miter\_limit
+	+ [ ] cairo\_get\_operator
 
 optional
 --------
@@ -119,14 +128,6 @@ optional
 * [ ] cairo\_get\_source
 * [ ] cairo\_set\_antialias
 * [ ] cairo\_get\_antialias
-* [ ] cairo\_get\_dash\_count
-* [ ] cairo\_get\_dash
-* [ ] cairo\_get\_fill\_rule
-* [ ] cairo\_get\_line\_cap
-* [ ] cairo\_get\_line\_join
-* [ ] cairo\_get\_line\_width
-* [ ] cairo\_get\_miter\_limit
-* [ ] cairo\_get\_operator
 * [ ] cairo\_set\_tolerance
 * [ ] cairo\_get\_tolerance
 * [ ] cairo\_rectangle\_list\_destroy
@@ -196,10 +197,12 @@ todo
 * [ ] move a function from Graphics.Cairo.Drawing.CairoT
 	to Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_line_width`
+* [x] define `class CairoSetting`
 * [ ] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_dash`
 		- [x] use `withArrayLen`
 		- [x] throw `CAIRO_STATU_INVALID_DASH`
+	+ [x] function `cairo_get_line_width`
 	+ [ ] function `cairo_set_fill_rule`
 	+ [ ] function `cairo_set_line_cap`
 	+ [ ] function `cairo_set_line_join`
