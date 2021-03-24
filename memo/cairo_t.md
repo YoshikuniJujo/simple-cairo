@@ -107,9 +107,9 @@ necessary
 	+ [ ] cairo\_set\_miter\_limit
 	+ [ ] cairo\_set\_operator
 * [ ] getting
-	+ [ ] cairo\_get\_line\_width
-	+ [ ] cairo\_get\_dash\_count
-	+ [ ] cairo\_get\_dash
+	+ [x] cairo\_get\_line\_width
+	+ [x] cairo\_get\_dash\_count
+	+ [x] cairo\_get\_dash
 	+ [ ] cairo\_get\_fill\_rule
 	+ [ ] cairo\_get\_line\_cap
 	+ [ ] cairo\_get\_line\_join
@@ -203,6 +203,7 @@ todo
 		- [x] use `withArrayLen`
 		- [x] throw `CAIRO_STATU_INVALID_DASH`
 	+ [x] function `cairo_get_line_width`
+	+ [x] function `cairo_get_dash_count` and `cairo_get_dash`
 	+ [ ] function `cairo_set_fill_rule`
 	+ [ ] function `cairo_set_line_cap`
 	+ [ ] function `cairo_set_line_join`
