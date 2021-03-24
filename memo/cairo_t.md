@@ -103,7 +103,7 @@ necessary
 	+ [x] cairo\_set\_dash
 	+ [x] cairo\_set\_fill\_rule
 	+ [x] cairo\_set\_line\_cap
-	+ [ ] cairo\_set\_line\_join
+	+ [x] cairo\_set\_line\_join
 	+ [ ] cairo\_set\_miter\_limit
 	+ [ ] cairo\_set\_operator
 * [ ] getting
@@ -112,7 +112,7 @@ necessary
 	+ [x] cairo\_get\_dash
 	+ [x] cairo\_get\_fill\_rule
 	+ [x] cairo\_get\_line\_cap
-	+ [ ] cairo\_get\_line\_join
+	+ [x] cairo\_get\_line\_join
 	+ [ ] cairo\_get\_miter\_limit
 	+ [ ] cairo\_get\_operator
 
@@ -206,7 +206,7 @@ todo
 	+ [x] function `cairo_get_dash_count` and `cairo_get_dash`
 	+ [x] function `cairo_set_fill_rule`
 	+ [x] function `cairo_set_line_cap`
-	+ [ ] function `cairo_set_line_join`
+	+ [x] function `cairo_set_line_join`
 	+ [ ] function `cairo_set_miter_limit`
 	+ [ ] function `cairo_set_operator`
 * [ ] use Color in CairoPatternT

@@ -104,3 +104,27 @@ foreign import ccall "cairo_set_line_cap" c_cairo_set_line_cap ::
 
 foreign import ccall "cairo_get_line_cap" c_cairo_get_line_cap ::
 	Ptr (CairoT s) -> IO #{type cairo_line_cap_t}
+
+newtype LineJoin = LineJoin #{type cairo_line_join_t} deriving Show
+
+pattern LineJoinMiter :: LineJoin
+pattern LineJoinMiter <- LineJoin #{const CAIRO_LINE_JOIN_MITER} where
+	LineJoinMiter = LineJoin #{const CAIRO_LINE_JOIN_MITER}
+
+pattern LineJoinRound :: LineJoin
+pattern LineJoinRound <- LineJoin #{const CAIRO_LINE_JOIN_ROUND} where
+	LineJoinRound = LineJoin #{const CAIRO_LINE_JOIN_ROUND}
+
+pattern LineJoinBevel :: LineJoin
+pattern LineJoinBevel <- LineJoin #{const CAIRO_LINE_JOIN_BEVEL} where
+	LineJoinBevel = LineJoin #{const CAIRO_LINE_JOIN_BEVEL}
+
+instance CairoSetting LineJoin where
+	cairoSet cr (LineJoin j) = withCairoT cr (`c_cairo_set_line_join` j)
+	cairoGet cr = LineJoin <$> withCairoT cr c_cairo_get_line_join
+
+foreign import ccall "cairo_set_line_join" c_cairo_set_line_join ::
+	Ptr (CairoT s) -> #{type cairo_line_join_t} -> IO ()
+
+foreign import ccall "cairo_get_line_join" c_cairo_get_line_join ::
+	Ptr (CairoT s) -> IO #{type cairo_line_join_t}
