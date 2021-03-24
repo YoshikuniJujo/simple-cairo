@@ -198,6 +198,37 @@ todo
 	to Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_line_width`
 * [x] define `class CairoSetting`
+* [ ] create module `Graphics.Cairo.Drawing.CairoT.CairoOperatorT`
+	+ [x] `newtype Operator`
+	+ [x] `pattern OperatorClear`
+	+ [x] `pattern OperatorSource`
+	+ [x] `pattern OperatorOver`
+	+ [ ] `pattern OperatorIn`
+	+ [ ] `pattern OperatorOut`
+	+ [ ] `pattern OperatorAtop`
+	+ [ ] `pattern OperatorDest`
+	+ [ ] `pattern OperatorDestOver`
+	+ [ ] `pattern OperatorDestIn`
+	+ [ ] `pattern OperatorDestOut`
+	+ [ ] `pattern OperatorDestAtop`
+	+ [ ] `pattern OperatorXor`
+	+ [ ] `pattern OperatorAdd`
+	+ [ ] `pattern OperatorSaturate`
+	+ [ ] `pattern OperatorMultiply`
+	+ [ ] `pattern OperatorScreen`
+	+ [ ] `pattern OperatorOverlay`
+	+ [ ] `pattern OperatorDarken`
+	+ [ ] `pattern OperatorLighten`
+	+ [ ] `pattern OperatorColorDodge`
+	+ [ ] `pattern OperatorColorBurn`
+	+ [ ] `pattern OperatorHardLight`
+	+ [ ] `pattern OperatorSoftLight`
+	+ [ ] `pattern OperatorDifference`
+	+ [ ] `pattern OperatorExclusion`
+	+ [ ] `pattern OperatorHslHue`
+	+ [ ] `pattern OperatorHslSaturation`
+	+ [ ] `pattern OperatorHslColor`
+	+ [ ] `pattern OperatorHslLuminosity`
 * [ ] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_dash`
 		- [x] use `withArrayLen`
