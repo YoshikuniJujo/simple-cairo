@@ -32,8 +32,8 @@ necessary
 * [ ] basic
 	+ [x] `cairo_new_path`
 	+ [x] `cairo_new_sub_path`
-	+ [ ] `cairo_move_to`
-	+ [ ] `cairo_line_to`
+	+ [x] `cairo_move_to`
+	+ [x] `cairo_line_to`
 	+ [ ] `cairo_curve_to`
 	+ [ ] `cairo_close_path`
 	+ [ ] `cairo_rectangle`

@@ -9,26 +9,17 @@ module Graphics.Cairo.Drawing.Paths (
 	) where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr
+import Foreign.C.Types
 import Control.Monad.Primitive
 
-import Graphics.Cairo.Exception
 import Graphics.Cairo.Drawing.Paths.Basic
 
 import Data.CairoContext
 
 #include <cairo.h>
 
-cairoMoveTo, cairoLineTo, cairoRelLineTo :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
-cairoMoveTo cr x y = withCairoT cr \pcr -> c_cairo_move_to pcr x y
-cairoLineTo cr@(CairoT fcr) x y = unsafeIOToPrim $ withForeignPtr fcr (\pcr -> c_cairo_line_to pcr x y) <* raiseIfError cr
+cairoRelLineTo :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> m ()
 cairoRelLineTo cr x y = withCairoT cr \pcr -> c_cairo_rel_line_to pcr x y
-
-foreign import ccall "cairo_move_to" c_cairo_move_to ::
-	Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
-
-foreign import ccall "cairo_line_to" c_cairo_line_to ::
-	Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
 
 foreign import ccall "cairo_rel_line_to" c_cairo_rel_line_to ::
 	Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
