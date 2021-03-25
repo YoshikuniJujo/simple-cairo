@@ -13,6 +13,7 @@ import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Exception
+import Graphics.Cairo.Drawing.Paths.Basic
 
 import Data.CairoContext
 
@@ -63,8 +64,3 @@ foreign import ccall "cairo_rectangle" c_cairo_rectangle ::
 
 cairoRectangle :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> m ()
 cairoRectangle cr x y w h = withCairoT cr \pcr -> c_cairo_rectangle pcr x y w h
-
-foreign import ccall "cairo_new_path" c_cairo_new_path :: Ptr (CairoT s) -> IO ()
-
-cairoNewPath :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoNewPath = (`withCairoT` c_cairo_new_path)
