@@ -112,3 +112,15 @@ pattern OperatorExclusion <- Operator #{const CAIRO_OPERATOR_EXCLUSION} where
 pattern OperatorHslHue :: Operator
 pattern OperatorHslHue <- Operator #{const CAIRO_OPERATOR_HSL_HUE} where
 	OperatorHslHue = Operator #{const CAIRO_OPERATOR_HSL_HUE}
+
+pattern OperatorHslSaturation :: Operator
+pattern OperatorHslSaturation <- Operator #{const CAIRO_OPERATOR_HSL_SATURATION} where
+	OperatorHslSaturation = Operator #{const CAIRO_OPERATOR_HSL_SATURATION}
+
+pattern OperatorHslColor :: Operator
+pattern OperatorHslColor <- Operator #{const CAIRO_OPERATOR_HSL_COLOR} where
+	OperatorHslColor = Operator #{const CAIRO_OPERATOR_HSL_COLOR}
+
+pattern OperatorHslLuminosity :: Operator
+pattern OperatorHslLuminosity <- Operator #{const CAIRO_OPERATOR_HSL_LUMINOSITY} where
+	OperatorHslLuminosity = Operator #{const CAIRO_OPERATOR_HSL_LUMINOSITY}

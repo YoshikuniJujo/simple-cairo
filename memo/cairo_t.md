@@ -198,7 +198,7 @@ todo
 	to Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_line_width`
 * [x] define `class CairoSetting`
-* [ ] create module `Graphics.Cairo.Drawing.CairoT.CairoOperatorT`
+* [x] create module `Graphics.Cairo.Drawing.CairoT.CairoOperatorT`
 	+ [x] `newtype Operator`
 	+ [x] `pattern OperatorClear`
 	+ [x] `pattern OperatorSource`
@@ -226,9 +226,9 @@ todo
 	+ [x] `pattern OperatorDifference`
 	+ [x] `pattern OperatorExclusion`
 	+ [x] `pattern OperatorHslHue`
-	+ [ ] `pattern OperatorHslSaturation`
-	+ [ ] `pattern OperatorHslColor`
-	+ [ ] `pattern OperatorHslLuminosity`
+	+ [x] `pattern OperatorHslSaturation`
+	+ [x] `pattern OperatorHslColor`
+	+ [x] `pattern OperatorHslLuminosity`
 * [x] create functions in module Graphics.Cairo.Drawing.CairoT.Setting
 	+ [x] function `cairo_set_dash`
 		- [x] use `withArrayLen`
