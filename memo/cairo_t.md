@@ -214,9 +214,9 @@ todo
 	+ [x] `pattern OperatorXor`
 	+ [x] `pattern OperatorAdd`
 	+ [x] `pattern OperatorSaturate`
-	+ [ ] `pattern OperatorMultiply`
-	+ [ ] `pattern OperatorScreen`
-	+ [ ] `pattern OperatorOverlay`
+	+ [x] `pattern OperatorMultiply`
+	+ [x] `pattern OperatorScreen`
+	+ [x] `pattern OperatorOverlay`
 	+ [ ] `pattern OperatorDarken`
 	+ [ ] `pattern OperatorLighten`
 	+ [ ] `pattern OperatorColorDodge`

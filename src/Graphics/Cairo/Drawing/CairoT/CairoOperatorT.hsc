@@ -64,3 +64,15 @@ pattern OperatorAdd <- Operator #{const CAIRO_OPERATOR_ADD} where
 pattern OperatorSaturate :: Operator
 pattern OperatorSaturate <- Operator #{const CAIRO_OPERATOR_ADD} where
 	OperatorSaturate = Operator #{const CAIRO_OPERATOR_SATURATE}
+
+pattern OperatorMultiply :: Operator
+pattern OperatorMultiply <- Operator #{const CAIRO_OPERATOR_MULTIPLY} where
+	OperatorMultiply = Operator #{const CAIRO_OPERATOR_MULTIPLY}
+
+pattern OperatorScreen :: Operator
+pattern OperatorScreen <- Operator #{const CAIRO_OPERATOR_SCREEN} where
+	OperatorScreen = Operator #{const CAIRO_OPERATOR_SCREEN}
+
+pattern OperatorOverlay :: Operator
+pattern OperatorOverlay <- Operator #{const CAIRO_OPERATOR_OVERLAY} where
+	OperatorOverlay = Operator #{const CAIRO_OPERATOR_OVERLAY}
