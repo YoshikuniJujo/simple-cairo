@@ -29,3 +29,10 @@ cairoLineTo cr x y = withCairoT cr \pcr -> c_cairo_line_to pcr x y
 
 foreign import ccall "cairo_line_to" c_cairo_line_to ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> IO ()
+
+cairoCurveTo :: PrimMonad m => CairoT (PrimState m) -> CDouble -> CDouble ->
+	CDouble -> CDouble -> CDouble -> CDouble -> m ()
+cairoCurveTo cr x1 y1 x2 y2 x3 y3 = withCairoT cr \pcr -> c_cairo_curve_to pcr x1 y1 x2 y2 x3 y3
+
+foreign import ccall "cairo_curve_to" c_cairo_curve_to ::
+	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
