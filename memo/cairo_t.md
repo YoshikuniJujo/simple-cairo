@@ -217,9 +217,9 @@ todo
 	+ [x] `pattern OperatorMultiply`
 	+ [x] `pattern OperatorScreen`
 	+ [x] `pattern OperatorOverlay`
-	+ [ ] `pattern OperatorDarken`
-	+ [ ] `pattern OperatorLighten`
-	+ [ ] `pattern OperatorColorDodge`
+	+ [x] `pattern OperatorDarken`
+	+ [x] `pattern OperatorLighten`
+	+ [x] `pattern OperatorColorDodge`
 	+ [ ] `pattern OperatorColorBurn`
 	+ [ ] `pattern OperatorHardLight`
 	+ [ ] `pattern OperatorSoftLight`

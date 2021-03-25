@@ -76,3 +76,15 @@ pattern OperatorScreen <- Operator #{const CAIRO_OPERATOR_SCREEN} where
 pattern OperatorOverlay :: Operator
 pattern OperatorOverlay <- Operator #{const CAIRO_OPERATOR_OVERLAY} where
 	OperatorOverlay = Operator #{const CAIRO_OPERATOR_OVERLAY}
+
+pattern OperatorDarken :: Operator
+pattern OperatorDarken <- Operator #{const CAIRO_OPERATOR_DARKEN} where
+	OperatorDarken = Operator #{const CAIRO_OPERATOR_DARKEN}
+
+pattern OperatorLighten :: Operator
+pattern OperatorLighten <- Operator #{const CAIRO_OPERATOR_LIGHTEN} where
+	OperatorLighten = Operator #{const CAIRO_OPERATOR_LIGHTEN}
+
+pattern OperatorColorDodge :: Operator
+pattern OperatorColorDodge <- Operator #{const CAIRO_OPERATOR_COLOR_DODGE} where
+	OperatorColorDodge = Operator #{const CAIRO_OPERATOR_COLOR_DODGE}
