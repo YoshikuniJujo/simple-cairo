@@ -88,3 +88,15 @@ pattern OperatorLighten <- Operator #{const CAIRO_OPERATOR_LIGHTEN} where
 pattern OperatorColorDodge :: Operator
 pattern OperatorColorDodge <- Operator #{const CAIRO_OPERATOR_COLOR_DODGE} where
 	OperatorColorDodge = Operator #{const CAIRO_OPERATOR_COLOR_DODGE}
+
+pattern OperatorColorBurn :: Operator
+pattern OperatorColorBurn <- Operator #{const CAIRO_OPERATOR_COLOR_BURN} where
+	OperatorColorBurn = Operator #{const CAIRO_OPERATOR_COLOR_BURN}
+
+pattern OperatorHardLight :: Operator
+pattern OperatorHardLight <- Operator #{const CAIRO_OPERATOR_HARD_LIGHT} where
+	OperatorHardLight = Operator #{const CAIRO_OPERATOR_HARD_LIGHT}
+
+pattern OperatorSoftLight :: Operator
+pattern OperatorSoftLight <- Operator #{const CAIRO_OPERATOR_SOFT_LIGHT} where
+	OperatorSoftLight = Operator #{const CAIRO_OPERATOR_SOFT_LIGHT}

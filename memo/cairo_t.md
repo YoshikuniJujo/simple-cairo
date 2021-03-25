@@ -220,9 +220,9 @@ todo
 	+ [x] `pattern OperatorDarken`
 	+ [x] `pattern OperatorLighten`
 	+ [x] `pattern OperatorColorDodge`
-	+ [ ] `pattern OperatorColorBurn`
-	+ [ ] `pattern OperatorHardLight`
-	+ [ ] `pattern OperatorSoftLight`
+	+ [x] `pattern OperatorColorBurn`
+	+ [x] `pattern OperatorHardLight`
+	+ [x] `pattern OperatorSoftLight`
 	+ [ ] `pattern OperatorDifference`
 	+ [ ] `pattern OperatorExclusion`
 	+ [ ] `pattern OperatorHslHue`
