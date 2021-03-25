@@ -209,8 +209,8 @@ todo
 	+ [x] `pattern OperatorDest`
 	+ [x] `pattern OperatorDestOver`
 	+ [x] `pattern OperatorDestIn`
-	+ [ ] `pattern OperatorDestOut`
-	+ [ ] `pattern OperatorDestAtop`
+	+ [x] `pattern OperatorDestOut`
+	+ [x] `pattern OperatorDestAtop`
 	+ [ ] `pattern OperatorXor`
 	+ [ ] `pattern OperatorAdd`
 	+ [ ] `pattern OperatorSaturate`

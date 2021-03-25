@@ -44,3 +44,11 @@ pattern OperatorDestOver <- Operator #{const CAIRO_OPERATOR_DEST_OVER} where
 pattern OperatorDestIn :: Operator
 pattern OperatorDestIn <- Operator #{const CAIRO_OPERATOR_DEST_IN} where
 	OperatorDestIn = Operator #{const CAIRO_OPERATOR_DEST_IN}
+
+pattern OperatorDestOut :: Operator
+pattern OperatorDestOut <- Operator #{const CAIRO_OPERATOR_DEST_OUT} where
+	OperatorDestOut = Operator #{const CAIRO_OPERATOR_DEST_OUT}
+
+pattern OperatorDestAtop :: Operator
+pattern OperatorDestAtop <- Operator #{const CAIRO_OPERATOR_DEST_ATOP} where
+	OperatorDestAtop = Operator #{const CAIRO_OPERATOR_DEST_ATOP}
