@@ -24,3 +24,7 @@ pattern OperatorOver <- Operator #{const CAIRO_OPERATOR_OVER} where
 pattern OperatorIn :: Operator
 pattern OperatorIn <- Operator #{const CAIRO_OPERATOR_IN} where
 	OperatorIn = Operator #{const CAIRO_OPERATOR_IN}
+
+pattern OperatorOut :: Operator
+pattern OperatorOut <- Operator #{const CAIRO_OPERATOR_OUT} where
+	OperatorOut = Operator #{const CAIRO_OPERATOR_OUT}

@@ -204,7 +204,7 @@ todo
 	+ [x] `pattern OperatorSource`
 	+ [x] `pattern OperatorOver`
 	+ [x] `pattern OperatorIn`
-	+ [ ] `pattern OperatorOut`
+	+ [x] `pattern OperatorOut`
 	+ [ ] `pattern OperatorAtop`
 	+ [ ] `pattern OperatorDest`
 	+ [ ] `pattern OperatorDestOver`
