@@ -52,3 +52,15 @@ pattern OperatorDestOut <- Operator #{const CAIRO_OPERATOR_DEST_OUT} where
 pattern OperatorDestAtop :: Operator
 pattern OperatorDestAtop <- Operator #{const CAIRO_OPERATOR_DEST_ATOP} where
 	OperatorDestAtop = Operator #{const CAIRO_OPERATOR_DEST_ATOP}
+
+pattern OperatorXor :: Operator
+pattern OperatorXor <- Operator #{const CAIRO_OPERATOR_XOR} where
+	OperatorXor = Operator #{const CAIRO_OPERATOR_XOR}
+
+pattern OperatorAdd :: Operator
+pattern OperatorAdd <- Operator #{const CAIRO_OPERATOR_ADD} where
+	OperatorAdd = Operator #{const CAIRO_OPERATOR_ADD}
+
+pattern OperatorSaturate :: Operator
+pattern OperatorSaturate <- Operator #{const CAIRO_OPERATOR_ADD} where
+	OperatorSaturate = Operator #{const CAIRO_OPERATOR_SATURATE}

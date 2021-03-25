@@ -211,9 +211,9 @@ todo
 	+ [x] `pattern OperatorDestIn`
 	+ [x] `pattern OperatorDestOut`
 	+ [x] `pattern OperatorDestAtop`
-	+ [ ] `pattern OperatorXor`
-	+ [ ] `pattern OperatorAdd`
-	+ [ ] `pattern OperatorSaturate`
+	+ [x] `pattern OperatorXor`
+	+ [x] `pattern OperatorAdd`
+	+ [x] `pattern OperatorSaturate`
 	+ [ ] `pattern OperatorMultiply`
 	+ [ ] `pattern OperatorScreen`
 	+ [ ] `pattern OperatorOverlay`
