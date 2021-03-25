@@ -203,7 +203,7 @@ todo
 	+ [x] `pattern OperatorClear`
 	+ [x] `pattern OperatorSource`
 	+ [x] `pattern OperatorOver`
-	+ [ ] `pattern OperatorIn`
+	+ [x] `pattern OperatorIn`
 	+ [ ] `pattern OperatorOut`
 	+ [ ] `pattern OperatorAtop`
 	+ [ ] `pattern OperatorDest`
