@@ -205,7 +205,7 @@ todo
 	+ [x] `pattern OperatorOver`
 	+ [x] `pattern OperatorIn`
 	+ [x] `pattern OperatorOut`
-	+ [ ] `pattern OperatorAtop`
+	+ [x] `pattern OperatorAtop`
 	+ [ ] `pattern OperatorDest`
 	+ [ ] `pattern OperatorDestOver`
 	+ [ ] `pattern OperatorDestIn`
