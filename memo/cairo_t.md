@@ -223,9 +223,9 @@ todo
 	+ [x] `pattern OperatorColorBurn`
 	+ [x] `pattern OperatorHardLight`
 	+ [x] `pattern OperatorSoftLight`
-	+ [ ] `pattern OperatorDifference`
-	+ [ ] `pattern OperatorExclusion`
-	+ [ ] `pattern OperatorHslHue`
+	+ [x] `pattern OperatorDifference`
+	+ [x] `pattern OperatorExclusion`
+	+ [x] `pattern OperatorHslHue`
 	+ [ ] `pattern OperatorHslSaturation`
 	+ [ ] `pattern OperatorHslColor`
 	+ [ ] `pattern OperatorHslLuminosity`

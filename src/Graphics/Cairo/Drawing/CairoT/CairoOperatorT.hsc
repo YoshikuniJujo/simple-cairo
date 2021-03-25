@@ -100,3 +100,15 @@ pattern OperatorHardLight <- Operator #{const CAIRO_OPERATOR_HARD_LIGHT} where
 pattern OperatorSoftLight :: Operator
 pattern OperatorSoftLight <- Operator #{const CAIRO_OPERATOR_SOFT_LIGHT} where
 	OperatorSoftLight = Operator #{const CAIRO_OPERATOR_SOFT_LIGHT}
+
+pattern OperatorDifference :: Operator
+pattern OperatorDifference <- Operator #{const CAIRO_OPERATOR_DIFFERENCE} where
+	OperatorDifference = Operator #{const CAIRO_OPERATOR_DIFFERENCE}
+
+pattern OperatorExclusion :: Operator
+pattern OperatorExclusion <- Operator #{const CAIRO_OPERATOR_EXCLUSION} where
+	OperatorExclusion = Operator #{const CAIRO_OPERATOR_EXCLUSION}
+
+pattern OperatorHslHue :: Operator
+pattern OperatorHslHue <- Operator #{const CAIRO_OPERATOR_HSL_HUE} where
+	OperatorHslHue = Operator #{const CAIRO_OPERATOR_HSL_HUE}
