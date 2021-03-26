@@ -43,9 +43,3 @@ foreign import ccall "cairo_rel_curve_to" c_cairo_rel_curve_to ::
 	Ptr (CairoT s) -> #{type double} -> #{type double} ->
 		#{type double} -> #{type double} ->
 		#{type double} -> #{type double} -> IO ()
-
-foreign import ccall "cairo_rectangle" c_cairo_rectangle ::
-	Ptr (CairoT s) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> IO ()
-
-cairoRectangle :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> m ()
-cairoRectangle cr x y w h = withCairoT cr \pcr -> c_cairo_rectangle pcr x y w h

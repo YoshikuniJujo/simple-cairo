@@ -42,3 +42,9 @@ cairoClosePath = (`withCairoT` c_cairo_close_path)
 
 foreign import ccall "cairo_close_path" c_cairo_close_path ::
 	Ptr (CairoT s) -> IO ()
+
+cairoRectangle :: PrimMonad m => CairoT (PrimState m) -> CDouble -> CDouble -> CDouble -> CDouble -> m ()
+cairoRectangle cr x y w h = withCairoT cr \pcr -> c_cairo_rectangle pcr x y w h
+
+foreign import ccall "cairo_rectangle" c_cairo_rectangle ::
+	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
