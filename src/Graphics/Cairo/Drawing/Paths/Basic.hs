@@ -36,3 +36,9 @@ cairoCurveTo cr x1 y1 x2 y2 x3 y3 = withCairoT cr \pcr -> c_cairo_curve_to pcr x
 
 foreign import ccall "cairo_curve_to" c_cairo_curve_to ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+
+cairoClosePath :: PrimMonad m => CairoT (PrimState m) -> m ()
+cairoClosePath = (`withCairoT` c_cairo_close_path)
+
+foreign import ccall "cairo_close_path" c_cairo_close_path ::
+	Ptr (CairoT s) -> IO ()

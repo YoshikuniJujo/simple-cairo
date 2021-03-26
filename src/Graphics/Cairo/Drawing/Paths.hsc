@@ -44,12 +44,6 @@ foreign import ccall "cairo_rel_curve_to" c_cairo_rel_curve_to ::
 		#{type double} -> #{type double} ->
 		#{type double} -> #{type double} -> IO ()
 
-cairoClosePath :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoClosePath = (`withCairoT` c_cairo_close_path)
-
-foreign import ccall "cairo_close_path" c_cairo_close_path ::
-	Ptr (CairoT s) -> IO ()
-
 foreign import ccall "cairo_rectangle" c_cairo_rectangle ::
 	Ptr (CairoT s) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> IO ()
 
