@@ -29,7 +29,7 @@ functions
 necessary
 ---------
 
-* [ ] basic
+* [x] basic
 	+ [x] `cairo_new_path`
 	+ [x] `cairo_new_sub_path`
 	+ [x] `cairo_move_to`
@@ -39,7 +39,7 @@ necessary
 	+ [x] `cairo_rectangle`
 	+ [x] `cairo_arc`
 	+ [x] `cairo_arc_negative`
-	+ [ ] `cairo_path_extents`
+	+ [x] `cairo_path_extents`
 * [ ] relative
 	+ [ ] `cairo_rel_move_to`
 	+ [ ] `cairo_rel_line_to`

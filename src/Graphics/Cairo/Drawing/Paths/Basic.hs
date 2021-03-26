@@ -4,9 +4,13 @@
 module Graphics.Cairo.Drawing.Paths.Basic where
 
 import Foreign.Ptr
+import Foreign.Marshal
+import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
 import Data.CairoContext
+
+import Graphics.Cairo.Drawing.Extents
 
 cairoNewPath :: PrimMonad m => CairoT (PrimState m) -> m ()
 cairoNewPath = (`withCairoT` c_cairo_new_path)
@@ -65,3 +69,11 @@ cairoArcNegative cr xc yc r a1 a2 =
 foreign import ccall "cairo_arc_negative" c_cairo_arc_negative ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble ->
 	IO ()
+
+cairoPathExtents :: PrimMonad m => CairoT (PrimState m) -> m CairoExtents
+cairoPathExtents = flip withCairoT \pcr -> alloca \x1 -> alloca \y1 -> alloca \x2 -> alloca \y2 -> do
+	c_cairo_path_extents pcr x1 y1 x2 y2
+	CairoExtentsLeftTopRightBottom <$> peek x1 <*> peek y1 <*> peek x2 <*> peek y2
+
+foreign import ccall "cairo_path_extents" c_cairo_path_extents ::
+	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO ()
