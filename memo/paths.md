@@ -40,10 +40,10 @@ necessary
 	+ [x] `cairo_arc`
 	+ [x] `cairo_arc_negative`
 	+ [x] `cairo_path_extents`
-* [ ] relative
+* [x] relative
 	+ [x] `cairo_rel_move_to`
-	+ [ ] `cairo_rel_line_to`
-	+ [ ] `cairo_rel_curve_to`
+	+ [x] `cairo_rel_line_to`
+	+ [x] `cairo_rel_curve_to`
 
 optional
 --------
