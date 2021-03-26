@@ -1,7 +1,7 @@
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.Drawing.CairoT.Extents where
+module Graphics.Cairo.Drawing.Extents where
 
 import Foreign.C.Types
 

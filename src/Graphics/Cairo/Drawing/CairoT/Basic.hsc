@@ -25,7 +25,7 @@ import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Drawing.CairoT.Extents
+import Graphics.Cairo.Drawing.Extents
 
 import Data.Color
 import Data.CairoContext

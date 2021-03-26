@@ -10,7 +10,7 @@ import Foreign.Storable
 import Control.Monad.Primitive
 import Data.Int
 import Data.CairoContext
-import Graphics.Cairo.Drawing.CairoT.Extents
+import Graphics.Cairo.Drawing.Extents
 
 #include <cairo.h>
 

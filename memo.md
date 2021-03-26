@@ -45,6 +45,8 @@ todo
 		- [x] cairo\_svg\_surface\_create
 		- [x] cairo\_svg\_surface\_create\_for\_stream
 		- [ ] others
+* [x] move a module `Graphics.Cairo.Drawing.CairoT.Extents`
+	to `Graphics.Cairo.Drawing.Extents`
 
 old
 ---
