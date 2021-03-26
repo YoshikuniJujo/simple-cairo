@@ -24,15 +24,6 @@ cairoRelLineTo cr x y = withCairoT cr \pcr -> c_cairo_rel_line_to pcr x y
 foreign import ccall "cairo_rel_line_to" c_cairo_rel_line_to ::
 	Ptr (CairoT s) -> #{type double} -> #{type double} -> IO ()
 
-cairoArc :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} ->
-	#{type double} -> #{type double} -> #{type double} -> m ()
-cairoArc cr xc yc r a1 a2 = 
-	withCairoT cr \pcr -> c_cairo_arc pcr xc yc r a1 a2
-
-foreign import ccall "cairo_arc" c_cairo_arc ::
-	Ptr (CairoT s) -> #{type double} -> #{type double} ->
-	#{type double} -> #{type double} -> #{type double} -> IO ()
-
 cairoRelCurveTo :: PrimMonad m => CairoT (PrimState m) -> #{type double} -> #{type double} ->
 	#{type double} -> #{type double} ->
 	#{type double} -> #{type double} -> m ()

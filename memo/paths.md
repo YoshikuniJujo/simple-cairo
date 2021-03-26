@@ -37,8 +37,8 @@ necessary
 	+ [x] `cairo_curve_to`
 	+ [x] `cairo_close_path`
 	+ [x] `cairo_rectangle`
-	+ [ ] `cairo_arc`
-	+ [ ] `cairo_arc_negative`
+	+ [x] `cairo_arc`
+	+ [x] `cairo_arc_negative`
 	+ [ ] `cairo_path_extents`
 * [ ] relative
 	+ [ ] `cairo_rel_move_to`
