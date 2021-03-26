@@ -35,7 +35,7 @@ todo
 
 * [ ] Drawing
 	+ [x] cairo\_t
-	+ [ ] Paths
+	+ [x] Paths
 	+ [ ] cairo\_pattern\_t
 	+ [ ] Regions
 	+ [ ] Transformations
