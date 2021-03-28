@@ -37,7 +37,6 @@ todo
 	+ [x] cairo\_t
 	+ [x] Paths
 	+ [ ] cairo\_pattern\_t
-	+ [ ] Regions
 	+ [ ] Transformations
 * [ ] Surfaces
 	+ [ ] Image Surfaces
@@ -47,6 +46,8 @@ todo
 		- [ ] others
 * [x] move a module `Graphics.Cairo.Drawing.CairoT.Extents`
 	to `Graphics.Cairo.Drawing.Extents`
+* [ ] make new package cairo-regions
+	+ [ ] Regions
 
 old
 ---

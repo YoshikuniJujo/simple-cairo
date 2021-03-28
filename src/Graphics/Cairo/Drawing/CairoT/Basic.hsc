@@ -30,7 +30,7 @@ import Graphics.Cairo.Drawing.Extents
 import Data.Color
 import Data.CairoContext
 
-import Graphics.Cairo.Types
+import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 #include <cairo.h>
 

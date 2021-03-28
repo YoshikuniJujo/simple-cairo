@@ -20,12 +20,13 @@ import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Types
 
 import Graphics.Cairo.Drawing.CairoT.Basic
 import Graphics.Cairo.Drawing.CairoT.Setting
 
 import Data.CairoContext
+
+import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 foreign import ccall "cairo_push_group" c_cairo_push_group ::
 	Ptr (CairoT s) -> IO ()

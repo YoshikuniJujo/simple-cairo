@@ -12,7 +12,8 @@ import Foreign.ForeignPtr
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT
-import Graphics.Cairo.Types
+
+import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 #include <cairo.h>
 
@@ -59,9 +60,6 @@ cairoPatternCreateForSurface :: PrimMonad m =>
 	CairoSurfaceT (PrimState m) -> m (CairoPatternT (PrimState m))
 cairoPatternCreateForSurface (CairoSurfaceT fs) = unsafeIOToPrim
 	$ withForeignPtr fs \s -> makeCairoPatternT =<< c_cairo_pattern_create_for_surface s
-
-returnCairoPatternT :: PrimMonad m => IO (Ptr (CairoPatternT (PrimState m))) -> m (CairoPatternT (PrimState m))
-returnCairoPatternT io = unsafeIOToPrim $ makeCairoPatternT =<< io
 
 argCairoPatternT :: PrimMonad m => (Ptr (CairoPatternT (PrimState m)) -> IO a) -> CairoPatternT (PrimState m) -> m a
 argCairoPatternT io (CairoPatternT fpt) = unsafeIOToPrim $ withForeignPtr fpt io
