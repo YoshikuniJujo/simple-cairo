@@ -29,6 +29,10 @@ Cairo structure
 	+ XLib-XRender Backend (won't implement)
 	+ Script Surfaces (will implement in the distant future)
 * Utilities
+	+ cairo\_matrix\_t
+	+ Error handling
+	+ Version Information
+	+ Types
 
 todo
 ----
@@ -44,6 +48,8 @@ todo
 		- [x] cairo\_svg\_surface\_create
 		- [x] cairo\_svg\_surface\_create\_for\_stream
 		- [ ] others
+* [ ] Utilities
+	+ [ ] cairo\_matrix\_t
 * [x] move a module `Graphics.Cairo.Drawing.CairoT.Extents`
 	to `Graphics.Cairo.Drawing.Extents`
 * [ ] make new package cairo-regions
