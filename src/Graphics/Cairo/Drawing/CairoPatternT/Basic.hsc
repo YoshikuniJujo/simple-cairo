@@ -1,3 +1,4 @@
+{-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
@@ -49,6 +50,13 @@ pattern CairoPatternTypeMesh <- CairoPatternTypeT #{const CAIRO_PATTERN_TYPE_MES
 pattern CairoPatternTypeRasterSource :: CairoPatternTypeT
 pattern CairoPatternTypeRasterSource <- CairoPatternTypeT #{const CAIRO_PATTERN_TYPE_RASTER_SOURCE} where
 	CairoPatternTypeRasterSource = CairoPatternTypeT #{const CAIRO_PATTERN_TYPE_RASTER_SOURCE}
+
+cairoPatternGetType :: PrimMonad m => CairoPatternT (PrimState m) -> m CairoPatternTypeT
+cairoPatternGetType (CairoPatternT fpt) = unsafeIOToPrim $ withForeignPtr fpt \pt ->
+	CairoPatternTypeT <$> c_cairo_pattern_get_type pt
+
+foreign import ccall "cairo_pattern_get_type" c_cairo_pattern_get_type ::
+	Ptr (CairoPatternT s) -> IO #{type cairo_pattern_type_t}
 
 cairoPatternCreateRgb :: PrimMonad m => Rgb -> m (CairoPatternT (PrimState m))
 cairoPatternCreateRgb (RgbDouble r g b) = returnCairoPatternT

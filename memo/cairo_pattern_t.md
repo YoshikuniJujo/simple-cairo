@@ -45,9 +45,9 @@ basic
 
 ### get type
 
-* [ ] `cairo_pattern_get_type`
+* [x] `cairo_pattern_get_type`
 	+ [x] `enum cairo_pattern_type_t`
-	+ [ ] function `cairo_pattern_get_type`
+	+ [x] function `cairo_pattern_get_type`
 
 ### solid pattern
 
