@@ -49,9 +49,9 @@ basic
 
 ### solid pattern
 
-* [ ] `cairo_pattern_create_rgb`
+* [x] `cairo_pattern_create_rgb`
 	+ [x] define it
-	+ [ ] use `Data.Color.Rgb`
+	+ [x] use `Data.Color.Rgb`
 * [ ] `cairo_pattern_create_rgba`
 * [ ] `cairo_pattern_get_rgba`
 

@@ -7,6 +7,7 @@ import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Color
 
 newtype CairoPatternT s = CairoPatternT (ForeignPtr (CairoPatternT s)) deriving Show
 
@@ -16,9 +17,8 @@ makeCairoPatternT p = CairoPatternT <$> newForeignPtr p (c_cairo_pattern_destroy
 foreign import ccall "cairo_pattern_destroy" c_cairo_pattern_destroy ::
 	Ptr (CairoPatternT s) -> IO ()
 
-cairoPatternCreateRgb :: PrimMonad m =>
-	CDouble -> CDouble -> CDouble -> m (CairoPatternT (PrimState m))
-cairoPatternCreateRgb r g b = returnCairoPatternT
+cairoPatternCreateRgb :: PrimMonad m => Rgb -> m (CairoPatternT (PrimState m))
+cairoPatternCreateRgb (RgbDouble r g b) = returnCairoPatternT
 	$ c_cairo_pattern_create_rgb r g b
 
 foreign import ccall "cairo_pattern_create_rgb" c_cairo_pattern_create_rgb ::
