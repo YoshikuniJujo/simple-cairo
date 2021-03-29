@@ -76,8 +76,8 @@ basic
 	+ [ ] `cairo_pattern_get_color_stop_count`
 	+ [ ] `cairo_pattern_get_color_stop_rgba`
 * [ ] linear
-	+ [ ] define `CairoPatternLinearT`
-	+ [ ] define `pattern CairoPatternGradientTLinear`
+	+ [x] define `CairoPatternLinearT`
+	+ [x] define `pattern CairoPatternGradientTLinear`
 	+ [ ] `cairo_pattern_create_linear`
 	+ [ ] `cairo_pattern_get_linear_points`
 * [ ] radial

@@ -117,6 +117,17 @@ cairoPatternGradientT pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
 	CairoPatternTypeRadial -> Just $ CairoPatternGradientT fpt
 	_ -> Nothing
 
+newtype CairoPatternLinearT s = CairoPatternLinearT (ForeignPtr (CairoPatternT s)) deriving Show
+
+pattern CairoPatternGradientTLinear :: CairoPatternLinearT s -> CairoPatternGradientT s
+pattern CairoPatternGradientTLinear ptl <- (cairoPatternGradientLinearT -> Just ptl) where
+	CairoPatternGradientTLinear (CairoPatternLinearT ptl) = CairoPatternGradientT ptl
+
+cairoPatternGradientLinearT :: CairoPatternGradientT s -> Maybe (CairoPatternLinearT s)
+cairoPatternGradientLinearT pt@(CairoPatternGradientT fpt) = case cairoPatternGetType $ CairoPatternTGradient pt of
+	CairoPatternTypeLinear -> Just $ CairoPatternLinearT fpt
+	_ -> Nothing
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt
