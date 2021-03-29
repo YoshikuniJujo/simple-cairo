@@ -12,6 +12,8 @@ import Control.Monad.Primitive
 import Data.Word
 import Data.Color
 
+import Graphics.Cairo.Exception
+
 #include <cairo.h>
 
 newtype CairoPatternT s = CairoPatternT (ForeignPtr (CairoPatternT s)) deriving Show
@@ -59,18 +61,26 @@ foreign import ccall "cairo_pattern_get_type" c_cairo_pattern_get_type ::
 	Ptr (CairoPatternT s) -> IO #{type cairo_pattern_type_t}
 
 cairoPatternCreateRgb :: PrimMonad m => Rgb -> m (CairoPatternT (PrimState m))
-cairoPatternCreateRgb (RgbDouble r g b) = returnCairoPatternT
-	$ c_cairo_pattern_create_rgb r g b
+cairoPatternCreateRgb (RgbDouble r g b) = unsafeIOToPrim do
+	ppt <- c_cairo_pattern_create_rgb r g b
+	pt <- CairoPatternT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
+	pt <$ raiseIfErrorPattern pt
 
 foreign import ccall "cairo_pattern_create_rgb" c_cairo_pattern_create_rgb ::
 	CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
 cairoPatternCreateRgba :: PrimMonad m => Rgba -> m (CairoPatternT (PrimState m))
-cairoPatternCreateRgba (RgbaDouble r g b a) = returnCairoPatternT
-	$ c_cairo_pattern_create_rgba r g b a
+cairoPatternCreateRgba (RgbaDouble r g b a) = unsafeIOToPrim do
+	ppt <- c_cairo_pattern_create_rgba r g b a
+	pt <- CairoPatternT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
+	pt <$ raiseIfErrorPattern pt
 
 foreign import ccall "cairo_pattern_create_rgba" c_cairo_pattern_create_rgba ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
+
+raiseIfErrorPattern :: CairoPatternT s -> IO ()
+raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
+	cairoStatusToThrowError =<< c_cairo_pattern_status pt
 
 foreign import ccall "cairo_pattern_status" c_cairo_pattern_status ::
 	Ptr (CairoPatternT s) -> IO #{type cairo_status_t}
