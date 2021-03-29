@@ -105,6 +105,18 @@ foreign import ccall "cairo_pattern_get_rgba" c_cairo_pattern_get_rgba ::
 	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble ->
 	IO #{type cairo_status_t}
 
+newtype CairoPatternGradientT s = CairoPatternGradientT (ForeignPtr (CairoPatternT s)) deriving Show
+
+pattern CairoPatternTGradient :: CairoPatternGradientT s -> CairoPatternT s
+pattern CairoPatternTGradient ptg <- (cairoPatternGradientT -> Just ptg) where
+	CairoPatternTGradient (CairoPatternGradientT ptg) = CairoPatternT ptg
+
+cairoPatternGradientT :: CairoPatternT s -> Maybe (CairoPatternGradientT s)
+cairoPatternGradientT pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
+	CairoPatternTypeLinear -> Just $ CairoPatternGradientT fpt
+	CairoPatternTypeRadial -> Just $ CairoPatternGradientT fpt
+	_ -> Nothing
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt

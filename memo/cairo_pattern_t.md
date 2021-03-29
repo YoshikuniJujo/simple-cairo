@@ -69,14 +69,20 @@ basic
 ### gradient pattern
 
 * [ ] common
+	+ [x] define `CairoPatternGradientT`
+	+ [x] define `pattern CairoPatternTGradient`
 	+ [ ] `cairo_pattern_add_color_stop_rgb`
 	+ [ ] `cairo_pattern_add_color_stop_rgba`
 	+ [ ] `cairo_pattern_get_color_stop_count`
 	+ [ ] `cairo_pattern_get_color_stop_rgba`
 * [ ] linear
+	+ [ ] define `CairoPatternLinearT`
+	+ [ ] define `pattern CairoPatternGradientTLinear`
 	+ [ ] `cairo_pattern_create_linear`
 	+ [ ] `cairo_pattern_get_linear_points`
 * [ ] radial
+	+ [ ] define `CairoPatternRadialT`
+	+ [ ] define `pattern CairoPatternGradientTRadial`
 	+ [ ] `cairo_pattern_radial`
 	+ [ ] `cairo_pattern_get_radial_circles`
 
