@@ -78,6 +78,11 @@ cairoPatternCreateRgba (RgbaDouble r g b a) = unsafeIOToPrim do
 foreign import ccall "cairo_pattern_create_rgba" c_cairo_pattern_create_rgba ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
+foreign import ccall "cairo_pattern_get_rgba" c_cairo_pattern_get_rgba ::
+	Ptr (CairoPatternT s) ->
+	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble ->
+	IO #{type cairo_status_t}
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt
