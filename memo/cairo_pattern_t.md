@@ -50,7 +50,7 @@ basic
 	+ [x] function `cairo_pattern_get_type`
 	+ [x] this function may be pure
 	+ [ ] define patterns
-		- [ ] `pattern CairoPatternSolidT :: CairoPatternSolidT s -> CairoPatternT s`
+		- [x] `pattern CairoPatternTSolid :: CairoPatternSolidT s -> CairoPatternT s`
 		- [ ] others
 
 ### solid pattern

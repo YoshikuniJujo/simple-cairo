@@ -1,5 +1,5 @@
 {-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Drawing.CairoPatternT.Basic where
@@ -61,20 +61,31 @@ cairoPatternGetType (CairoPatternT fpt) = unsafePerformIO $ withForeignPtr fpt \
 foreign import ccall "cairo_pattern_get_type" c_cairo_pattern_get_type ::
 	Ptr (CairoPatternT s) -> IO #{type cairo_pattern_type_t}
 
-cairoPatternCreateRgb :: PrimMonad m => Rgb -> m (CairoPatternT (PrimState m))
+newtype CairoPatternSolidT s = CairoPatternSolidT (ForeignPtr (CairoPatternT s)) deriving Show
+
+pattern CairoPatternTSolid :: CairoPatternSolidT s -> CairoPatternT s
+pattern CairoPatternTSolid pts <- (cairoPatternSolidT -> Just pts) where
+	CairoPatternTSolid (CairoPatternSolidT pts) = CairoPatternT pts
+
+cairoPatternSolidT :: CairoPatternT s -> Maybe (CairoPatternSolidT s)
+cairoPatternSolidT pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
+	CairoPatternTypeSolid -> Just $ CairoPatternSolidT fpt
+	_ -> Nothing
+
+cairoPatternCreateRgb :: PrimMonad m => Rgb -> m (CairoPatternSolidT (PrimState m))
 cairoPatternCreateRgb (RgbDouble r g b) = unsafeIOToPrim do
 	ppt <- c_cairo_pattern_create_rgb r g b
-	pt <- CairoPatternT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
-	pt <$ raiseIfErrorPattern pt
+	pt <- CairoPatternSolidT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
+	pt <$ raiseIfErrorPattern (CairoPatternTSolid pt)
 
 foreign import ccall "cairo_pattern_create_rgb" c_cairo_pattern_create_rgb ::
 	CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
-cairoPatternCreateRgba :: PrimMonad m => Rgba -> m (CairoPatternT (PrimState m))
+cairoPatternCreateRgba :: PrimMonad m => Rgba -> m (CairoPatternSolidT (PrimState m))
 cairoPatternCreateRgba (RgbaDouble r g b a) = unsafeIOToPrim do
 	ppt <- c_cairo_pattern_create_rgba r g b a
-	pt <- CairoPatternT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
-	pt <$ raiseIfErrorPattern pt
+	pt <- CairoPatternSolidT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
+	pt <$ raiseIfErrorPattern (CairoPatternTSolid pt)
 
 foreign import ccall "cairo_pattern_create_rgba" c_cairo_pattern_create_rgba ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
