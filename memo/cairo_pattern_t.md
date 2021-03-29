@@ -48,7 +48,7 @@ basic
 * [ ] `cairo_pattern_get_type`
 	+ [x] `enum cairo_pattern_type_t`
 	+ [x] function `cairo_pattern_get_type`
-	+ [ ] this function may be pure
+	+ [x] this function may be pure
 	+ [ ] define patterns
 		- [ ] `pattern CairoPatternSolidT :: CairoPatternSolidT s -> CairoPatternT s`
 		- [ ] others

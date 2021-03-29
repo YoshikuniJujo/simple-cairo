@@ -11,6 +11,7 @@ import Foreign.C.Types
 import Control.Monad.Primitive
 import Data.Word
 import Data.Color
+import System.IO.Unsafe
 
 import Graphics.Cairo.Exception
 
@@ -53,8 +54,8 @@ pattern CairoPatternTypeRasterSource :: CairoPatternTypeT
 pattern CairoPatternTypeRasterSource <- CairoPatternTypeT #{const CAIRO_PATTERN_TYPE_RASTER_SOURCE} where
 	CairoPatternTypeRasterSource = CairoPatternTypeT #{const CAIRO_PATTERN_TYPE_RASTER_SOURCE}
 
-cairoPatternGetType :: PrimMonad m => CairoPatternT (PrimState m) -> m CairoPatternTypeT
-cairoPatternGetType (CairoPatternT fpt) = unsafeIOToPrim $ withForeignPtr fpt \pt ->
+cairoPatternGetType :: CairoPatternT s -> CairoPatternTypeT
+cairoPatternGetType (CairoPatternT fpt) = unsafePerformIO $ withForeignPtr fpt \pt ->
 	CairoPatternTypeT <$> c_cairo_pattern_get_type pt
 
 foreign import ccall "cairo_pattern_get_type" c_cairo_pattern_get_type ::
