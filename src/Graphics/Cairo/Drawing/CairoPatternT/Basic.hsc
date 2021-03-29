@@ -71,3 +71,6 @@ cairoPatternCreateRgba (RgbaDouble r g b a) = returnCairoPatternT
 
 foreign import ccall "cairo_pattern_create_rgba" c_cairo_pattern_create_rgba ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
+
+foreign import ccall "cairo_pattern_status" c_cairo_pattern_status ::
+	Ptr (CairoPatternT s) -> IO #{type cairo_status_t}

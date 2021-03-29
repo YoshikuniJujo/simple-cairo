@@ -51,10 +51,13 @@ basic
 
 ### solid pattern
 
-* [x] `cairo_pattern_create_rgb`
+* [ ] `cairo_pattern_create_rgb`
 	+ [x] define it
 	+ [x] use `Data.Color.Rgb`
-* [x] `cairo_pattern_create_rgba`
+	+ [ ] exception
+* [ ] `cairo_pattern_create_rgba`
+	+ [x] define it
+	+ [ ] exception
 * [ ] `cairo_pattern_get_rgba`
 
 ### gradient pattern
@@ -116,3 +119,5 @@ for exception
 -------------
 
 * [ ] `cairo_pattern_status`
+	+ [x] foreign import it
+	+ [ ] define `raiseIfErrorPattern`
