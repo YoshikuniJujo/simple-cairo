@@ -1,4 +1,4 @@
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
@@ -7,6 +7,8 @@ module Graphics.Cairo.Drawing.CairoPatternT.Basic where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Foreign.Marshal
+import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
 import Data.Word
@@ -89,6 +91,14 @@ cairoPatternCreateRgba (RgbaDouble r g b a) = unsafeIOToPrim do
 
 foreign import ccall "cairo_pattern_create_rgba" c_cairo_pattern_create_rgba ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
+
+cairoPatternGetRgba :: PrimMonad m => CairoPatternSolidT (PrimState m) -> m Rgba
+cairoPatternGetRgba (CairoPatternSolidT fpts) = unsafeIOToPrim $ withForeignPtr fpts \pts ->
+	alloca \r -> alloca \g -> alloca \b -> alloca \a -> do
+		cairoStatusToThrowError =<< c_cairo_pattern_get_rgba pts r g b a
+		rgbaDouble <$> peek r <*> peek g <*> peek b <*> peek a >>= \case
+			Just rgba -> pure rgba
+			Nothing -> error $ "(r, g, b, a) = " ++ show (r, g, b, a)
 
 foreign import ccall "cairo_pattern_get_rgba" c_cairo_pattern_get_rgba ::
 	Ptr (CairoPatternT s) ->

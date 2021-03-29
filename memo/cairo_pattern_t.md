@@ -62,10 +62,9 @@ basic
 * [x] `cairo_pattern_create_rgba`
 	+ [x] define it
 	+ [x] exception
-* [ ] `cairo_pattern_get_rgba`
+* [x] `cairo_pattern_get_rgba`
 	+ [x] foreign import `c_cairo_pattern_get_rgba`
-	+ [ ] define `cairoPatternGetRgba`
-	+ [ ] define `pattern CairoPatternGetRgba`
+	+ [x] define `cairoPatternGetRgba`
 
 ### gradient pattern
 
