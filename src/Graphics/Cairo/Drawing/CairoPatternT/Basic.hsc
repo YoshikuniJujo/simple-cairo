@@ -69,5 +69,5 @@ cairoPatternCreateRgba :: PrimMonad m => Rgba -> m (CairoPatternT (PrimState m))
 cairoPatternCreateRgba (RgbaDouble r g b a) = returnCairoPatternT
 	$ c_cairo_pattern_create_rgba r g b a
 
-foreign import ccall "cairo_pattern-create_rgba" c_cairo_pattern_create_rgba ::
+foreign import ccall "cairo_pattern_create_rgba" c_cairo_pattern_create_rgba ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
