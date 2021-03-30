@@ -60,8 +60,8 @@ foreign import ccall "cairo_set_source_rgba" c_cairo_set_source_rgba ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
 cairoSetSource :: PrimMonad m => CairoT s -> CairoPatternT s -> m ()
-cairoSetSource (CairoT fcr) (CairoPatternT fpt) = unsafeIOToPrim
-	$ withForeignPtr fcr \cr -> withForeignPtr fpt \pt -> c_cairo_set_source cr pt
+cairoSetSource cr@(CairoT fcr) (CairoPatternT fpt) = unsafeIOToPrim
+	$ withForeignPtr fcr \pcr -> withForeignPtr fpt \pt -> c_cairo_set_source pcr pt >> raiseIfError cr
 
 foreign import ccall "cairo_set_source" c_cairo_set_source ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
@@ -133,8 +133,8 @@ foreign import ccall "cairo_paint_with_alpha" c_cairo_paint_with_alpha ::
 	Ptr (CairoT s) -> CDouble -> IO ()
 
 cairoMask :: PrimMonad m => CairoT s -> CairoPatternT s -> m ()
-cairoMask (CairoT fcr) (CairoPatternT fpt) = unsafeIOToPrim
-	$ withForeignPtr fcr \cr -> withForeignPtr fpt $ c_cairo_mask cr
+cairoMask cr@(CairoT fcr) (CairoPatternT fpt) = unsafeIOToPrim
+	$ withForeignPtr fcr \pcr -> withForeignPtr fpt (c_cairo_mask pcr) >> raiseIfError cr
 
 foreign import ccall "cairo_mask" c_cairo_mask ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()

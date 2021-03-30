@@ -157,16 +157,16 @@ todo
 	+ [x] function `cairo_create`
 	+ [x] function `cairo_set_source_rgb`
 	+ [x] function `cairo_set_source_rgba`
-	+ [ ] function `cairo_set_source`
+	+ [x] function `cairo_set_source`
 		- [x] define
-		- [ ] add exception
+		- [x] add exception
 	+ [x] function `cairo_stroke`
 	+ [x] function `cairo_fill`
 	+ [x] function `cairo_paint`
 	+ [x] function `cairo_paint_with_alpha`
-	+ [ ] function `cairo_mask`
+	+ [x] function `cairo_mask`
 		- [x] define
-		- [ ] add exception
+		- [x] add exception
 * [x] create function in module Graphics.Cairo.Drawing.CairoT.Basic
 	+ [x] function `cairo_set_source_surface`
 	+ [x] function `cairo_stroke_preserve`
