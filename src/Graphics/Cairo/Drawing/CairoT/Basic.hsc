@@ -122,7 +122,7 @@ foreign import ccall "cairo_in_fill" c_cairo_in_fill ::
 	Ptr (CairoT s) -> CDouble -> CDouble -> IO #{type cairo_bool_t}
 
 cairoPaint :: PrimMonad m => CairoT (PrimState m) -> m ()
-cairoPaint = (`withCairoT` c_cairo_paint)
+cairoPaint cr = withCairoT cr \pcr -> c_cairo_paint pcr >> raiseIfError cr
 
 foreign import ccall "cairo_paint" c_cairo_paint :: Ptr (CairoT s) -> IO ()
 
