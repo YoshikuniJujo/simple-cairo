@@ -88,7 +88,7 @@ basic
 	+ [x] define `CairoPatternLinearT`
 	+ [x] define `pattern CairoPatternGradientTLinear`
 	+ [x] `instance IsCairoPatternGradientT CairoPatternLinearT`
-	+ [ ] `cairo_pattern_create_linear`
+	+ [x] `cairo_pattern_create_linear`
 	+ [ ] `cairo_pattern_get_linear_points`
 * [ ] radial
 	+ [ ] define `CairoPatternRadialT`

@@ -133,6 +133,14 @@ cairoPatternGradientT pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
 	CairoPatternTypeRadial -> Just $ CairoPatternGradientT fpt
 	_ -> Nothing
 
+cairoPatternAddColorStopRgb :: (PrimMonad m, IsCairoPatternGradientT pt) =>
+	pt (PrimState m) -> CDouble -> CDouble -> CDouble -> CDouble -> m ()
+cairoPatternAddColorStopRgb (toCairoPatternGradientT -> CairoPatternGradientT fpt) os r g b =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> c_cairo_pattern_add_color_stop_rgb ppt os r g b
+
+foreign import ccall "cairo_pattern_add_color_stop_rgb" c_cairo_pattern_add_color_stop_rgb ::
+	Ptr (CairoPatternT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+
 newtype CairoPatternLinearT s = CairoPatternLinearT (ForeignPtr (CairoPatternT s)) deriving Show
 
 pattern CairoPatternGradientTLinear :: CairoPatternLinearT s -> CairoPatternGradientT s
@@ -144,13 +152,15 @@ cairoPatternGradientLinearT pt@(CairoPatternGradientT fpt) = case cairoPatternGe
 	CairoPatternTypeLinear -> Just $ CairoPatternLinearT fpt
 	_ -> Nothing
 
-cairoPatternAddColorStopRgb :: (PrimMonad m, IsCairoPatternGradientT pt) =>
-	pt (PrimState m) -> CDouble -> CDouble -> CDouble -> CDouble -> m ()
-cairoPatternAddColorStopRgb (toCairoPatternGradientT -> CairoPatternGradientT fpt) os r g b =
-	unsafeIOToPrim $ withForeignPtr fpt \ppt -> c_cairo_pattern_add_color_stop_rgb ppt os r g b
+cairoPatternCreateLinear :: PrimMonad m =>
+	CDouble -> CDouble -> CDouble -> CDouble -> m (CairoPatternLinearT (PrimState m))
+cairoPatternCreateLinear x0 y0 x1 y1 = unsafeIOToPrim
+	$ CairoPatternLinearT <$> do
+		p <- c_cairo_pattern_create_linear x0 y0 x1 y1
+		newForeignPtr p $ c_cairo_pattern_destroy p
 
-foreign import ccall "cairo_pattern_add_color_stop_rgb" c_cairo_pattern_add_color_stop_rgb ::
-	Ptr (CairoPatternT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+foreign import ccall "cairo_pattern_create_linear" c_cairo_pattern_create_linear ::
+	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->

@@ -27,14 +27,6 @@ cairoPatternAddColorStopRgba :: PrimMonad m =>
 cairoPatternAddColorStopRgba pt os r g b a = argCairoPatternT
 	(\ppt -> c_cairo_pattern_add_color_stop_rgba ppt os r g b a) pt
 
-foreign import ccall "cairo_pattern_create_linear" c_cairo_pattern_create_linear ::
-	#{type double} -> #{type double} -> #{type double} -> #{type double} -> IO (Ptr (CairoPatternT s))
-
-cairoPatternCreateLinear :: PrimMonad m =>
-	#{type double} -> #{type double} -> #{type double} -> #{type double} -> m (CairoPatternT (PrimState m))
-cairoPatternCreateLinear x0 y0 x1 y1 = returnCairoPatternT
-	$ c_cairo_pattern_create_linear x0 y0 x1 y1
-
 foreign import ccall "cairo_pattern_create_radial" c_cairo_pattern_create_radial ::
 	#{type double} -> #{type double} -> #{type double} ->
 	#{type double} -> #{type double} -> #{type double} -> IO (Ptr (CairoPatternT s))
