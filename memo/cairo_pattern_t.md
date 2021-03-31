@@ -105,13 +105,32 @@ basic
 	+ [x] `cairo_pattern_create_radial`
 	+ [x] `cairo_pattern_get_radial_circles`
 
-### mesh pattern
+### pattern for surface
+
+* [ ] `cairo_pattern_create_for_surface`
+* [ ] `cairo_pattern_get_surface`
+
+### setting
+
+* [ ] `cairo_pattern_set_foo` and `cairo_pattern_get_foo`
+	+ [ ] `extend`
+	+ [ ] `filter`
+	+ [ ] `matrix`
+
+mesh pattern
+------------
 
 * [x] define `CairoPatternMeshT`
 * [x] define `pattern CairoPattermTMesh`
 	+ [x] define `cairoPatternMeshT`
 	+ [x] define `pattern CairoPatternTMesh`
 * [x] `instance IsCairoPatternT CairoPatternMeshT`
+* [ ] define ADTs
+	+ [ ] `data MoveTo`
+	+ [ ] `data LineCurveTo`
+	+ [ ] `data CloseTo`
+	+ [ ] `data Color`
+	+ [ ] `data Point`
 * [ ] `cairo_pattern_create_mesh`
 * [ ] `cairoMeshPatternAddPatch`
 	+ [ ] `cairo_mesh_pattern_begin_patch`
@@ -127,18 +146,6 @@ basic
 	+ [ ] `cairo_mesh_pattern_get_path`
 	+ [ ] `cairo_mesh_pattern_get_control_point`
 	+ [ ] `cairo_mesh_pattern_get_corner_color_rgba`
-
-### pattern for surface
-
-* [ ] `cairo_pattern_create_for_surface`
-* [ ] `cairo_pattern_get_surface`
-
-### setting
-
-* [ ] `cairo_pattern_set_foo` and `cairo_pattern_get_foo`
-	+ [ ] `extend`
-	+ [ ] `filter`
-	+ [ ] `matrix`
 
 optional
 --------
@@ -159,3 +166,8 @@ for exception
 * [ ] `cairo_pattern_status`
 	+ [x] foreign import it
 	+ [ ] define `raiseIfErrorPattern`
+
+TODO
+----
+
+* [x] make new module for `CairoPatternMeshT`
