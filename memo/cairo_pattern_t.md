@@ -131,7 +131,7 @@ mesh pattern
 	+ [ ] `data CloseTo`
 	+ [ ] `data Color`
 	+ [ ] `data Point`
-* [ ] `cairo_pattern_create_mesh`
+* [x] `cairo_pattern_create_mesh`
 * [ ] `cairoMeshPatternAddPatch`
 	+ [ ] `cairo_mesh_pattern_begin_patch`
 	+ [ ] `cairo_mesh_pattern_end_patch`
@@ -170,4 +170,5 @@ for exception
 TODO
 ----
 
-* [x] make new module for `CairoPatternMeshT`
+* [x] make a new module for `CairoPatternMeshT`
+* [ ] make a module `Graphics.Cairo.Drawing.CairoPatternT.Basic.Internal`
