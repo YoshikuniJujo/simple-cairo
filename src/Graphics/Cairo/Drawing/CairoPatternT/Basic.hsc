@@ -245,6 +245,18 @@ cairoPatternCreateRadial cx0 cy0 r0 cx1 cy1 r1 = unsafeIOToPrim
 foreign import ccall "cairo_pattern_create_radial" c_cairo_pattern_create_radial ::
 	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
+cairoPatternGetRadialCircles :: PrimMonad m =>
+	CairoPatternRadialT (PrimState m) -> m ((CDouble, CDouble, CDouble), (CDouble, CDouble, CDouble))
+cairoPatternGetRadialCircles (CairoPatternRadialT fpt) = unsafeIOToPrim
+	$ withForeignPtr fpt \ppt -> alloca \x0 -> alloca \y0 -> alloca \r0 -> alloca \x1 -> alloca \y1 -> alloca \r1 -> do
+		cs <- c_cairo_pattern_get_radial_circles ppt x0 y0 r0 x1 y1 r1
+		cairoStatusToThrowError cs
+		(,) <$> ((,,) <$> peek x0 <*> peek y0 <*> peek r0) <*> ((,,) <$> peek x1 <*> peek y1 <*> peek r1)
+
+foreign import ccall "cairo_pattern_get_radiakl_circles" c_cairo_pattern_get_radial_circles ::
+	Ptr (CairoPatternT s) ->
+	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt
