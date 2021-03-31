@@ -48,7 +48,7 @@ basic
 * [x] class `IsCairoPatternT`
 	+ [x] instance IsCairoPatternT CairoPatternT
 	+ [x] instance IsCairoPatternT CairoPatternSolidT
-	+ [ ] instance IsCairoPatternGradient pt => CairoPatternT pt
+	+ [x] instance IsCairoPatternGradient pt => CairoPatternT pt
 	+ [ ] others
 
 ### get type
@@ -77,7 +77,7 @@ basic
 ### gradient pattern
 
 * [ ] common
-	+ [ ] class `IsCairoPatternGradient`
+	+ [x] class `IsCairoPatternGradient`
 	+ [x] define `CairoPatternGradientT`
 	+ [x] define `pattern CairoPatternTGradient`
 	+ [ ] `cairo_pattern_add_color_stop_rgb`
@@ -87,6 +87,7 @@ basic
 * [ ] linear
 	+ [x] define `CairoPatternLinearT`
 	+ [x] define `pattern CairoPatternGradientTLinear`
+	+ [x] `instance IsCairoPatternGradientT CairoPatternLinearT`
 	+ [ ] `cairo_pattern_create_linear`
 	+ [ ] `cairo_pattern_get_linear_points`
 * [ ] radial

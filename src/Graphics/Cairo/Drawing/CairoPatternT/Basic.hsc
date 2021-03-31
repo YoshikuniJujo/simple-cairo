@@ -1,5 +1,6 @@
 {-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
+{-# LANGUAGE FlexibleInstances, UndecidableInstances #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Drawing.CairoPatternT.Basic where
@@ -111,7 +112,16 @@ foreign import ccall "cairo_pattern_get_rgba" c_cairo_pattern_get_rgba ::
 	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble ->
 	IO #{type cairo_status_t}
 
+class IsCairoPatternGradientT pt where
+	toCairoPatternGradientT :: pt s -> CairoPatternGradientT s
+
+instance IsCairoPatternGradientT pt => IsCairoPatternT pt where
+	toCairoPatternT = CairoPatternTGradient . toCairoPatternGradientT
+
 newtype CairoPatternGradientT s = CairoPatternGradientT (ForeignPtr (CairoPatternT s)) deriving Show
+
+instance IsCairoPatternGradientT CairoPatternGradientT where
+	toCairoPatternGradientT = id
 
 pattern CairoPatternTGradient :: CairoPatternGradientT s -> CairoPatternT s
 pattern CairoPatternTGradient ptg <- (cairoPatternGradientT -> Just ptg) where
