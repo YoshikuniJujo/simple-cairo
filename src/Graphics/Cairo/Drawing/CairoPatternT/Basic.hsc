@@ -115,7 +115,7 @@ foreign import ccall "cairo_pattern_get_rgba" c_cairo_pattern_get_rgba ::
 class IsCairoPatternGradientT pt where
 	toCairoPatternGradientT :: pt s -> CairoPatternGradientT s
 
-instance IsCairoPatternGradientT pt => IsCairoPatternT pt where
+instance {-# OVERLAPPABLE #-} IsCairoPatternGradientT pt => IsCairoPatternT pt where
 	toCairoPatternT = CairoPatternTGradient . toCairoPatternGradientT
 
 newtype CairoPatternGradientT s = CairoPatternGradientT (ForeignPtr (CairoPatternT s)) deriving Show
