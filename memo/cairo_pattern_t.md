@@ -98,9 +98,9 @@ basic
 	+ [x] `cairo_pattern_get_linear_points`
 * [ ] radial
 	+ [x] define `CairoPatternRadialT`
-	+ [ ] define `pattern CairoPatternGradientTRadial`
-		- [ ] define `cairoPatternGradientRadialT`
-		- [ ] `pattern CairoPatternGradientTRadial`
+	+ [x] define `pattern CairoPatternGradientTRadial`
+		- [x] define `cairoPatternGradientRadialT`
+		- [x] `pattern CairoPatternGradientTRadial`
 	+ [ ] `instance IsCairoPatternGradientT CairoPatternRadialT`
 	+ [ ] `cairo_pattern_radial`
 	+ [ ] `cairo_pattern_get_radial_circles`
