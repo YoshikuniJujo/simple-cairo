@@ -234,6 +234,17 @@ cairoPatternGradientRadialT pt@(CairoPatternGradientT fpt) = case cairoPatternGe
 	CairoPatternTypeRadial -> Just $ CairoPatternRadialT fpt
 	_ -> Nothing
 
+cairoPatternCreateRadial :: PrimMonad m =>
+	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble ->
+	m (CairoPatternRadialT (PrimState m))
+cairoPatternCreateRadial cx0 cy0 r0 cx1 cy1 r1 = unsafeIOToPrim
+	$ CairoPatternRadialT <$> do
+		p <- c_cairo_pattern_create_radial cx0 cy0 r0 cx1 cy1 r1
+		newForeignPtr p $ c_cairo_pattern_destroy p
+
+foreign import ccall "cairo_pattern_create_radial" c_cairo_pattern_create_radial ::
+	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt
