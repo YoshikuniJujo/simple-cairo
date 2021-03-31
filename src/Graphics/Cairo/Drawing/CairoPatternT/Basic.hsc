@@ -19,7 +19,11 @@ import Graphics.Cairo.Exception
 
 #include <cairo.h>
 
+class IsCairoPatternT pt where toCairoPatternT :: pt s -> CairoPatternT s
+
 newtype CairoPatternT s = CairoPatternT (ForeignPtr (CairoPatternT s)) deriving Show
+
+instance IsCairoPatternT CairoPatternT where toCairoPatternT = id
 
 makeCairoPatternT :: Ptr (CairoPatternT s) -> IO (CairoPatternT s)
 makeCairoPatternT p = CairoPatternT <$> newForeignPtr p (c_cairo_pattern_destroy p)

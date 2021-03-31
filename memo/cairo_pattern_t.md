@@ -43,6 +43,14 @@ functions
 basic
 -----
 
+### common
+
+* [x] class `IsCairoPatternT`
+	+ [x] instance IsCairoPatternT CairoPatternT
+	+ [ ] instance IsCairoPatternT CairoPatternSolidT
+	+ [ ] instance IsCairoPatternGradient pt => CairoPatternT pt
+	+ [ ] others
+
 ### get type
 
 * [ ] `cairo_pattern_get_type`
@@ -69,6 +77,7 @@ basic
 ### gradient pattern
 
 * [ ] common
+	+ [ ] class `IsCairoPatternGradient`
 	+ [x] define `CairoPatternGradientT`
 	+ [x] define `pattern CairoPatternTGradient`
 	+ [ ] `cairo_pattern_add_color_stop_rgb`
