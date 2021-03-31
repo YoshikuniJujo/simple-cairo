@@ -101,8 +101,8 @@ basic
 	+ [x] define `pattern CairoPatternGradientTRadial`
 		- [x] define `cairoPatternGradientRadialT`
 		- [x] `pattern CairoPatternGradientTRadial`
-	+ [ ] `instance IsCairoPatternGradientT CairoPatternRadialT`
-	+ [ ] `cairo_pattern_radial`
+	+ [x] `instance IsCairoPatternGradientT CairoPatternRadialT`
+	+ [ ] `cairo_pattern_create_radial`
 	+ [ ] `cairo_pattern_get_radial_circles`
 
 ### mesh pattern

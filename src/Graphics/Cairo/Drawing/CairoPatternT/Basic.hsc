@@ -219,6 +219,12 @@ foreign import ccall "cairo_pattern_get_color_stop_rgba" c_cairo_pattern_get_col
 
 newtype CairoPatternRadialT s = CairoPatternRadialT (ForeignPtr (CairoPatternT s)) deriving Show
 
+instance IsCairoPatternT CairoPatternRadialT where
+	toCairoPatternT = CairoPatternTGradient . toCairoPatternGradientT
+
+instance IsCairoPatternGradientT CairoPatternRadialT where
+	toCairoPatternGradientT = CairoPatternGradientTRadial
+
 pattern CairoPatternGradientTRadial :: CairoPatternRadialT s -> CairoPatternGradientT s
 pattern CairoPatternGradientTRadial pt <- (cairoPatternGradientRadialT -> Just pt) where
 	CairoPatternGradientTRadial (CairoPatternRadialT fpt) = CairoPatternGradientT fpt
