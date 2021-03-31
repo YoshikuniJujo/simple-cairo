@@ -214,6 +214,8 @@ foreign import ccall "cairo_pattern_get_color_stop_rgba" c_cairo_pattern_get_col
 	Ptr (CairoPatternT s) -> CInt ->
 	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
+newtype CairoPatternRadialT s = CairoPatternRadialT (ForeignPtr (CairoPatternT s)) deriving Show
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt

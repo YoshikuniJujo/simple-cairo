@@ -97,26 +97,31 @@ basic
 	+ [x] `cairo_pattern_create_linear`
 	+ [x] `cairo_pattern_get_linear_points`
 * [ ] radial
-	+ [ ] define `CairoPatternRadialT`
+	+ [x] define `CairoPatternRadialT`
 	+ [ ] define `pattern CairoPatternGradientTRadial`
+		- [ ] define `cairoPatternGradientRadialT`
+		- [ ] `pattern CairoPatternGradientTRadial`
+	+ [ ] `instance IsCairoPatternGradientT CairoPatternRadialT`
 	+ [ ] `cairo_pattern_radial`
 	+ [ ] `cairo_pattern_get_radial_circles`
 
 ### mesh pattern
 
 * [ ] `cairo_pattern_create_mesh`
-* [ ] `cairo_mesh_pattern_begin_patch`
-* [ ] `cairo_mesh_pattern_end_patch`
-* [ ] `cairo_mesh_pattern_move_to`
-* [ ] `cairo_mesh_pattern_line_to`
-* [ ] `cairo_mesh_pattern_curve_to`
-* [ ] `cairo_mesh_pattern_set_control_point`
-* [ ] `cairo_mesh_pattern_set_corner_color_rgb`
-* [ ] `cairo_mesh_pattern_set_corner_color_rgba`
-* [ ] `cairo_mesh_pattern_get_patch_count`
-* [ ] `cairo_mesh_pattern_get_path`
-* [ ] `cairo_mesh_pattern_get_control_point`
-* [ ] `cairo_mesh_pattern_get_corner_color_rgba`
+* [ ] `cairoMeshPatternAddPatch`
+	+ [ ] `cairo_mesh_pattern_begin_patch`
+	+ [ ] `cairo_mesh_pattern_end_patch`
+	+ [ ] `cairo_mesh_pattern_move_to`
+	+ [ ] `cairo_mesh_pattern_line_to`
+	+ [ ] `cairo_mesh_pattern_curve_to`
+	+ [ ] `cairo_mesh_pattern_set_control_point`
+	+ [ ] `cairo_mesh_pattern_set_corner_color_rgb`
+	+ [ ] `cairo_mesh_pattern_set_corner_color_rgba`
+* [ ] `cairoMeshPatternGetPatchList`
+	+ [ ] `cairo_mesh_pattern_get_patch_count`
+	+ [ ] `cairo_mesh_pattern_get_path`
+	+ [ ] `cairo_mesh_pattern_get_control_point`
+	+ [ ] `cairo_mesh_pattern_get_corner_color_rgba`
 
 ### pattern for surface
 
