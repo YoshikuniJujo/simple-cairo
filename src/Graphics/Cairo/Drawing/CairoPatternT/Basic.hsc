@@ -69,6 +69,8 @@ foreign import ccall "cairo_pattern_get_type" c_cairo_pattern_get_type ::
 
 newtype CairoPatternSolidT s = CairoPatternSolidT (ForeignPtr (CairoPatternT s)) deriving Show
 
+instance IsCairoPatternT CairoPatternSolidT where toCairoPatternT = CairoPatternTSolid
+
 pattern CairoPatternTSolid :: CairoPatternSolidT s -> CairoPatternT s
 pattern CairoPatternTSolid pts <- (cairoPatternSolidT -> Just pts) where
 	CairoPatternTSolid (CairoPatternSolidT pts) = CairoPatternT pts

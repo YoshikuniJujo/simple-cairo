@@ -47,7 +47,7 @@ basic
 
 * [x] class `IsCairoPatternT`
 	+ [x] instance IsCairoPatternT CairoPatternT
-	+ [ ] instance IsCairoPatternT CairoPatternSolidT
+	+ [x] instance IsCairoPatternT CairoPatternSolidT
 	+ [ ] instance IsCairoPatternGradient pt => CairoPatternT pt
 	+ [ ] others
 
