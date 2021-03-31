@@ -141,6 +141,14 @@ cairoPatternAddColorStopRgb (toCairoPatternGradientT -> CairoPatternGradientT fp
 foreign import ccall "cairo_pattern_add_color_stop_rgb" c_cairo_pattern_add_color_stop_rgb ::
 	Ptr (CairoPatternT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
+cairoPatternAddColorStopRgba :: (PrimMonad m, IsCairoPatternGradientT pt) =>
+	pt (PrimState m) -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> m ()
+cairoPatternAddColorStopRgba (toCairoPatternGradientT -> CairoPatternGradientT fpt) os r g b a =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> c_cairo_pattern_add_color_stop_rgba ppt os r g b a
+
+foreign import ccall "cairo_pattern_add_color_stop_rgba" c_cairo_pattern_add_color_stop_rgba ::
+	Ptr (CairoPatternT s) -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+
 newtype CairoPatternLinearT s = CairoPatternLinearT (ForeignPtr (CairoPatternT s)) deriving Show
 
 pattern CairoPatternGradientTLinear :: CairoPatternLinearT s -> CairoPatternGradientT s

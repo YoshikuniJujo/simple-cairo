@@ -17,16 +17,6 @@ import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 #include <cairo.h>
 
-foreign import ccall "cairo_pattern_add_color_stop_rgba" c_cairo_pattern_add_color_stop_rgba ::
-	Ptr (CairoPatternT s) -> #{type double} ->
-	#{type double} -> #{type double} -> #{type double} -> #{type double} -> IO ()
-
-cairoPatternAddColorStopRgba :: PrimMonad m =>
-	CairoPatternT (PrimState m) -> #{type double} ->
-	#{type double} -> #{type double} -> #{type double} -> #{type double} -> m ()
-cairoPatternAddColorStopRgba pt os r g b a = argCairoPatternT
-	(\ppt -> c_cairo_pattern_add_color_stop_rgba ppt os r g b a) pt
-
 foreign import ccall "cairo_pattern_create_radial" c_cairo_pattern_create_radial ::
 	#{type double} -> #{type double} -> #{type double} ->
 	#{type double} -> #{type double} -> #{type double} -> IO (Ptr (CairoPatternT s))
@@ -44,6 +34,3 @@ cairoPatternCreateForSurface :: PrimMonad m =>
 	CairoSurfaceT (PrimState m) -> m (CairoPatternT (PrimState m))
 cairoPatternCreateForSurface (CairoSurfaceT fs) = unsafeIOToPrim
 	$ withForeignPtr fs \s -> makeCairoPatternT =<< c_cairo_pattern_create_for_surface s
-
-argCairoPatternT :: PrimMonad m => (Ptr (CairoPatternT (PrimState m)) -> IO a) -> CairoPatternT (PrimState m) -> m a
-argCairoPatternT io (CairoPatternT fpt) = unsafeIOToPrim $ withForeignPtr fpt io

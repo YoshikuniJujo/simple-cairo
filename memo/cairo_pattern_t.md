@@ -80,8 +80,12 @@ basic
 	+ [x] class `IsCairoPatternGradient`
 	+ [x] define `CairoPatternGradientT`
 	+ [x] define `pattern CairoPatternTGradient`
-	+ [x] `cairo_pattern_add_color_stop_rgb`
+	+ [ ] `cairo_pattern_add_color_stop_rgb`
+		- [x] define
+		- [ ] use Data.Color.Rgb
 	+ [ ] `cairo_pattern_add_color_stop_rgba`
+		- [x] define
+		- [ ] use Data.Color.Rgba
 	+ [ ] `cairo_pattern_get_color_stop_count`
 	+ [ ] `cairo_pattern_get_color_stop_rgba`
 * [ ] linear
