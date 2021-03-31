@@ -12,6 +12,8 @@ import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Traversable
+import Data.Maybe
 import Data.Word
 import Data.Color
 import System.IO.Unsafe
@@ -183,6 +185,34 @@ cairoPatternGetLinearPoints (CairoPatternLinearT fpt) = unsafeIOToPrim
 
 foreign import ccall "cairo_pattern_get_linear_points" c_cairo_pattern_get_linear_points ::
 	Ptr (CairoPatternT s) -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
+
+cairoPatternGetColorStopRgbaList :: (PrimMonad m, IsCairoPatternGradientT pt) =>
+	pt (PrimState m) -> m [(CDouble, Rgba)]
+cairoPatternGetColorStopRgbaList pt = cairoPatternGetColorStopCount pt >>= \n ->
+	for [0 .. n - 1] \i -> cairoPatternGetColorStopRgba pt i
+
+cairoPatternGetColorStopCount :: (PrimMonad m, IsCairoPatternGradientT pt) =>
+	pt (PrimState m) -> m CInt
+cairoPatternGetColorStopCount (toCairoPatternGradientT -> CairoPatternGradientT fpt) = unsafeIOToPrim
+	$ withForeignPtr fpt \ppt -> alloca \n -> do
+		cs <- c_cairo_pattern_get_color_stop_count ppt n
+		cairoStatusToThrowError cs
+		peek n
+
+foreign import ccall "cairo_pattern_get_color_stop_count" c_cairo_pattern_get_color_stop_count ::
+	Ptr (CairoPatternT s) -> Ptr CInt -> IO #{type cairo_status_t}
+
+cairoPatternGetColorStopRgba :: (PrimMonad m, IsCairoPatternGradientT pt) =>
+	pt (PrimState m) -> CInt -> m (CDouble, Rgba)
+cairoPatternGetColorStopRgba (toCairoPatternGradientT -> CairoPatternGradientT fpt) i = unsafeIOToPrim
+	$ withForeignPtr fpt \ppt -> alloca \os -> alloca \rd -> alloca \gr -> alloca \bl -> alloca \al -> do
+		cs <- c_cairo_pattern_get_color_stop_rgba ppt i os rd gr bl al
+		cairoStatusToThrowError cs
+		(,) <$> peek os <*> ((\r g b a -> fromJust $ rgbaDouble r g b a) <$> peek rd <*> peek gr <*> peek bl <*> peek al)
+
+foreign import ccall "cairo_pattern_get_color_stop_rgba" c_cairo_pattern_get_color_stop_rgba ::
+	Ptr (CairoPatternT s) -> CInt ->
+	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->

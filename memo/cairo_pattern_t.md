@@ -76,7 +76,7 @@ basic
 
 ### gradient pattern
 
-* [ ] common
+* [x] common
 	+ [x] class `IsCairoPatternGradient`
 	+ [x] define `CairoPatternGradientT`
 	+ [x] define `pattern CairoPatternTGradient`
@@ -86,8 +86,10 @@ basic
 	+ [x] `cairo_pattern_add_color_stop_rgba`
 		- [x] define
 		- [x] use Data.Color.Rgba
-	+ [ ] `cairo_pattern_get_color_stop_count`
-	+ [ ] `cairo_pattern_get_color_stop_rgba`
+	+ [x] `cairoPatternGetColorStopRgbaList`
+		- [x] `cairo_pattern_get_color_stop_count`
+		- [x] `cairo_pattern_get_color_stop_rgba`
+		- [x] `cairoPatternGetColorStopRgbaList`
 * [x] linear
 	+ [x] define `CairoPatternLinearT`
 	+ [x] define `pattern CairoPatternGradientTLinear`
