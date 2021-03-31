@@ -114,13 +114,13 @@ foreign import ccall "cairo_pattern_get_rgba" c_cairo_pattern_get_rgba ::
 	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble ->
 	IO #{type cairo_status_t}
 
-class IsCairoPatternGradientT pt where
+class IsCairoPatternT pt => IsCairoPatternGradientT pt where
 	toCairoPatternGradientT :: pt s -> CairoPatternGradientT s
 
-instance {-# OVERLAPPABLE #-} IsCairoPatternGradientT pt => IsCairoPatternT pt where
-	toCairoPatternT = CairoPatternTGradient . toCairoPatternGradientT
-
 newtype CairoPatternGradientT s = CairoPatternGradientT (ForeignPtr (CairoPatternT s)) deriving Show
+
+instance IsCairoPatternT CairoPatternGradientT where
+	toCairoPatternT = CairoPatternTGradient
 
 instance IsCairoPatternGradientT CairoPatternGradientT where
 	toCairoPatternGradientT = id
@@ -155,6 +155,9 @@ newtype CairoPatternLinearT s = CairoPatternLinearT (ForeignPtr (CairoPatternT s
 
 instance IsCairoPatternGradientT CairoPatternLinearT where
 	toCairoPatternGradientT = CairoPatternGradientTLinear
+
+instance IsCairoPatternT CairoPatternLinearT where
+	toCairoPatternT = CairoPatternTGradient . toCairoPatternGradientT
 
 pattern CairoPatternGradientTLinear :: CairoPatternLinearT s -> CairoPatternGradientT s
 pattern CairoPatternGradientTLinear ptl <- (cairoPatternGradientLinearT -> Just ptl) where
