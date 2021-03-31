@@ -257,6 +257,17 @@ foreign import ccall "cairo_pattern_get_radial_circles" c_cairo_pattern_get_radi
 	Ptr (CairoPatternT s) ->
 	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
+newtype CairoPatternMeshT s = CairoPatternMeshT (ForeignPtr (CairoPatternT s)) deriving Show
+
+pattern CairoPatternTMesh :: CairoPatternMeshT s -> CairoPatternT s
+pattern CairoPatternTMesh pt <- (cairoPatternMeshT -> Just pt) where
+	CairoPatternTMesh (CairoPatternMeshT fpt) = CairoPatternT fpt
+
+cairoPatternMeshT :: CairoPatternT s -> Maybe (CairoPatternMeshT s)
+cairoPatternMeshT pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
+	CairoPatternTypeMesh -> Just $ CairoPatternMeshT fpt
+	_ -> Nothing
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt

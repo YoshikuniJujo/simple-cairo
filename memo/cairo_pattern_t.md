@@ -107,6 +107,11 @@ basic
 
 ### mesh pattern
 
+* [x] define `CairoPatternMeshT`
+* [x] define `pattern CairoPattermTMesh`
+	+ [x] define `cairoPatternMeshT`
+	+ [x] define `pattern CairoPatternTMesh`
+* [ ] `instance IsCairoPatternT CairoPatternMeshT`
 * [ ] `cairo_pattern_create_mesh`
 * [ ] `cairoMeshPatternAddPatch`
 	+ [ ] `cairo_mesh_pattern_begin_patch`
