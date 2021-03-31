@@ -259,6 +259,9 @@ foreign import ccall "cairo_pattern_get_radial_circles" c_cairo_pattern_get_radi
 
 newtype CairoPatternMeshT s = CairoPatternMeshT (ForeignPtr (CairoPatternT s)) deriving Show
 
+instance IsCairoPatternT CairoPatternMeshT where
+	toCairoPatternT = CairoPatternTMesh
+
 pattern CairoPatternTMesh :: CairoPatternMeshT s -> CairoPatternT s
 pattern CairoPatternTMesh pt <- (cairoPatternMeshT -> Just pt) where
 	CairoPatternTMesh (CairoPatternMeshT fpt) = CairoPatternT fpt
