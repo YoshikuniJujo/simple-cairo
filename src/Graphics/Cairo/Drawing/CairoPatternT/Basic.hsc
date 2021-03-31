@@ -173,6 +173,17 @@ cairoPatternCreateLinear x0 y0 x1 y1 = unsafeIOToPrim
 foreign import ccall "cairo_pattern_create_linear" c_cairo_pattern_create_linear ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
+cairoPatternGetLinearPoints :: PrimMonad m =>
+	CairoPatternLinearT (PrimState m) -> m ((CDouble, CDouble), (CDouble, CDouble))
+cairoPatternGetLinearPoints (CairoPatternLinearT fpt) = unsafeIOToPrim
+	$ withForeignPtr fpt \ppt -> alloca \x0 -> alloca \y0 -> alloca \x1 -> alloca \y1 -> do
+		cs <- c_cairo_pattern_get_linear_points ppt x0 y0 x1 y1
+		cairoStatusToThrowError cs
+		(,) <$> ((,) <$> peek x0 <*> peek y0) <*> ((,) <$> peek x1 <*> peek y1)
+
+foreign import ccall "cairo_pattern_get_linear_points" c_cairo_pattern_get_linear_points ::
+	Ptr (CairoPatternT s) -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt

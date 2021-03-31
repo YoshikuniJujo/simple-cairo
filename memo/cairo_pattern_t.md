@@ -88,12 +88,12 @@ basic
 		- [ ] use Data.Color.Rgba
 	+ [ ] `cairo_pattern_get_color_stop_count`
 	+ [ ] `cairo_pattern_get_color_stop_rgba`
-* [ ] linear
+* [x] linear
 	+ [x] define `CairoPatternLinearT`
 	+ [x] define `pattern CairoPatternGradientTLinear`
 	+ [x] `instance IsCairoPatternGradientT CairoPatternLinearT`
 	+ [x] `cairo_pattern_create_linear`
-	+ [ ] `cairo_pattern_get_linear_points`
+	+ [x] `cairo_pattern_get_linear_points`
 * [ ] radial
 	+ [ ] define `CairoPatternRadialT`
 	+ [ ] define `pattern CairoPatternGradientTRadial`
