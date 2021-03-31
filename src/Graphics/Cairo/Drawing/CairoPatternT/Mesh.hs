@@ -1,4 +1,4 @@
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
@@ -50,3 +50,91 @@ data CloseTo
 data Color = ColorRgb Rgb | ColorRgba Rgba deriving Show
 
 data Point = Point CDouble CDouble deriving Show
+
+cairoMeshPatternAddPatch :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
+	MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo ->
+	Color -> Color -> Color -> Color ->
+	Maybe Point -> Maybe Point -> Maybe Point -> Maybe Point -> m ()
+cairoMeshPatternAddPatch pt mv lc1 lc2 lc3 cls c0 c1 c2 c3 cp0 cp1 cp2 cp3 = do
+	cairoMeshPatternBeginPatch pt
+	cairoMeshPatternMoveTo pt mv
+	cairoMeshPatternLineTo pt lc1
+	cairoMeshPatternLineTo pt lc2
+	cairoMeshPatternLineTo pt lc3
+	cairoMeshPatternCloseTo pt mv cls
+	cairoMeshPatternSetCornerColor pt 0 c0
+	cairoMeshPatternSetCornerColor pt 1 c1
+	cairoMeshPatternSetCornerColor pt 2 c2
+	cairoMeshPatternSetCornerColor pt 3 c3
+	cairoMeshPatternSetControlPointMaybe pt 0 cp0
+	cairoMeshPatternSetControlPointMaybe pt 1 cp1
+	cairoMeshPatternSetControlPointMaybe pt 2 cp2
+	cairoMeshPatternSetControlPointMaybe pt 3 cp3
+	cairoMeshPatternEndPatch pt
+
+cairoMeshPatternBeginPatch :: PrimMonad m => CairoPatternMeshT (PrimState m) -> m ()
+cairoMeshPatternBeginPatch (CairoPatternMeshT fpt) = unsafeIOToPrim 
+	$ withForeignPtr fpt c_cairo_mesh_pattern_begin_patch
+
+foreign import ccall "cairo_mesh_pattern_begin_patch" c_cairo_mesh_pattern_begin_patch ::
+	Ptr (CairoPatternT s) -> IO ()
+
+cairoMeshPatternEndPatch :: PrimMonad m => CairoPatternMeshT (PrimState m) -> m ()
+cairoMeshPatternEndPatch (CairoPatternMeshT fpt) = unsafeIOToPrim
+	$ withForeignPtr fpt c_cairo_mesh_pattern_end_patch
+
+foreign import ccall "cairo_mesh_pattern_end_patch" c_cairo_mesh_pattern_end_patch ::
+	Ptr (CairoPatternT s) -> IO ()
+
+cairoMeshPatternMoveTo :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> MoveTo -> m ()
+cairoMeshPatternMoveTo (CairoPatternMeshT fpt) (MoveTo x y) = unsafeIOToPrim
+	$ withForeignPtr fpt \ppt -> c_cairo_mesh_pattern_move_to ppt x y
+
+foreign import ccall "cairo_mesh_pattern_move_to" c_cairo_mesh_pattern_move_to ::
+	Ptr (CairoPatternT s) -> CDouble -> CDouble -> IO ()
+
+cairoMeshPatternLineTo :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> LineCurveTo -> m ()
+cairoMeshPatternLineTo (CairoPatternMeshT fpt) = \case
+	LineTo x y -> unsafeIOToPrim
+		$ withForeignPtr fpt \ppt -> c_cairo_mesh_pattern_line_to ppt x y
+	CurveTo x1  y1 x2 y2 x3 y3 -> unsafeIOToPrim
+		$ withForeignPtr fpt \ppt -> c_cairo_mesh_pattern_curve_to ppt x1 y1 x2 y2 x3 y3
+
+cairoMeshPatternCloseTo :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> MoveTo -> CloseTo -> m ()
+cairoMeshPatternCloseTo (CairoPatternMeshT fpt) (MoveTo x0 y0) cls =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> case cls of
+		CloseLineTo -> pure ()
+		CloseCurveTo x1 y1 x2 y2 -> c_cairo_mesh_pattern_curve_to ppt x1 y1 x2 y2 x0 y0
+
+foreign import ccall "cairo_mesh_pattern_line_to" c_cairo_mesh_pattern_line_to ::
+	Ptr (CairoPatternT s) -> CDouble -> CDouble -> IO ()
+
+foreign import ccall "cairo_mesh_pattern_curve_to" c_cairo_mesh_pattern_curve_to ::
+	Ptr (CairoPatternT s) ->
+	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+
+cairoMeshPatternSetControlPointMaybe :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> CUInt -> Maybe Point -> m ()
+cairoMeshPatternSetControlPointMaybe (CairoPatternMeshT fpt) i = \case
+	Nothing -> pure ()
+	Just (Point x y) -> unsafeIOToPrim
+		$ withForeignPtr fpt \ppt -> c_cairo_mesh_pattern_set_control_point ppt i x y
+
+foreign import ccall "cairo_mesh_pattern_set_control_point" c_cairo_mesh_pattern_set_control_point ::
+	Ptr (CairoPatternT s) -> CUInt -> CDouble -> CDouble -> IO ()
+
+cairoMeshPatternSetCornerColor :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> CUInt -> Color -> m ()
+cairoMeshPatternSetCornerColor (CairoPatternMeshT fpt) i c =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> case c of
+		ColorRgb (RgbDouble r g b) -> c_cairo_mesh_pattern_set_corner_color_rgb ppt i r g b
+		ColorRgba (RgbaDouble r g b a) -> c_cairo_mesh_pattern_set_corner_color_rgba ppt i r g b a
+
+foreign import ccall "cairo_mesh_pattern_set_corner_color_rgb" c_cairo_mesh_pattern_set_corner_color_rgb ::
+	Ptr (CairoPatternT s) -> CUInt -> CDouble -> CDouble -> CDouble -> IO ()
+
+foreign import ccall "cairo_mesh_pattern_set_corner_color_rgba" c_cairo_mesh_pattern_set_corner_color_rgba ::
+	Ptr (CairoPatternT s) -> CUInt -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()

@@ -132,15 +132,16 @@ mesh pattern
 	+ [x] `data Color`
 	+ [x] `data Point`
 * [x] `cairo_pattern_create_mesh`
-* [ ] `cairoMeshPatternAddPatch`
-	+ [ ] `cairo_mesh_pattern_begin_patch`
-	+ [ ] `cairo_mesh_pattern_end_patch`
-	+ [ ] `cairo_mesh_pattern_move_to`
-	+ [ ] `cairo_mesh_pattern_line_to`
-	+ [ ] `cairo_mesh_pattern_curve_to`
-	+ [ ] `cairo_mesh_pattern_set_control_point`
-	+ [ ] `cairo_mesh_pattern_set_corner_color_rgb`
-	+ [ ] `cairo_mesh_pattern_set_corner_color_rgba`
+* [x] `cairoMeshPatternAddPatch`
+	+ [x] `cairo_mesh_pattern_begin_patch`
+	+ [x] `cairo_mesh_pattern_end_patch`
+	+ [x] `cairo_mesh_pattern_move_to`
+	+ [x] `cairo_mesh_pattern_line_to`
+	+ [x] `cairo_mesh_pattern_curve_to`
+	+ [x] `cairo_mesh_pattern_set_control_point`
+	+ [x] `cairo_mesh_pattern_set_corner_color_rgb`
+	+ [x] `cairo_mesh_pattern_set_corner_color_rgba`
+	+ [x] `cairoMeshPatternAddPatch`
 * [ ] `cairoMeshPatternGetPatchList`
 	+ [ ] `cairo_mesh_pattern_get_patch_count`
 	+ [ ] `cairo_mesh_pattern_get_path`
