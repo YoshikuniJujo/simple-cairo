@@ -253,7 +253,7 @@ cairoPatternGetRadialCircles (CairoPatternRadialT fpt) = unsafeIOToPrim
 		cairoStatusToThrowError cs
 		(,) <$> ((,,) <$> peek x0 <*> peek y0 <*> peek r0) <*> ((,,) <$> peek x1 <*> peek y1 <*> peek r1)
 
-foreign import ccall "cairo_pattern_get_radiakl_circles" c_cairo_pattern_get_radial_circles ::
+foreign import ccall "cairo_pattern_get_radial_circles" c_cairo_pattern_get_radial_circles ::
 	Ptr (CairoPatternT s) ->
 	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
