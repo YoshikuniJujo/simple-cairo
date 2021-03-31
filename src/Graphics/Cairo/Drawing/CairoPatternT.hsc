@@ -17,14 +17,6 @@ import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 #include <cairo.h>
 
-foreign import ccall "cairo_pattern_add_color_stop_rgb" c_cairo_pattern_add_color_stop_rgb ::
-	Ptr (CairoPatternT s) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> IO ()
-
-cairoPatternAddColorStopRgb :: PrimMonad m =>
-	CairoPatternT (PrimState m) -> #{type double} -> #{type double} -> #{type double} -> #{type double} -> m ()
-cairoPatternAddColorStopRgb pt os r g b = argCairoPatternT
-	(\ppt -> c_cairo_pattern_add_color_stop_rgb ppt os r g b) pt
-
 foreign import ccall "cairo_pattern_add_color_stop_rgba" c_cairo_pattern_add_color_stop_rgba ::
 	Ptr (CairoPatternT s) -> #{type double} ->
 	#{type double} -> #{type double} -> #{type double} -> #{type double} -> IO ()

@@ -144,6 +144,14 @@ cairoPatternGradientLinearT pt@(CairoPatternGradientT fpt) = case cairoPatternGe
 	CairoPatternTypeLinear -> Just $ CairoPatternLinearT fpt
 	_ -> Nothing
 
+cairoPatternAddColorStopRgb :: (PrimMonad m, IsCairoPatternGradientT pt) =>
+	pt (PrimState m) -> CDouble -> CDouble -> CDouble -> CDouble -> m ()
+cairoPatternAddColorStopRgb (toCairoPatternGradientT -> CairoPatternGradientT fpt) os r g b =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> c_cairo_pattern_add_color_stop_rgb ppt os r g b
+
+foreign import ccall "cairo_pattern_add_color_stop_rgb" c_cairo_pattern_add_color_stop_rgb ::
+	Ptr (CairoPatternT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt
