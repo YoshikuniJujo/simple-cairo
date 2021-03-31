@@ -151,6 +151,9 @@ foreign import ccall "cairo_pattern_add_color_stop_rgba" c_cairo_pattern_add_col
 
 newtype CairoPatternLinearT s = CairoPatternLinearT (ForeignPtr (CairoPatternT s)) deriving Show
 
+instance IsCairoPatternGradientT CairoPatternLinearT where
+	toCairoPatternGradientT = CairoPatternGradientTLinear
+
 pattern CairoPatternGradientTLinear :: CairoPatternLinearT s -> CairoPatternGradientT s
 pattern CairoPatternGradientTLinear ptl <- (cairoPatternGradientLinearT -> Just ptl) where
 	CairoPatternGradientTLinear (CairoPatternLinearT ptl) = CairoPatternGradientT ptl
