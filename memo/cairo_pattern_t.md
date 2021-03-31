@@ -125,12 +125,12 @@ mesh pattern
 	+ [x] define `cairoPatternMeshT`
 	+ [x] define `pattern CairoPatternTMesh`
 * [x] `instance IsCairoPatternT CairoPatternMeshT`
-* [ ] define ADTs
-	+ [ ] `data MoveTo`
-	+ [ ] `data LineCurveTo`
-	+ [ ] `data CloseTo`
-	+ [ ] `data Color`
-	+ [ ] `data Point`
+* [x] define ADTs
+	+ [x] `data MoveTo`
+	+ [x] `data LineCurveTo`
+	+ [x] `data CloseTo`
+	+ [x] `data Color`
+	+ [x] `data Point`
 * [x] `cairo_pattern_create_mesh`
 * [ ] `cairoMeshPatternAddPatch`
 	+ [ ] `cairo_mesh_pattern_begin_patch`

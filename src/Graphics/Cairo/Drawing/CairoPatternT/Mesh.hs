@@ -7,7 +7,9 @@ module Graphics.Cairo.Drawing.CairoPatternT.Mesh where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Color
 
 import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
@@ -32,3 +34,19 @@ cairoPatternCreateMesh = unsafeIOToPrim do
 
 foreign import ccall "cairo_pattern_create_mesh" c_cairo_pattern_create_mesh ::
 	IO (Ptr (CairoPatternT s))
+
+data MoveTo = MoveTo CDouble CDouble deriving Show
+
+data LineCurveTo
+	= LineTo CDouble CDouble
+	| CurveTo CDouble CDouble CDouble CDouble CDouble CDouble
+	deriving Show
+
+data CloseTo
+	= CloseLineTo
+	| CloseCurveTo CDouble CDouble CDouble CDouble
+	deriving Show
+
+data Color = ColorRgb Rgb | ColorRgba Rgba deriving Show
+
+data Point = Point CDouble CDouble deriving Show

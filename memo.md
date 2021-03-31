@@ -54,6 +54,7 @@ todo
 	to `Graphics.Cairo.Drawing.Extents`
 * [ ] make new package cairo-regions
 	+ [ ] Regions
+* [ ] rename a module `Data.Color` to `Data.CairoColor`
 
 old
 ---
