@@ -2,7 +2,8 @@
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.Drawing.Paths.CairoPathT (Path(..), CairoPathT, pattern CairoPathT, mkCairoPathT) where
+module Graphics.Cairo.Drawing.Paths.CairoPathT (
+	Path(..), CairoPathT, pattern CairoPathT, withCairoPathT, mkCairoPathT ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
@@ -23,6 +24,9 @@ newtype CairoPathT = CairoPathT_ (ForeignPtr CairoPathT) deriving Show
 pattern CairoPathT :: [Path] -> CairoPathT
 pattern CairoPathT ps <- (unsafePerformIO . cairoPathTPathList -> ps) where
 	CairoPathT = unsafePerformIO . pathListToCairoPathT
+
+withCairoPathT :: CairoPathT -> (Ptr CairoPathT -> IO a) -> IO a
+withCairoPathT (CairoPathT_ fpth) = withForeignPtr fpth
 
 mkCairoPathT :: Ptr CairoPathT -> IO CairoPathT
 mkCairoPathT p =
