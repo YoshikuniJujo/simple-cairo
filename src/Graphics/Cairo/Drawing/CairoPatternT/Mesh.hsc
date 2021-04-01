@@ -12,6 +12,7 @@ import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
 import Data.Word
+import Data.Maybe
 import Data.Color
 
 import Graphics.Cairo.Exception
@@ -175,3 +176,13 @@ cairoMeshPatternGetControlPoint (CairoPatternMeshT fpt) i j =
 
 foreign import ccall "cairo_mesh_pattern_get_control_point" c_cairo_mesh_pattern_get_control_point ::
 	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
+
+cairoMeshPatternGetCornerColorRgba :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> CUInt -> CUInt -> m Rgba
+cairoMeshPatternGetCornerColorRgba (CairoPatternMeshT fpt) i j =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> alloca \r -> alloca \g -> alloca \b -> alloca \a -> do
+		cairoStatusToThrowError =<< c_cairo_mesh_pattern_get_corner_color_rgba ppt i j r g b a
+		fromJust <$> (rgbaDouble <$> peek r <*> peek g <*> peek b <*> peek a)
+
+foreign import ccall "cairo_mesh_pattern_get_corner_color_rgba" c_cairo_mesh_pattern_get_corner_color_rgba ::
+	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}

@@ -146,7 +146,9 @@ mesh pattern
 	+ [x] `cairo_mesh_pattern_get_patch_count`
 	+ [x] `cairo_mesh_pattern_get_path`
 	+ [x] `cairo_mesh_pattern_get_control_point`
-	+ [ ] `cairo_mesh_pattern_get_corner_color_rgba`
+	+ [x] `cairo_mesh_pattern_get_corner_color_rgba`
+	+ [ ] `cairoMeshPatternGetPatch1`
+	+ [ ] `cairoMeshPatternGetPatchList`
 
 optional
 --------
