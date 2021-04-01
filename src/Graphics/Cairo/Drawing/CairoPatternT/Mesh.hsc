@@ -15,6 +15,7 @@ import Data.Word
 import Data.Color
 
 import Graphics.Cairo.Exception
+import Graphics.Cairo.Drawing.Paths.CairoPathT (CairoPathT, mkCairoPathT)
 
 #include <cairo.h>
 
@@ -146,12 +147,21 @@ foreign import ccall "cairo_mesh_pattern_set_corner_color_rgb" c_cairo_mesh_patt
 foreign import ccall "cairo_mesh_pattern_set_corner_color_rgba" c_cairo_mesh_pattern_set_corner_color_rgba ::
 	Ptr (CairoPatternT s) -> CUInt -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
-cairoMeshPatternGetPathCount :: PrimMonad m =>
+cairoMeshPatternGetPatchCount :: PrimMonad m =>
 	CairoPatternMeshT (PrimState m) -> m CUInt
-cairoMeshPatternGetPathCount (CairoPatternMeshT fpt) =
+cairoMeshPatternGetPatchCount (CairoPatternMeshT fpt) =
 	unsafeIOToPrim $ withForeignPtr fpt \ppt -> alloca \cnt -> do
-		cairoStatusToThrowError =<< c_cairo_mesh_pattern_get_path_count ppt cnt
+		cairoStatusToThrowError =<< c_cairo_mesh_pattern_get_patch_count ppt cnt
 		peek cnt
 
-foreign import ccall "cairo_mesh_pattern_get_path_count" c_cairo_mesh_pattern_get_path_count ::
+foreign import ccall "cairo_mesh_pattern_get_patch_count" c_cairo_mesh_pattern_get_patch_count ::
 	Ptr (CairoPatternT s) -> Ptr CUInt -> IO #{type cairo_status_t}
+
+cairoMeshPatternGetPath :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> CUInt -> m CairoPathT
+cairoMeshPatternGetPath (CairoPatternMeshT fpt) i =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt ->
+		mkCairoPathT =<< c_cairo_mesh_pattern_get_path ppt i
+
+foreign import ccall "cairo_mesh_pattern_get_path" c_cairo_mesh_pattern_get_path ::
+	Ptr (CairoPatternT s) -> CUInt -> IO (Ptr CairoPathT)
