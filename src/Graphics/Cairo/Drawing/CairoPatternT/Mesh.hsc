@@ -7,9 +7,16 @@ module Graphics.Cairo.Drawing.CairoPatternT.Mesh where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Foreign.Marshal
+import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Word
 import Data.Color
+
+import Graphics.Cairo.Exception
+
+#include <cairo.h>
 
 import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
@@ -138,3 +145,13 @@ foreign import ccall "cairo_mesh_pattern_set_corner_color_rgb" c_cairo_mesh_patt
 
 foreign import ccall "cairo_mesh_pattern_set_corner_color_rgba" c_cairo_mesh_pattern_set_corner_color_rgba ::
 	Ptr (CairoPatternT s) -> CUInt -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+
+cairoMeshPatternGetPathCount :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> m CUInt
+cairoMeshPatternGetPathCount (CairoPatternMeshT fpt) =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> alloca \cnt -> do
+		cairoStatusToThrowError =<< c_cairo_mesh_pattern_get_path_count ppt cnt
+		peek cnt
+
+foreign import ccall "cairo_mesh_pattern_get_path_count" c_cairo_mesh_pattern_get_path_count ::
+	Ptr (CairoPatternT s) -> Ptr CUInt -> IO #{type cairo_status_t}
