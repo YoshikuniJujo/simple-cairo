@@ -165,3 +165,13 @@ cairoMeshPatternGetPath (CairoPatternMeshT fpt) i =
 
 foreign import ccall "cairo_mesh_pattern_get_path" c_cairo_mesh_pattern_get_path ::
 	Ptr (CairoPatternT s) -> CUInt -> IO (Ptr CairoPathT)
+
+cairoMeshPatternGetControlPoint :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) -> CUInt -> CUInt -> m (CDouble, CDouble)
+cairoMeshPatternGetControlPoint (CairoPatternMeshT fpt) i j =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> alloca \x -> alloca \y -> do
+		cairoStatusToThrowError =<< c_cairo_mesh_pattern_get_control_point ppt i j x y
+		(,) <$> peek x <*> peek y
+
+foreign import ccall "cairo_mesh_pattern_get_control_point" c_cairo_mesh_pattern_get_control_point ::
+	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
