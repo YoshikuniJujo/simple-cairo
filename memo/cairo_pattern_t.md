@@ -142,13 +142,13 @@ mesh pattern
 	+ [x] `cairo_mesh_pattern_set_corner_color_rgb`
 	+ [x] `cairo_mesh_pattern_set_corner_color_rgba`
 	+ [x] `cairoMeshPatternAddPatch`
-* [ ] `cairoMeshPatternGetPatchList`
+* [x] `cairoMeshPatternGetPatchList`
 	+ [x] `cairo_mesh_pattern_get_patch_count`
 	+ [x] `cairo_mesh_pattern_get_path`
 	+ [x] `cairo_mesh_pattern_get_control_point`
 	+ [x] `cairo_mesh_pattern_get_corner_color_rgba`
-	+ [ ] `cairoMeshPatternGetPatch1`
-	+ [ ] `cairoMeshPatternGetPatchList`
+	+ [x] `cairoMeshPatternGetPatch1`
+	+ [x] `cairoMeshPatternGetPatchList`
 
 optional
 --------

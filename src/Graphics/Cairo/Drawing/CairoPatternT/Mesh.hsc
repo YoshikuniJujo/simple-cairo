@@ -11,6 +11,7 @@ import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Traversable
 import Data.Word
 import Data.Maybe
 import Data.Color
@@ -168,11 +169,11 @@ foreign import ccall "cairo_mesh_pattern_get_path" c_cairo_mesh_pattern_get_path
 	Ptr (CairoPatternT s) -> CUInt -> IO (Ptr CairoPathT)
 
 cairoMeshPatternGetControlPoint :: PrimMonad m =>
-	CairoPatternMeshT (PrimState m) -> CUInt -> CUInt -> m (CDouble, CDouble)
+	CairoPatternMeshT (PrimState m) -> CUInt -> CUInt -> m Point
 cairoMeshPatternGetControlPoint (CairoPatternMeshT fpt) i j =
 	unsafeIOToPrim $ withForeignPtr fpt \ppt -> alloca \x -> alloca \y -> do
 		cairoStatusToThrowError =<< c_cairo_mesh_pattern_get_control_point ppt i j x y
-		(,) <$> peek x <*> peek y
+		Point <$> peek x <*> peek y
 
 foreign import ccall "cairo_mesh_pattern_get_control_point" c_cairo_mesh_pattern_get_control_point ::
 	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
@@ -186,3 +187,20 @@ cairoMeshPatternGetCornerColorRgba (CairoPatternMeshT fpt) i j =
 
 foreign import ccall "cairo_mesh_pattern_get_corner_color_rgba" c_cairo_mesh_pattern_get_corner_color_rgba ::
 	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
+
+cairoMeshPatternGetPatch1 :: PrimMonad m => CairoPatternMeshT (PrimState m) -> CUInt ->
+	m (CairoPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))
+cairoMeshPatternGetPatch1 pt i = do
+	pth <- cairoMeshPatternGetPath pt i
+	cairoMeshPatternGetCornerColorRgba pt i `mapM` [0, 1, 2, 3] >>= \case
+		[c0, c1, c2, c3] ->
+			cairoMeshPatternGetControlPoint pt i `mapM` [0, 1, 2, 3] >>= \case
+				[p0, p1, p2, p3] -> pure (pth, (c0, c1, c2, c3), (p0, p1, p2, p3))
+				_ -> error "never occur"
+		_ -> error "never occur"
+
+cairoMeshPatternGetPatchList :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
+	m [(CairoPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))]
+cairoMeshPatternGetPatchList pt = do
+	n <- cairoMeshPatternGetPatchCount pt
+	for [0 .. n - 1] $ cairoMeshPatternGetPatch1 pt
