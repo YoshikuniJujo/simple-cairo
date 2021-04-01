@@ -48,7 +48,7 @@ necessary
 optional
 --------
 
-* [ ] `cairo_copy_path`
+* [x] `cairo_copy_path`
 * [ ] `cairo_copy_path_flat`
 * [ ] `cairo_append_path`
 * [ ] `cairo_has_current_point`
@@ -62,4 +62,4 @@ won't implement
 for GC
 ------
 
-* [ ] `cairo_path_destroy`
+* [x] `cairo_path_destroy`
