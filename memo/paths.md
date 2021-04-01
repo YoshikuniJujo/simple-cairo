@@ -49,7 +49,7 @@ optional
 --------
 
 * [x] `cairo_copy_path`
-* [ ] `cairo_copy_path_flat`
+* [x] `cairo_copy_path_flat`
 * [ ] `cairo_append_path`
 * [ ] `cairo_has_current_point`
 * [ ] `cairo_get_current_point`

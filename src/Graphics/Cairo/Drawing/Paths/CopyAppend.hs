@@ -15,3 +15,10 @@ cairoCopyPath (CairoT fcr) = unsafeIOToPrim
 
 foreign import ccall "cairo_copy_path" c_cairo_copy_path ::
 	Ptr (CairoT s) -> IO (Ptr CairoPathT)
+
+cairoCopyPathFlat :: PrimMonad m => CairoT (PrimState m) -> m CairoPathT
+cairoCopyPathFlat (CairoT fcr) = unsafeIOToPrim
+	$ withForeignPtr fcr \pcr -> mkCairoPathT =<< c_cairo_copy_path_flat pcr
+
+foreign import ccall "cairo_copy_path_flat" c_cairo_copy_path_flat ::
+	Ptr (CairoT s) -> IO (Ptr CairoPathT)
