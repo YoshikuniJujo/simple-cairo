@@ -279,6 +279,20 @@ cairoPatternCreateForSurface (CairoSurfaceT fs) =
 foreign import ccall "cairo_pattern_create_for_surface" c_cairo_pattern_create_for_surface ::
 	Ptr (CairoSurfaceT s) -> IO (Ptr (CairoPatternT s))
 
+cairoPatternGetSurface :: PrimMonad m =>
+	CairoPatternSurfaceT (PrimState m) -> m (CairoSurfaceT (PrimState m))
+cairoPatternGetSurface (CairoPatternSurfaceT fpt) =
+	unsafeIOToPrim $ CairoSurfaceT <$> withForeignPtr fpt \ppt -> alloca \pps -> do
+		cairoStatusToThrowError =<< c_cairo_pattern_get_surface ppt pps
+		p <- c_cairo_surface_reference =<< peek pps
+		newForeignPtr p $ c_cairo_surface_destroy p
+
+foreign import ccall "cairo_pattern_get_surface" c_cairo_pattern_get_surface ::
+	Ptr (CairoPatternT s) -> Ptr (Ptr (CairoSurfaceT s)) -> IO #{type cairo_status_t}
+
+foreign import ccall "cairo_surface_reference" c_cairo_surface_reference ::
+	Ptr (CairoSurfaceT s) -> IO (Ptr (CairoSurfaceT s))
+
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->
 	cairoStatusToThrowError =<< c_cairo_pattern_status pt

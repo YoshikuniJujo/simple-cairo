@@ -110,7 +110,7 @@ basic
 	+ [x] define `cairoPatternTSurface :: CairoPatternT s -> Maybe (CairoPatternSurfaceT s)`
 	+ [x] define `pattern CairoPatternTSurface`
 * [x] `cairo_pattern_create_for_surface`
-* [ ] `cairo_pattern_get_surface`
+* [x] `cairo_pattern_get_surface`
 
 ### setting
 
