@@ -16,7 +16,7 @@ class CairoPatternSetting s where
 	cairoPatternSet :: (PrimMonad m, IsCairoPatternT pt) => pt (PrimState m) -> s -> m ()
 	cairoPatternGet :: (PrimMonad m, IsCairoPatternT pt) => pt (PrimState m) -> m s
 
-newtype CairoExtendT = CairoExtendT #{type cairo_extend_t}
+newtype CairoExtendT = CairoExtendT #{type cairo_extend_t} deriving Show
 
 pattern CairoExtendNone :: CairoExtendT
 pattern CairoExtendNone <- CairoExtendT #{const CAIRO_EXTEND_NONE} where
