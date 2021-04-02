@@ -106,9 +106,9 @@ basic
 ### pattern for surface
 
 * [x] define `CairoPatternSurfaceT`
-* [ ] define `pattern CairoPatternTSurface :: CairoPatternSurfaceT s -> CairoPatternT s`
-	+ [ ] define `cairoPatternTSurface :: CairoPatternT s -> Maybe (CairoPatternSurfaceT s)`
-	+ [ ] define `pattern CairoPatternTSurface`
+* [x] define `pattern CairoPatternTSurface :: CairoPatternSurfaceT s -> CairoPatternT s`
+	+ [x] define `cairoPatternTSurface :: CairoPatternT s -> Maybe (CairoPatternSurfaceT s)`
+	+ [x] define `pattern CairoPatternTSurface`
 * [ ] `cairo_pattern_create_for_surface`
 * [ ] `cairo_pattern_get_surface`
 
