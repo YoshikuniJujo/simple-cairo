@@ -62,17 +62,27 @@ data Color = ColorRgb Rgb | ColorRgba Rgba deriving Show
 
 data Point = Point CDouble CDouble deriving Show
 
-cairoMeshPatternAddPatch3 :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
+cairoMeshPatternAddPatchDefaultControlPoint3 :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
 	MoveTo -> LineCurveTo -> LineCurveTo -> CloseTo ->
-	Color -> Color -> Color ->
-	Maybe Point -> Maybe Point -> Maybe Point -> m ()
-cairoMeshPatternAddPatch3 pt mv lc1 lc2 cls c0 c1 c2 cp0 cp1 cp2 = do
+	Color -> Color -> Color -> m ()
+cairoMeshPatternAddPatchDefaultControlPoint3 pt mv lc1 lc2 cls c0 c1 c2 = do
 	cairoMeshPatternBeginPatch pt
 	cairoMeshPatternMoveTo pt mv
 	cairoMeshPatternLineTo pt `mapM_` [lc1, lc2]
 	cairoMeshPatternCloseTo pt mv cls
 	zipWithM_ (cairoMeshPatternSetCornerColor pt) [0 ..] [c0, c1, c2]
-	zipWithM_ (cairoMeshPatternSetControlPointMaybe pt) [0 ..] [cp0, cp1, cp2]
+	cairoMeshPatternEndPatch pt
+
+cairoMeshPatternAddPatchDefaultControlPoint :: PrimMonad m =>
+	CairoPatternMeshT (PrimState m) ->
+	MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo ->
+	Color -> Color -> Color -> Color -> m ()
+cairoMeshPatternAddPatchDefaultControlPoint pt mv lc1 lc2 lc3 cls c0 c1 c2 c3 = do
+	cairoMeshPatternBeginPatch pt
+	cairoMeshPatternMoveTo pt mv
+	cairoMeshPatternLineTo pt `mapM_` [lc1, lc2, lc3]
+	cairoMeshPatternCloseTo pt mv cls
+	zipWithM_ (cairoMeshPatternSetCornerColor pt) [0 ..] [c0, c1, c2, c3]
 	cairoMeshPatternEndPatch pt
 
 cairoMeshPatternAddPatch :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
