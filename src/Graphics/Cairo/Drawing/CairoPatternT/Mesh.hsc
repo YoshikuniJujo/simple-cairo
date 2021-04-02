@@ -10,6 +10,7 @@ import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
+import Control.Monad
 import Control.Monad.Primitive
 import Data.Traversable
 import Data.Word
@@ -61,6 +62,19 @@ data Color = ColorRgb Rgb | ColorRgba Rgba deriving Show
 
 data Point = Point CDouble CDouble deriving Show
 
+cairoMeshPatternAddPatch3 :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
+	MoveTo -> LineCurveTo -> LineCurveTo -> CloseTo ->
+	Color -> Color -> Color ->
+	Maybe Point -> Maybe Point -> Maybe Point -> m ()
+cairoMeshPatternAddPatch3 pt mv lc1 lc2 cls c0 c1 c2 cp0 cp1 cp2 = do
+	cairoMeshPatternBeginPatch pt
+	cairoMeshPatternMoveTo pt mv
+	cairoMeshPatternLineTo pt `mapM_` [lc1, lc2]
+	cairoMeshPatternCloseTo pt mv cls
+	zipWithM_ (cairoMeshPatternSetCornerColor pt) [0 ..] [c0, c1, c2]
+	zipWithM_ (cairoMeshPatternSetControlPointMaybe pt) [0 ..] [cp0, cp1, cp2]
+	cairoMeshPatternEndPatch pt
+
 cairoMeshPatternAddPatch :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
 	MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo ->
 	Color -> Color -> Color -> Color ->
@@ -68,18 +82,10 @@ cairoMeshPatternAddPatch :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
 cairoMeshPatternAddPatch pt mv lc1 lc2 lc3 cls c0 c1 c2 c3 cp0 cp1 cp2 cp3 = do
 	cairoMeshPatternBeginPatch pt
 	cairoMeshPatternMoveTo pt mv
-	cairoMeshPatternLineTo pt lc1
-	cairoMeshPatternLineTo pt lc2
-	cairoMeshPatternLineTo pt lc3
+	cairoMeshPatternLineTo pt `mapM_` [lc1, lc2, lc3]
 	cairoMeshPatternCloseTo pt mv cls
-	cairoMeshPatternSetCornerColor pt 0 c0
-	cairoMeshPatternSetCornerColor pt 1 c1
-	cairoMeshPatternSetCornerColor pt 2 c2
-	cairoMeshPatternSetCornerColor pt 3 c3
-	cairoMeshPatternSetControlPointMaybe pt 0 cp0
-	cairoMeshPatternSetControlPointMaybe pt 1 cp1
-	cairoMeshPatternSetControlPointMaybe pt 2 cp2
-	cairoMeshPatternSetControlPointMaybe pt 3 cp3
+	zipWithM_ (cairoMeshPatternSetCornerColor pt) [0 ..] [c0, c1, c2, c3]
+	zipWithM_ (cairoMeshPatternSetControlPointMaybe pt) [0 ..] [cp0, cp1, cp2, cp3]
 	cairoMeshPatternEndPatch pt
 
 cairoMeshPatternBeginPatch :: PrimMonad m => CairoPatternMeshT (PrimState m) -> m ()
