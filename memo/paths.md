@@ -75,6 +75,6 @@ CairoPathT
 * [x] get `MoveTo`, `LineCurveTo` and `CloseTo` from `Graphics.Cairo.Drawing.CairoPatternT.Mesh`
 	+ [x] rename data constructors of `Path`
 	+ [x] move them
-* [ ] `pattern CairoPatchPathT :: `
-	+ [ ] `createCairoPathPathT :: MoveTo -> LineCurveTo -> ... -> CairoPathPathT`
+* [x] `pattern CairoPatchPathT :: `
+	+ [x] `createCairoPathPathT :: MoveTo -> LineCurveTo -> ... -> CairoPathPathT`
 	+ [x] `drawFromCairoPatchPathT :: CairoPatchPathT -> (MoveTo, LineCurveTo, ..., CloseTo)`

@@ -242,7 +242,8 @@ data CloseTo
 	deriving Show
 
 pattern CairoPatchPathT :: MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo -> CairoPatchPathT
-pattern CairoPatchPathT mt lct1 lct2 lct3 cls <- (unsafePerformIO . drawFromCairoPatchPathT -> (mt, lct1, lct2, lct3, cls))
+pattern CairoPatchPathT mt lct1 lct2 lct3 cls <- (unsafePerformIO . drawFromCairoPatchPathT -> (mt, lct1, lct2, lct3, cls)) where
+	CairoPatchPathT mt lct1 lct2 lct3 cls = unsafePerformIO $ patchPathsToCairoPatchPathT mt lct1 lct2 lct3 cls
 
 drawFromCairoPatchPathT :: CairoPatchPathT -> IO (MoveTo, LineCurveTo, LineCurveTo, LineCurveTo, CloseTo)
 drawFromCairoPatchPathT (CairoPatchPathT_ fpth) = withForeignPtr fpth \ppth -> do
@@ -310,3 +311,83 @@ drawCloseToFromCairoPathDataT p n = do
 	ln <- cairoPathDataTHeaderLength p
 	if n - ln < 0 then error "bad" else pure (ctgl, (nextByLength p ln, n - ln))
 	where [p1, p2, p3] = nextByLength p <$> [1, 2, 3]
+
+patchPathsToCairoPatchPathT ::
+	MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo -> IO CairoPatchPathT
+patchPathsToCairoPatchPathT mt lct1 lct2 lct3 cls = CairoPatchPathT_ <$> do
+	pd <- mallocBytes $ patchPathSize mt lct1 lct2 lct3 cls * cairoPathDataTSize
+	patchPathsToCairoPathDataT pd mt lct1 lct2 lct3 cls
+	p <- mallocBytes #{size cairo_path_t}
+	#{poke cairo_path_t, status} p (#{const CAIRO_STATUS_SUCCESS} :: #{type cairo_status_t})
+	#{poke cairo_path_t, data} p pd
+	#{poke cairo_path_t, num_data} p $ patchPathSize mt lct1 lct2 lct3 cls
+	newForeignPtr p $ free pd >> free p
+
+patchPathSize :: MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo -> Int
+patchPathSize _mt lct1 lct2 lct3 cls =
+	2 + sum (lineCurveToSize <$> [lct1, lct2, lct3]) + closeToSize cls
+
+lineCurveToSize :: LineCurveTo -> Int
+lineCurveToSize (LineTo _ _) = 2
+lineCurveToSize (CurveTo _ _ _ _ _ _) = 4
+
+closeToSize :: CloseTo -> Int
+closeToSize CloseLineTo = 1
+closeToSize (CloseCurveTo _ _ _ _) = 4
+
+patchPathsToCairoPathDataT :: Ptr CairoPathDataT ->
+	MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo -> IO ()
+patchPathsToCairoPathDataT pd mt lct1 lct2 lct3 cls = do
+	pd1 <- moveToToCairoPathDataT pd mt
+	pd2 <- lineCurveToToCairoPathDataT pd1 lct1
+	pd3 <- lineCurveToToCairoPathDataT pd2 lct2
+	pd4 <- lineCurveToToCairoPathDataT pd3 lct3
+	_ <- closeToToCairoPathDataT pd4 mt cls
+	pure ()
+
+moveToToCairoPathDataT :: Ptr CairoPathDataT -> MoveTo -> IO (Ptr CairoPathDataT)
+moveToToCairoPathDataT p (MoveTo x y) = do
+	#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_MOVE_TO} :: #{type cairo_path_data_type_t})
+	#{poke cairo_path_data_t, header.length} p (2 :: CInt)
+	#{poke cairo_path_data_t, point.x} p1 x
+	#{poke cairo_path_data_t, point.y} p1 y
+	pure $ p `plusPtr` (cairoPathDataTSize * 2)
+	where p1 = nextByLength p 1
+
+lineCurveToToCairoPathDataT :: Ptr CairoPathDataT -> LineCurveTo -> IO (Ptr CairoPathDataT)
+lineCurveToToCairoPathDataT p = \case
+	LineTo x y -> do
+		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_LINE_TO} :: #{type cairo_path_data_type_t})
+		#{poke cairo_path_data_t, header.length} p (2 :: CInt)
+		#{poke cairo_path_data_t, point.x} p1 x
+		#{poke cairo_path_data_t, point.y} p1 y
+		pure $ p `plusPtr` (cairoPathDataTSize * 2)
+	CurveTo x1 y1 x2 y2 x3 y3 -> do
+		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_CURVE_TO} :: #{type cairo_path_data_type_t})
+		#{poke cairo_path_data_t, header.length} p (4 :: CInt)
+		#{poke cairo_path_data_t, point.x} p1 x1
+		#{poke cairo_path_data_t, point.y} p1 y1
+		#{poke cairo_path_data_t, point.x} p2 x2
+		#{poke cairo_path_data_t, point.y} p2 y2
+		#{poke cairo_path_data_t, point.x} p3 x3
+		#{poke cairo_path_data_t, point.y} p3 y3
+		pure $ p `plusPtr` (cairoPathDataTSize * 4)
+	where p1 = nextByLength p 1; p2 = nextByLength p 2; p3 = nextByLength p 3
+
+closeToToCairoPathDataT :: Ptr CairoPathDataT -> MoveTo -> CloseTo -> IO (Ptr CairoPathDataT)
+closeToToCairoPathDataT p (MoveTo x0 y0) = \case
+	CloseLineTo -> do
+		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_CLOSE_PATH} :: #{type cairo_path_data_type_t})
+		#{poke cairo_path_data_t, header.length} p (1 :: CInt)
+		pure $ p `plusPtr` cairoPathDataTSize
+	CloseCurveTo x1 y1 x2 y2 -> do
+		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_CURVE_TO} :: #{type cairo_path_data_type_t})
+		#{poke cairo_path_data_t, header.length} p (4 :: CInt)
+		#{poke cairo_path_data_t, point.x} p1 x1
+		#{poke cairo_path_data_t, point.y} p1 y1
+		#{poke cairo_path_data_t, point.x} p2 x2
+		#{poke cairo_path_data_t, point.y} p2 y2
+		#{poke cairo_path_data_t, point.x} p3 x0
+		#{poke cairo_path_data_t, point.y} p3 y0
+		pure $ p `plusPtr` (cairoPathDataTSize * 4)
+	where p1 = nextByLength p 1; p2 = nextByLength p 2; p3 = nextByLength p 3
