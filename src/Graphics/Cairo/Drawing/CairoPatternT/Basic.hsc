@@ -19,6 +19,7 @@ import Data.Color
 import System.IO.Unsafe
 
 import Graphics.Cairo.Exception
+import Graphics.Cairo.Surfaces.CairoSurfaceT
 
 #include <cairo.h>
 
@@ -256,6 +257,11 @@ cairoPatternGetRadialCircles (CairoPatternRadialT fpt) = unsafeIOToPrim
 foreign import ccall "cairo_pattern_get_radial_circles" c_cairo_pattern_get_radial_circles ::
 	Ptr (CairoPatternT s) ->
 	Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
+
+newtype CairoPatternSurfaceT s = CairoPatternSurfaceT (ForeignPtr (CairoPatternT s)) deriving Show
+
+foreign import ccall "cairo_pattern_create_for_surface" c_cairo_pattern_create_for_surface ::
+	Ptr (CairoSurfaceT s) -> IO (Ptr (CairoPatternT s))
 
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->

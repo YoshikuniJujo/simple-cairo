@@ -49,17 +49,15 @@ basic
 	+ [x] instance IsCairoPatternT CairoPatternT
 	+ [x] instance IsCairoPatternT CairoPatternSolidT
 	+ [x] instance IsCairoPatternGradient pt => CairoPatternT pt
-	+ [ ] others
 
 ### get type
 
-* [ ] `cairo_pattern_get_type`
+* [x] `cairo_pattern_get_type`
 	+ [x] `enum cairo_pattern_type_t`
 	+ [x] function `cairo_pattern_get_type`
 	+ [x] this function may be pure
-	+ [ ] define patterns
+	+ [x] define patterns
 		- [x] `pattern CairoPatternTSolid :: CairoPatternSolidT s -> CairoPatternT s`
-		- [ ] others
 
 ### solid pattern
 
@@ -107,6 +105,10 @@ basic
 
 ### pattern for surface
 
+* [x] define `CairoPatternSurfaceT`
+* [ ] define `pattern CairoPatternTSurface :: CairoPatternSurfaceT s -> CairoPatternT s`
+	+ [ ] define `cairoPatternTSurface :: CairoPatternT s -> Maybe (CairoPatternSurfaceT s)`
+	+ [ ] define `pattern CairoPatternTSurface`
 * [ ] `cairo_pattern_create_for_surface`
 * [ ] `cairo_pattern_get_surface`
 
