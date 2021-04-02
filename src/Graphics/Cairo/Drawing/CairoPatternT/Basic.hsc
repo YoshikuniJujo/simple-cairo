@@ -269,6 +269,13 @@ cairoPatternTSurface pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
 	CairoPatternTypeSurface -> Just $ CairoPatternSurfaceT fpt
 	_ -> Nothing
 
+cairoPatternCreateForSurface :: PrimMonad m =>
+	CairoSurfaceT (PrimState m) -> m (CairoPatternSurfaceT (PrimState m))
+cairoPatternCreateForSurface (CairoSurfaceT fs) =
+	unsafeIOToPrim $ CairoPatternSurfaceT <$> withForeignPtr fs \ps -> do
+		p <- c_cairo_pattern_create_for_surface ps
+		newForeignPtr p $ c_cairo_pattern_destroy p
+
 foreign import ccall "cairo_pattern_create_for_surface" c_cairo_pattern_create_for_surface ::
 	Ptr (CairoSurfaceT s) -> IO (Ptr (CairoPatternT s))
 
