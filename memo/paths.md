@@ -67,8 +67,8 @@ for GC
 CairoPathT
 ----------
 
-* [ ] define `isCairoPatchPath :: CairoPathT -> Bool`
+* [x] define `isCairoPatchPath :: CairoPathT -> Bool`
 	+ MoveTo ==> (LineTo or CurveTo) * 4
 	+ MoveTo x0 y0: the goal of last LineTo or CurveTo is (x0, y0)
 	+ [x] define `cairoPathCheckPaths :: CairoPathT -> [#{type cairo_path_data_type_t} -> Bool] -> Bool`
-	+ [ ] define `cairoPathGetGoal :: Int -> (CDouble, CDouble)
+	+ [x] define `cairoPathGetGoal :: Int -> (CDouble, CDouble)

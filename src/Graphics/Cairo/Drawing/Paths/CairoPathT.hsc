@@ -155,8 +155,8 @@ pathListToCairoPathDataT pd = \case
 	[] -> pure ()
 	pth : pths -> pathToCairoPathData pd pth >> pathListToCairoPathDataT (pd `plusPtr` (cairoPathDataTSize * pathToNumData pth)) pths
 
-cairoPathCheckPaths :: CairoPathT -> [#{type cairo_path_data_type_t} -> Bool] -> IO Bool
-cairoPathCheckPaths (CairoPathT_ fpth) ts = withForeignPtr fpth \ppth -> do
+cairoPathTCheckPaths :: CairoPathT -> [#{type cairo_path_data_type_t} -> Bool] -> IO Bool
+cairoPathTCheckPaths (CairoPathT_ fpth) ts = withForeignPtr fpth \ppth -> do
 	d <- cairoPathTData ppth
 	n <- cairoPathTNumData ppth
 	cairoPathDataCheckPaths d ts n
@@ -169,3 +169,43 @@ cairoPathDataCheckPaths p (t : ts) n = do
 	b <- t <$> cairoPathDataTHeaderType p
 	ln <- cairoPathDataTHeaderLength p
 	(b &&) <$> unsafeInterleaveIO (cairoPathDataCheckPaths (nextByLength p ln) ts (n - ln))
+
+cairoPathTGetGoal :: CairoPathT -> Int -> IO (Maybe (CDouble, CDouble))
+cairoPathTGetGoal (CairoPathT_ fpth) i = withForeignPtr fpth \ppth -> do
+	d <- cairoPathTData ppth
+	n <- cairoPathTNumData ppth
+	cairoPathDataTGetGoal d i n
+
+cairoPathDataTGetGoal :: Ptr CairoPathDataT -> Int -> CInt -> IO (Maybe (CDouble, CDouble))
+cairoPathDataTGetGoal _ _ n | n < 1 = pure Nothing
+cairoPathDataTGetGoal p 0 _ = unsafeInterleaveIO do
+	cairoPathDataTHeaderType p >>= \case
+		#{const CAIRO_PATH_MOVE_TO} -> (\x y -> Just (x, y))
+			<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
+		#{const CAIRO_PATH_LINE_TO} -> (\x y -> Just (x, y))
+			<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
+		#{const CAIRO_PATH_CURVE_TO} -> (\x y -> Just (x, y))
+			<$> cairoPathDataTPointX p3 <*> cairoPathDataTPointY p3
+		#{const CAIRO_PATH_CLOSE_PATH} -> pure Nothing
+		_ -> error "no such path"
+	where p1 = nextByLength p 1; p3 = nextByLength p 3
+cairoPathDataTGetGoal p i n = do
+	ln <- cairoPathDataTHeaderLength p
+	cairoPathDataTGetGoal (nextByLength p ln) (i - 1) (n - ln)
+
+lineOrCurve :: #{type cairo_path_data_type_t} -> Bool
+lineOrCurve = (||) <$> (== #{const CAIRO_PATH_LINE_TO}) <*> (== #{const CAIRO_PATH_CURVE_TO})
+
+isCairoPatchPath :: CairoPathT -> IO Bool
+isCairoPatchPath pth = do
+	b1 <- cairoPathTCheckPaths pth [
+		(== #{const CAIRO_PATH_MOVE_TO}), lineOrCurve, lineOrCurve, lineOrCurve,
+		(== #{const CAIRO_PATH_CLOSE_PATH}) ]
+	b2 <- cairoPathTCheckPaths pth [
+		(== #{const CAIRO_PATH_MOVE_TO}), lineOrCurve, lineOrCurve, lineOrCurve, lineOrCurve ]
+	b3 <- cairoPathTGetGoal pth 0 >>= \case
+		Nothing -> pure False
+		Just (x0, y0) -> cairoPathTGetGoal pth 4 >>= \case
+			Nothing -> pure False
+			Just (xc, yc) -> pure $ xc == x0 && yc == y0
+	pure $ b1 || (b2 && b3)
