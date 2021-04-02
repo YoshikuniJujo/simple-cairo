@@ -4,7 +4,7 @@
 
 module Graphics.Cairo.Drawing.Paths.CairoPathT (
 	Path(..), CairoPathT, pattern CairoPathT, withCairoPathT, mkCairoPathT,
-	CairoPatchPathT, pattern CairoPathTPatch ) where
+	CairoPatchPathT, pattern CairoPathTPatch, mkCairoPatchPathT ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
@@ -213,6 +213,11 @@ isCairoPatchPath pth = do
 	pure $ b1 || (b2 && b3)
 
 newtype CairoPatchPathT = CairoPatchPathT_ (ForeignPtr CairoPathT) deriving Show
+
+mkCairoPatchPathT :: Ptr CairoPathT -> IO CairoPatchPathT
+mkCairoPatchPathT p =
+	CairoPatchPathT_ <$> newForeignPtr p (c_cairo_path_destroy p)
+		<* (cairoStatusToThrowError =<< cairoPathTStatus p)
 
 pattern CairoPathTPatch :: CairoPatchPathT -> CairoPathT
 pattern CairoPathTPatch ppth <- (unsafePerformIO . cairoPathTPatch -> Just ppth) where

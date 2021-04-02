@@ -17,7 +17,7 @@ import Data.Maybe
 import Data.Color
 
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Drawing.Paths.CairoPathT (CairoPathT, mkCairoPathT)
+import Graphics.Cairo.Drawing.Paths.CairoPathT (CairoPathT, CairoPatchPathT, mkCairoPatchPathT)
 
 #include <cairo.h>
 
@@ -175,10 +175,10 @@ foreign import ccall "cairo_mesh_pattern_get_patch_count" c_cairo_mesh_pattern_g
 	Ptr (CairoPatternT s) -> Ptr CUInt -> IO #{type cairo_status_t}
 
 cairoMeshPatternGetPath :: PrimMonad m =>
-	CairoPatternMeshT (PrimState m) -> CUInt -> m CairoPathT
+	CairoPatternMeshT (PrimState m) -> CUInt -> m CairoPatchPathT
 cairoMeshPatternGetPath (CairoPatternMeshT fpt) i =
 	unsafeIOToPrim $ withForeignPtr fpt \ppt ->
-		mkCairoPathT =<< c_cairo_mesh_pattern_get_path ppt i
+		mkCairoPatchPathT =<< c_cairo_mesh_pattern_get_path ppt i
 
 foreign import ccall "cairo_mesh_pattern_get_path" c_cairo_mesh_pattern_get_path ::
 	Ptr (CairoPatternT s) -> CUInt -> IO (Ptr CairoPathT)
@@ -204,7 +204,7 @@ foreign import ccall "cairo_mesh_pattern_get_corner_color_rgba" c_cairo_mesh_pat
 	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
 cairoMeshPatternGetPatch1 :: PrimBase m => CairoPatternMeshT (PrimState m) -> CUInt ->
-	m (CairoPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))
+	m (CairoPatchPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))
 cairoMeshPatternGetPatch1 pt i = do
 	pth <- unsafeInterleave $ cairoMeshPatternGetPath pt i
 	(unsafeInterleave . cairoMeshPatternGetCornerColorRgba pt i) `mapM` [0, 1, 2, 3] >>= \case
@@ -222,7 +222,7 @@ mapMLazy :: PrimBase m => (a -> m b) -> [a] -> m [b]
 mapMLazy = flip forLazy
 
 cairoMeshPatternGetPatchList :: PrimBase m => CairoPatternMeshT (PrimState m) ->
-	m [(CairoPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))]
+	m [(CairoPatchPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))]
 cairoMeshPatternGetPatchList pt = do
 	n <- cairoMeshPatternGetPatchCount pt
 	forLazy [0 .. n - 1] $ unsafeInterleave . cairoMeshPatternGetPatch1 pt
