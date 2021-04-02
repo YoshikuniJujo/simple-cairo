@@ -77,4 +77,4 @@ CairoPathT
 	+ [x] move them
 * [ ] `pattern CairoPatchPathT :: `
 	+ [ ] `createCairoPathPathT :: MoveTo -> LineCurveTo -> ... -> CairoPathPathT`
-	+ [ ] `drawFromCairoPatchPathT :: CairoPatchPathT -> (MoveTo, LineCurveTo, ..., CloseTo)`
+	+ [x] `drawFromCairoPatchPathT :: CairoPatchPathT -> (MoveTo, LineCurveTo, ..., CloseTo)`

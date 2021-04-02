@@ -1,11 +1,12 @@
-{-# LANGUAGE BlockArguments, LambdaCase #-}
+{-# LANGUAGE BlockArguments, LambdaCase, TupleSections #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Drawing.Paths.CairoPathT (
 	Path(..), CairoPathT, pattern CairoPathT, withCairoPathT, mkCairoPathT,
 	MoveTo(..), LineCurveTo(..), CloseTo(..),
-	CairoPatchPathT, pattern CairoPathTPatch, mkCairoPatchPathT ) where
+	CairoPatchPathT, pattern CairoPatchPathT,
+	pattern CairoPathTPatch, mkCairoPatchPathT ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
@@ -239,3 +240,73 @@ data CloseTo
 	= CloseLineTo
 	| CloseCurveTo CDouble CDouble CDouble CDouble
 	deriving Show
+
+pattern CairoPatchPathT :: MoveTo -> LineCurveTo -> LineCurveTo -> LineCurveTo -> CloseTo -> CairoPatchPathT
+pattern CairoPatchPathT mt lct1 lct2 lct3 cls <- (unsafePerformIO . drawFromCairoPatchPathT -> (mt, lct1, lct2, lct3, cls))
+
+drawFromCairoPatchPathT :: CairoPatchPathT -> IO (MoveTo, LineCurveTo, LineCurveTo, LineCurveTo, CloseTo)
+drawFromCairoPatchPathT (CairoPatchPathT_ fpth) = withForeignPtr fpth \ppth -> do
+	d <- cairoPathTData ppth
+	n <- cairoPathTNumData ppth
+	drawFromCairoPathDataT d n >>= \case
+		(Just r, 0) -> pure r
+		_ -> error "badbadbad"
+		
+drawFromCairoPathDataT :: Ptr CairoPathDataT -> CInt ->
+	IO (Maybe (MoveTo, LineCurveTo, LineCurveTo, LineCurveTo, CloseTo), CInt)
+drawFromCairoPathDataT p0 n0 = do
+	(mmt, pn1) <- drawMoveToFromCairoPathDataT p0 n0
+	(mlct1, pn2) <- uncurry drawLineCurveToFromCairoPathDataT pn1
+	(mlct2, pn3) <- uncurry drawLineCurveToFromCairoPathDataT pn2
+	(mlct3, pn4) <- uncurry drawLineCurveToFromCairoPathDataT pn3
+	(mcls_, (_p5, n5)) <- uncurry drawCloseToFromCairoPathDataT pn4
+	let	mcls = case mmt of
+			Nothing -> error "bad"
+			Just (MoveTo x0 y0) -> case mcls_ of
+				Nothing -> error "bad"
+				Just (m, Nothing) -> Just m
+				Just (m, Just (x1, y1))
+					| x0 == x1 && y0 == y1 -> Just m
+					| otherwise -> error "bad"
+	if n5 /= 0 then error "bad" else pure 
+		. (, n5) $ (,,,,) <$> mmt <*> mlct1 <*> mlct2 <*> mlct3 <*> mcls
+
+drawMoveToFromCairoPathDataT :: Ptr CairoPathDataT -> CInt -> IO (Maybe MoveTo, (Ptr CairoPathDataT, CInt))
+drawMoveToFromCairoPathDataT p n = do
+	mt <- cairoPathDataTHeaderType p >>= \case
+		#{const CAIRO_PATH_MOVE_TO} -> Just
+			<$> (MoveTo <$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1)
+		_ -> pure Nothing
+	ln <- cairoPathDataTHeaderLength p
+	if n - ln < 0 then error "bad" else pure (mt, (nextByLength p ln, n - ln))
+	where p1 = nextByLength p 1
+
+drawLineCurveToFromCairoPathDataT :: Ptr CairoPathDataT -> CInt -> IO (Maybe LineCurveTo, (Ptr CairoPathDataT, CInt))
+drawLineCurveToFromCairoPathDataT p n = do
+	lct <- cairoPathDataTHeaderType p >>= \case
+		#{const CAIRO_PATH_LINE_TO} -> Just
+			<$> (LineTo <$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1)
+		#{const CAIRO_PATH_CURVE_TO} -> (Just <$>) $ CurveTo
+			<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
+			<*> cairoPathDataTPointX p2 <*> cairoPathDataTPointY p2
+			<*> cairoPathDataTPointX p3 <*> cairoPathDataTPointY p3
+		_ -> pure Nothing
+	ln <- cairoPathDataTHeaderLength p
+	if n - ln < 0 then error "bad" else pure (lct, (nextByLength p ln, n - ln))
+	where p1 = nextByLength p 1; p2 = nextByLength p 2; p3 = nextByLength p 3
+
+drawCloseToFromCairoPathDataT :: Ptr CairoPathDataT -> CInt -> IO (Maybe (CloseTo, Maybe (CDouble, CDouble)), (Ptr CairoPathDataT, CInt))
+drawCloseToFromCairoPathDataT p n = do
+	ctgl <- cairoPathDataTHeaderType p >>= \case
+		#{const CAIRO_PATH_LINE_TO} -> (Just <$>) $ ((CloseLineTo ,) . Just <$>) $
+			(,) <$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
+		#{const CAIRO_PATH_CURVE_TO} -> (Just <$>) $ (,)
+			<$> (CloseCurveTo
+				<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
+				<*> cairoPathDataTPointX p2 <*> cairoPathDataTPointY p2)
+			<*> (Just <$> ((,) <$> cairoPathDataTPointX p3 <*> cairoPathDataTPointY p3))
+		#{const CAIRO_PATH_CLOSE_PATH} -> pure $ Just (CloseLineTo, Nothing)
+		_ -> pure Nothing
+	ln <- cairoPathDataTHeaderLength p
+	if n - ln < 0 then error "bad" else pure (ctgl, (nextByLength p ln, n - ln))
+	where [p1, p2, p3] = nextByLength p <$> [1, 2, 3]
