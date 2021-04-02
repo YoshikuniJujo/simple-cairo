@@ -149,7 +149,7 @@ mesh pattern
 	+ [x] `cairo_mesh_pattern_get_corner_color_rgba`
 	+ [x] `cairoMeshPatternGetPatch1`
 	+ [x] `cairoMeshPatternGetPatchList`
-	+ [ ] use `unsafeInterleaveIO`
+	+ [x] use `unsafeInterleaveIO`
 
 optional
 --------

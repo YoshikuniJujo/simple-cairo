@@ -12,7 +12,6 @@ import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad
 import Control.Monad.Primitive
-import Data.Traversable
 import Data.Word
 import Data.Maybe
 import Data.Color
@@ -204,19 +203,26 @@ cairoMeshPatternGetCornerColorRgba (CairoPatternMeshT fpt) i j =
 foreign import ccall "cairo_mesh_pattern_get_corner_color_rgba" c_cairo_mesh_pattern_get_corner_color_rgba ::
 	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
-cairoMeshPatternGetPatch1 :: PrimMonad m => CairoPatternMeshT (PrimState m) -> CUInt ->
+cairoMeshPatternGetPatch1 :: PrimBase m => CairoPatternMeshT (PrimState m) -> CUInt ->
 	m (CairoPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))
 cairoMeshPatternGetPatch1 pt i = do
-	pth <- cairoMeshPatternGetPath pt i
-	cairoMeshPatternGetCornerColorRgba pt i `mapM` [0, 1, 2, 3] >>= \case
+	pth <- unsafeInterleave $ cairoMeshPatternGetPath pt i
+	(unsafeInterleave . cairoMeshPatternGetCornerColorRgba pt i) `mapM` [0, 1, 2, 3] >>= \case
 		[c0, c1, c2, c3] ->
-			cairoMeshPatternGetControlPoint pt i `mapM` [0, 1, 2, 3] >>= \case
+			(unsafeInterleave . cairoMeshPatternGetControlPoint pt i) `mapMLazy` [0, 1, 2, 3] >>= \case
 				[p0, p1, p2, p3] -> pure (pth, (c0, c1, c2, c3), (p0, p1, p2, p3))
 				_ -> error "never occur"
 		_ -> error "never occur"
 
-cairoMeshPatternGetPatchList :: PrimMonad m => CairoPatternMeshT (PrimState m) ->
+forLazy :: PrimBase m => [a] -> (a -> m b) -> m [b]
+forLazy [] _ = pure []
+forLazy (x : xs) f = unsafeInterleave $ (:) <$> f x <*> forLazy xs f
+
+mapMLazy :: PrimBase m => (a -> m b) -> [a] -> m [b]
+mapMLazy = flip forLazy
+
+cairoMeshPatternGetPatchList :: PrimBase m => CairoPatternMeshT (PrimState m) ->
 	m [(CairoPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))]
 cairoMeshPatternGetPatchList pt = do
 	n <- cairoMeshPatternGetPatchCount pt
-	for [0 .. n - 1] $ cairoMeshPatternGetPatch1 pt
+	forLazy [0 .. n - 1] $ unsafeInterleave . cairoMeshPatternGetPatch1 pt
