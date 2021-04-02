@@ -3,7 +3,8 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Drawing.Paths.CairoPathT (
-	Path(..), CairoPathT, pattern CairoPathT, withCairoPathT, mkCairoPathT ) where
+	Path(..), CairoPathT, pattern CairoPathT, withCairoPathT, mkCairoPathT,
+	CairoPatchPathT, pattern CairoPathTPatch ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
@@ -11,6 +12,7 @@ import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
+import Data.Bool
 import Data.Word
 
 import Graphics.Cairo.Exception
@@ -209,3 +211,13 @@ isCairoPatchPath pth = do
 			Nothing -> pure False
 			Just (xc, yc) -> pure $ xc == x0 && yc == y0
 	pure $ b1 || (b2 && b3)
+
+newtype CairoPatchPathT = CairoPatchPathT_ (ForeignPtr CairoPathT) deriving Show
+
+pattern CairoPathTPatch :: CairoPatchPathT -> CairoPathT
+pattern CairoPathTPatch ppth <- (unsafePerformIO . cairoPathTPatch -> Just ppth) where
+	CairoPathTPatch (CairoPatchPathT_ fpth) = CairoPathT_ fpth
+
+cairoPathTPatch :: CairoPathT -> IO (Maybe CairoPatchPathT)
+cairoPathTPatch pth@(CairoPathT_ fpth) =
+	bool Nothing (Just $ CairoPatchPathT_ fpth) <$> isCairoPatchPath pth
