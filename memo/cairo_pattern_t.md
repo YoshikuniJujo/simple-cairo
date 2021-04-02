@@ -115,7 +115,7 @@ basic
 ### setting
 
 * [ ] `cairo_pattern_set_foo` and `cairo_pattern_get_foo`
-	+ [ ] `extend`
+	+ [x] `extend`
 	+ [ ] `filter`
 	+ [ ] `matrix`
 
