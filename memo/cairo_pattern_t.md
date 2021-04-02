@@ -150,6 +150,8 @@ mesh pattern
 	+ [x] `cairoMeshPatternGetPatch1`
 	+ [x] `cairoMeshPatternGetPatchList`
 	+ [x] use `unsafeInterleaveIO`
+* [ ] define `CairoPatchPathT`
+	+ [ ] define `pattern CairoPathTPatch :: CairoPatchPathT -> CairoPathT`
 
 optional
 --------

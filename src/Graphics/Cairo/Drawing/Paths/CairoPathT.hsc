@@ -155,3 +155,17 @@ pathListToCairoPathDataT pd = \case
 	[] -> pure ()
 	pth : pths -> pathToCairoPathData pd pth >> pathListToCairoPathDataT (pd `plusPtr` (cairoPathDataTSize * pathToNumData pth)) pths
 
+cairoPathCheckPaths :: CairoPathT -> [#{type cairo_path_data_type_t} -> Bool] -> IO Bool
+cairoPathCheckPaths (CairoPathT_ fpth) ts = withForeignPtr fpth \ppth -> do
+	d <- cairoPathTData ppth
+	n <- cairoPathTNumData ppth
+	cairoPathDataCheckPaths d ts n
+
+cairoPathDataCheckPaths :: Ptr CairoPathDataT -> [#{type cairo_path_data_type_t} -> Bool] -> CInt -> IO Bool
+cairoPathDataCheckPaths _ [] 0 = pure True
+cairoPathDataCheckPaths _ [] _ = pure False
+cairoPathDataCheckPaths _ _ 0 = pure False
+cairoPathDataCheckPaths p (t : ts) n = do
+	b <- t <$> cairoPathDataTHeaderType p
+	ln <- cairoPathDataTHeaderLength p
+	(b &&) <$> unsafeInterleaveIO (cairoPathDataCheckPaths (nextByLength p ln) ts (n - ln))
