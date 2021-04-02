@@ -72,3 +72,9 @@ CairoPathT
 	+ MoveTo x0 y0: the goal of last LineTo or CurveTo is (x0, y0)
 	+ [x] define `cairoPathCheckPaths :: CairoPathT -> [#{type cairo_path_data_type_t} -> Bool] -> Bool`
 	+ [x] define `cairoPathGetGoal :: Int -> (CDouble, CDouble)
+* [x] get `MoveTo`, `LineCurveTo` and `CloseTo` from `Graphics.Cairo.Drawing.CairoPatternT.Mesh`
+	+ [x] rename data constructors of `Path`
+	+ [x] move them
+* [ ] `pattern CairoPatchPathT :: `
+	+ [ ] `createCairoPathPathT :: MoveTo -> LineCurveTo -> ... -> CairoPathPathT`
+	+ [ ] `drawFromCairoPatchPathT :: CairoPatchPathT -> (MoveTo, LineCurveTo, ..., CloseTo)`

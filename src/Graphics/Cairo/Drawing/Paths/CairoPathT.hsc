@@ -4,6 +4,7 @@
 
 module Graphics.Cairo.Drawing.Paths.CairoPathT (
 	Path(..), CairoPathT, pattern CairoPathT, withCairoPathT, mkCairoPathT,
+	MoveTo(..), LineCurveTo(..), CloseTo(..),
 	CairoPatchPathT, pattern CairoPathTPatch, mkCairoPatchPathT ) where
 
 import Foreign.Ptr
@@ -70,10 +71,10 @@ cairoPathDataTPointX = #{peek cairo_path_data_t, point.x}
 cairoPathDataTPointY = #{peek cairo_path_data_t, point.y}
 
 data Path
-	= MoveTo CDouble CDouble
-	| LineTo CDouble CDouble
-	| CurveTo CDouble CDouble CDouble CDouble CDouble CDouble
-	| ClosePath
+	= PathMoveTo CDouble CDouble
+	| PathLineTo CDouble CDouble
+	| PathCurveTo CDouble CDouble CDouble CDouble CDouble CDouble
+	| PathClosePath
 	deriving Show
 
 cairoPathTPathList :: CairoPathT -> IO [Path]
@@ -86,15 +87,15 @@ cairoPathDataTPathList :: Ptr CairoPathDataT -> CInt -> IO [Path]
 cairoPathDataTPathList _ n | n < 1 = pure []
 cairoPathDataTPathList p n = unsafeInterleaveIO do
 	pth <- unsafeInterleaveIO $ cairoPathDataTHeaderType p >>= \case
-		#{const CAIRO_PATH_MOVE_TO} -> MoveTo
+		#{const CAIRO_PATH_MOVE_TO} -> PathMoveTo
 			<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
-		#{const CAIRO_PATH_LINE_TO} -> LineTo
+		#{const CAIRO_PATH_LINE_TO} -> PathLineTo
 			<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
-		#{const CAIRO_PATH_CURVE_TO} -> CurveTo
+		#{const CAIRO_PATH_CURVE_TO} -> PathCurveTo
 			<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
 			<*> cairoPathDataTPointX p2 <*> cairoPathDataTPointY p2
 			<*> cairoPathDataTPointX p3 <*> cairoPathDataTPointY p3
-		#{const CAIRO_PATH_CLOSE_PATH} -> pure ClosePath
+		#{const CAIRO_PATH_CLOSE_PATH} -> pure PathClosePath
 		_ -> error "no such path"
 	ln <- cairoPathDataTHeaderLength p
 	(pth :) <$> cairoPathDataTPathList (nextByLength p ln) (n - ln)
@@ -105,21 +106,21 @@ cairoPathDataTPathList p n = unsafeInterleaveIO do
 
 pathToNumData :: Path -> Int
 pathToNumData = \case
-	MoveTo _ _ -> 2; LineTo _ _ -> 2; CurveTo _ _ _ _ _ _ -> 4; ClosePath -> 1
+	PathMoveTo _ _ -> 2; PathLineTo _ _ -> 2; PathCurveTo _ _ _ _ _ _ -> 4; PathClosePath -> 1
 
 pathToCairoPathData :: Ptr CairoPathDataT -> Path -> IO ()
 pathToCairoPathData p = \case
-	MoveTo x y -> do
+	PathMoveTo x y -> do
 		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_MOVE_TO} :: #{type cairo_path_data_type_t})
 		#{poke cairo_path_data_t, header.length} p (2 :: CInt)
 		#{poke cairo_path_data_t, point.x} p1 x
 		#{poke cairo_path_data_t, point.y} p1 y
-	LineTo x y -> do
+	PathLineTo x y -> do
 		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_LINE_TO} :: #{type cairo_path_data_type_t})
 		#{poke cairo_path_data_t, header.length} p (2 :: CInt)
 		#{poke cairo_path_data_t, point.x} p1 x
 		#{poke cairo_path_data_t, point.y} p1 y
-	CurveTo x1 y1 x2 y2 x3 y3 -> do
+	PathCurveTo x1 y1 x2 y2 x3 y3 -> do
 		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_CURVE_TO} :: #{type cairo_path_data_type_t})
 		#{poke cairo_path_data_t, header.length} p (4 :: CInt)
 		#{poke cairo_path_data_t, point.x} p1 x1
@@ -128,7 +129,7 @@ pathToCairoPathData p = \case
 		#{poke cairo_path_data_t, point.y} p2 y2
 		#{poke cairo_path_data_t, point.x} p3 x3
 		#{poke cairo_path_data_t, point.y} p3 y3
-	ClosePath -> do
+	PathClosePath -> do
 		#{poke cairo_path_data_t, header.type} p (#{const CAIRO_PATH_CLOSE_PATH} :: #{type cairo_path_data_type_t})
 		#{poke cairo_path_data_t, header.length} p (1 :: CInt)
 	where
@@ -226,3 +227,15 @@ pattern CairoPathTPatch ppth <- (unsafePerformIO . cairoPathTPatch -> Just ppth)
 cairoPathTPatch :: CairoPathT -> IO (Maybe CairoPatchPathT)
 cairoPathTPatch pth@(CairoPathT_ fpth) =
 	bool Nothing (Just $ CairoPatchPathT_ fpth) <$> isCairoPatchPath pth
+
+data MoveTo = MoveTo CDouble CDouble deriving Show
+
+data LineCurveTo
+	= LineTo CDouble CDouble
+	| CurveTo CDouble CDouble CDouble CDouble CDouble CDouble
+	deriving Show
+
+data CloseTo
+	= CloseLineTo
+	| CloseCurveTo CDouble CDouble CDouble CDouble
+	deriving Show
