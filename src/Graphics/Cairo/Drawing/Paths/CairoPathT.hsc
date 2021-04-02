@@ -83,7 +83,7 @@ cairoPathTPathList (CairoPathT_ fp) = withForeignPtr fp \p -> do
 cairoPathDataTPathList :: Ptr CairoPathDataT -> CInt -> IO [Path]
 cairoPathDataTPathList _ n | n < 1 = pure []
 cairoPathDataTPathList p n = unsafeInterleaveIO do
-	pth <- cairoPathDataTHeaderType p >>= \case
+	pth <- unsafeInterleaveIO $ cairoPathDataTHeaderType p >>= \case
 		#{const CAIRO_PATH_MOVE_TO} -> MoveTo
 			<$> cairoPathDataTPointX p1 <*> cairoPathDataTPointY p1
 		#{const CAIRO_PATH_LINE_TO} -> LineTo
