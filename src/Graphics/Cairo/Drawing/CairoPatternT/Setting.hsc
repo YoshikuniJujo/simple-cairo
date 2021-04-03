@@ -51,3 +51,49 @@ cairoPatternGetExtend (toCairoPatternT -> CairoPatternT fpt) =
 
 foreign import ccall "cairo_pattern_get_extend" c_cairo_pattern_get_extend ::
 	Ptr (CairoPatternT s) -> IO #{type cairo_extend_t}
+
+newtype CairoFilterT = CairoFilterT #{type cairo_filter_t} deriving Show
+
+pattern CairoFilterFast :: CairoFilterT
+pattern CairoFilterFast <- CairoFilterT #{const CAIRO_FILTER_FAST} where
+	CairoFilterFast = CairoFilterT #{const CAIRO_FILTER_FAST}
+
+pattern CairoFilterGood :: CairoFilterT
+pattern CairoFilterGood <- CairoFilterT #{const CAIRO_FILTER_GOOD} where
+	CairoFilterGood = CairoFilterT #{const CAIRO_FILTER_GOOD}
+
+pattern CairoFilterBest :: CairoFilterT
+pattern CairoFilterBest <- CairoFilterT #{const CAIRO_FILTER_BEST} where
+	CairoFilterBest = CairoFilterT #{const CAIRO_FILTER_BEST}
+
+pattern CairoFilterNearest :: CairoFilterT
+pattern CairoFilterNearest <- CairoFilterT #{const CAIRO_FILTER_NEAREST} where
+	CairoFilterNearest = CairoFilterT #{const CAIRO_FILTER_NEAREST}
+
+pattern CairoFilterBilinear :: CairoFilterT
+pattern CairoFilterBilinear <- CairoFilterT #{const CAIRO_FILTER_BILINEAR} where
+	CairoFilterBilinear = CairoFilterT #{const CAIRO_FILTER_BILINEAR}
+
+pattern CairoFilterGaussian :: CairoFilterT
+pattern CairoFilterGaussian <- CairoFilterT #{const CAIRO_FILTER_GAUSSIAN} where
+	CairoFilterGaussian = CairoFilterT #{const CAIRO_FILTER_GAUSSIAN}
+
+instance CairoPatternSetting CairoFilterT where
+	cairoPatternSet = cairoPatternSetFilter
+	cairoPatternGet = cairoPatternGetFilter
+
+cairoPatternSetFilter :: (PrimMonad m, IsCairoPatternT pt) =>
+	pt (PrimState m) -> CairoFilterT -> m ()
+cairoPatternSetFilter (toCairoPatternT -> CairoPatternT fpt) (CairoFilterT flt) =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> c_cairo_pattern_set_filter ppt flt
+
+foreign import ccall "cairo_pattern_set_filter" c_cairo_pattern_set_filter ::
+	Ptr (CairoPatternT s) -> #{type cairo_filter_t} -> IO ()
+
+cairoPatternGetFilter :: (PrimMonad m, IsCairoPatternT pt) =>
+	pt (PrimState m) -> m CairoFilterT
+cairoPatternGetFilter (toCairoPatternT -> CairoPatternT fpt) =
+	unsafeIOToPrim $ CairoFilterT <$> withForeignPtr fpt c_cairo_pattern_get_filter
+
+foreign import ccall "cairo_pattern_get_filter" c_cairo_pattern_get_filter ::
+	Ptr (CairoPatternT s) -> IO #{type cairo_filter_t}

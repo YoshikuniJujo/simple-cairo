@@ -116,7 +116,7 @@ basic
 
 * [ ] `cairo_pattern_set_foo` and `cairo_pattern_get_foo`
 	+ [x] `extend`
-	+ [ ] `filter`
+	+ [x] `filter`
 	+ [ ] `matrix`
 
 mesh pattern
