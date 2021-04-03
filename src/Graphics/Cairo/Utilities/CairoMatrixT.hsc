@@ -4,11 +4,29 @@
 module Graphics.Cairo.Utilities.CairoMatrixT where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr
+import Foreign.ForeignPtr hiding (newForeignPtr)
+import Foreign.Concurrent
+import Foreign.Marshal
+import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
 
+#include <cairo.h>
+
 newtype CairoMatrixT s = CairoMatrixT (ForeignPtr (CairoMatrixT s)) deriving Show
+
+data Matrix = Matrix CDouble CDouble CDouble CDouble CDouble CDouble deriving Show
+
+cairoMatrixNew :: PrimMonad m => m (CairoMatrixT (PrimState m))
+cairoMatrixNew = (CairoMatrixT <$>) $ unsafeIOToPrim
+	$ ($) <$> newForeignPtr <*> free =<< mallocBytes #{size cairo_matrix_t}
+
+cairoMatrixGet :: PrimMonad m => CairoMatrixT (PrimState m) -> m Matrix
+cairoMatrixGet (CairoMatrixT f) =
+	unsafeIOToPrim $ withForeignPtr f \p -> Matrix
+		<$> #{peek cairo_matrix_t, xx} p <*> #{peek cairo_matrix_t, yx} p
+		<*> #{peek cairo_matrix_t, yx} p <*> #{peek cairo_matrix_t, yy} p
+		<*> #{peek cairo_matrix_t, x0} p <*> #{peek cairo_matrix_t, y0} p
 
 cairoMatrixInit :: PrimMonad m => CairoMatrixT (PrimState m) ->
 	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> m ()
