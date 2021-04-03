@@ -25,7 +25,7 @@ cairoMatrixGet :: PrimMonad m => CairoMatrixT (PrimState m) -> m Matrix
 cairoMatrixGet (CairoMatrixT f) =
 	unsafeIOToPrim $ withForeignPtr f \p -> Matrix
 		<$> #{peek cairo_matrix_t, xx} p <*> #{peek cairo_matrix_t, yx} p
-		<*> #{peek cairo_matrix_t, yx} p <*> #{peek cairo_matrix_t, yy} p
+		<*> #{peek cairo_matrix_t, xy} p <*> #{peek cairo_matrix_t, yy} p
 		<*> #{peek cairo_matrix_t, x0} p <*> #{peek cairo_matrix_t, y0} p
 
 cairoMatrixInit :: PrimMonad m => CairoMatrixT (PrimState m) ->
