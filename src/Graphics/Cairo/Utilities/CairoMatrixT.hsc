@@ -35,3 +35,18 @@ cairoMatrixInit (CairoMatrixT fmtx) xx yx xy yy x0 y0 =
 
 foreign import ccall "cairo_matrix_init" c_cairo_matrix_init ::
 	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
+
+cairoMatrixInitIdentity :: PrimMonad m => CairoMatrixT (PrimState m) -> m ()
+cairoMatrixInitIdentity (CairoMatrixT fmtx) =
+	unsafeIOToPrim $ withForeignPtr fmtx c_cairo_matrix_init_identity
+
+foreign import ccall "cairo_matrix_init_identity" c_cairo_matrix_init_identity ::
+	Ptr (CairoMatrixT s) -> IO ()
+
+cairoMatrixInitTranslate :: PrimMonad m => CairoMatrixT (PrimState m) ->
+	CDouble -> CDouble -> m ()
+cairoMatrixInitTranslate (CairoMatrixT fmtx) tx ty =
+	unsafeIOToPrim $ withForeignPtr fmtx \mtx -> c_cairo_matrix_init_translate mtx tx ty
+
+foreign import ccall "cairo_matrix_init_translate" c_cairo_matrix_init_translate ::
+	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
