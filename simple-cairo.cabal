@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8cec950a0d4ffa672f0aecc64b8450831719bae816ce14e6d9f62583c524f355
+-- hash: 92e2e64fab32aa149008ad05686765936e2eddabf3cda710848bfa55f8af96f0
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -57,6 +57,7 @@ library
       Graphics.Cairo.Surfaces.PngSupport
       Graphics.Cairo.Surfaces.SvgSurfaces
       Graphics.Cairo.Types
+      Graphics.Cairo.Utilities.CairoMatrixT
       Graphics.Cairo.Values
   other-modules:
       Paths_simple_cairo
