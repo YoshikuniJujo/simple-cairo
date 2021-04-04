@@ -73,3 +73,11 @@ cairoMatrixTranslate (CairoMatrixT fmtx) tx ty =
 
 foreign import ccall "cairo_matrix_translate" c_cairo_matrix_translate ::
 	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
+
+cairoMatrixScale :: PrimMonad m => CairoMatrixT (PrimState m) ->
+	CDouble -> CDouble -> m ()
+cairoMatrixScale (CairoMatrixT fmtx) sx sy =
+	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_scale pmtx sx sy
+
+foreign import ccall "cairo_matrix_scale" c_cairo_matrix_scale ::
+	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
