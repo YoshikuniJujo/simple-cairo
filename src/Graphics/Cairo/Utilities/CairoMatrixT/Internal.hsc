@@ -1,10 +1,10 @@
 {-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE TypeApplications, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Utilities.CairoMatrixT.Internal (
 	Matrix(..), IsCairoMatrixT(..),
-	CairoMatrixT(..), CairoMatrixRegularT,
+	CairoMatrixT(..), CairoMatrixRegularT, cairoMatrixCopyFromRegular,
 	cairoMatrixAlloc, cairoMatrixGet,
 	cairoMatrixNew, cairoMatrixRegularNew, cairoMatrixNewIdentity,
 	cairoMatrixNewTranslate,
@@ -185,3 +185,21 @@ cairoMatrixTransformPoint mtx (Point x y) =
 
 foreign import ccall "cairo_matrix_transform_point" c_cairo_matrix_transform_point ::
 	Ptr (CairoMatrixT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+cairoMatrixCopyFromRegular :: PrimMonad m =>
+	CairoMatrixRegularT (PrimState m) -> m (CairoMatrixT (PrimState m))
+cairoMatrixCopyFromRegular (CairoMatrixRegularT fmtx) = unsafeIOToPrim
+	$ CairoMatrixT <$> withForeignPtr fmtx \pmtx -> do
+		p <- cairoMatrixCopy pmtx
+		newForeignPtr p (free p)
+
+cairoMatrixCopy :: Ptr (CairoMatrixT s) -> IO (Ptr (CairoMatrixT s))
+cairoMatrixCopy p0 = do
+	p <- mallocBytes #{size cairo_matrix_t}
+	#{poke cairo_matrix_t, xx} p =<< (#{peek cairo_matrix_t, xx} p0 :: IO CDouble)
+	#{poke cairo_matrix_t, yx} p =<< (#{peek cairo_matrix_t, yx} p0 :: IO CDouble)
+	#{poke cairo_matrix_t, xy} p =<< (#{peek cairo_matrix_t, xy} p0 :: IO CDouble)
+	#{poke cairo_matrix_t, yy} p =<< (#{peek cairo_matrix_t, yy} p0 :: IO CDouble)
+	#{poke cairo_matrix_t, x0} p =<< (#{peek cairo_matrix_t, x0} p0 :: IO CDouble)
+	#{poke cairo_matrix_t, y0} p =<< (#{peek cairo_matrix_t, y0} p0 :: IO CDouble)
+	pure p

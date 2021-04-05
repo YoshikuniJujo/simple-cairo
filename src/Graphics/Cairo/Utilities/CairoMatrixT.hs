@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Utilities.CairoMatrixT (
-	Matrix(..), IsCairoMatrixT, toCairoMatrixT, CairoMatrixT, CairoMatrixRegularT,
-	cairoMatrixGet,
+	Matrix(..), IsCairoMatrixT, CairoMatrixT, CairoMatrixRegularT,
+	cairoMatrixGet, cairoMatrixCopyFromRegular,
 	cairoMatrixNew, cairoMatrixRegularNew, cairoMatrixNewIdentity,
 	cairoMatrixNewTranslate,
 	cairoMatrixNewScale, cairoMatrixRegularNewScale, cairoMatrixNewRotate,
