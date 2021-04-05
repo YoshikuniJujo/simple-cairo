@@ -22,7 +22,7 @@ todo
 * [x] `cairo_translate`
 * [x] `cairo_scale`
 * [x] `cairo_rotate`
-* [ ] `cairo_transform`
+* [x] `cairo_transform`
 * [ ] `cairo_set_matrix`
 * [ ] `cairo_get_matrix`
 * [x] `cairo_identity_matrix`
