@@ -2,8 +2,8 @@
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.Utilities.CairoMatrixT (
-	Matrix(..), IsCairoMatrixT, CairoMatrixT, CairoMatrixRegularT,
+module Graphics.Cairo.Utilities.CairoMatrixT.Internal (
+	Matrix(..), IsCairoMatrixT(..), CairoMatrixT(..), CairoMatrixRegularT,
 	cairoMatrixGet,
 	cairoMatrixNew, cairoMatrixRegularNew, cairoMatrixNewIdentity,
 	cairoMatrixNewTranslate,

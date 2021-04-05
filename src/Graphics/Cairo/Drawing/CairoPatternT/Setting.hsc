@@ -9,6 +9,7 @@ import Foreign.ForeignPtr
 import Control.Monad.Primitive
 import Data.Word
 import Graphics.Cairo.Drawing.CairoPatternT.Basic
+import Graphics.Cairo.Utilities.CairoMatrixT.Internal
 
 #include <cairo.h>
 
@@ -97,3 +98,12 @@ cairoPatternGetFilter (toCairoPatternT -> CairoPatternT fpt) =
 
 foreign import ccall "cairo_pattern_get_filter" c_cairo_pattern_get_filter ::
 	Ptr (CairoPatternT s) -> IO #{type cairo_filter_t}
+
+cairoPatternSetMatrix :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	CairoPatternT (PrimState m) -> mtx (PrimState m) -> m ()
+cairoPatternSetMatrix (CairoPatternT fpt) (toCairoMatrixT -> CairoMatrixT fmtx) =
+	unsafeIOToPrim $ withForeignPtr fpt \ppt -> withForeignPtr fmtx \pmtx ->
+		c_cairo_pattern_set_matrix ppt pmtx
+
+foreign import ccall "cairo_pattern_set_matrix" c_cairo_pattern_set_matrix ::
+	Ptr (CairoPatternT s) -> Ptr (CairoMatrixT s) -> IO ()
