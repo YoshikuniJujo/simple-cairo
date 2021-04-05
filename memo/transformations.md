@@ -23,7 +23,7 @@ todo
 * [x] `cairo_scale`
 * [x] `cairo_rotate`
 * [x] `cairo_transform`
-* [ ] `cairo_set_matrix`
+* [x] `cairo_set_matrix`
 * [ ] `cairo_get_matrix`
 * [x] `cairo_identity_matrix`
 * [ ] `cairo_user_to_device`

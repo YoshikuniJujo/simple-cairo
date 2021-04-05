@@ -45,6 +45,15 @@ cairoTransform (CairoT fcr) (toCairoMatrixT -> CairoMatrixT fmtx) =
 foreign import ccall "cairo_transform" c_cairo_transform ::
 	Ptr (CairoT s) -> Ptr (CairoMatrixT s) -> IO ()
 
+cairoSetMatrix :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	CairoT (PrimState m) -> mtx (PrimState m) -> m ()
+cairoSetMatrix (CairoT fcr) (toCairoMatrixT -> CairoMatrixT fmtx) =
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> withForeignPtr fmtx \pmtx ->
+		c_cairo_set_matrix pcr pmtx
+
+foreign import ccall "cairo_set_matrix" c_cairo_set_matrix ::
+	Ptr (CairoT s) -> Ptr (CairoMatrixT s) -> IO ()
+
 cairoIdentityMatrix :: PrimMonad m => CairoT (PrimState m) -> m ()
 cairoIdentityMatrix (CairoT fcr) =
 	unsafeIOToPrim $ withForeignPtr fcr c_cairo_identity_matrix
