@@ -107,3 +107,12 @@ cairoPatternSetMatrix (toCairoPatternT -> CairoPatternT fpt) (toCairoMatrixT -> 
 
 foreign import ccall "cairo_pattern_set_matrix" c_cairo_pattern_set_matrix ::
 	Ptr (CairoPatternT s) -> Ptr (CairoMatrixT s) -> IO ()
+
+cairoPatternGetMatrix :: (PrimMonad m, IsCairoPatternT pt) =>
+	pt (PrimState m) -> m (CairoMatrixT (PrimState m))
+cairoPatternGetMatrix (toCairoPatternT -> CairoPatternT fpt) = (CairoMatrixT <$>)
+	$ cairoMatrixAlloc \pmtx -> withForeignPtr fpt \ppt ->
+		c_cairo_pattern_get_matrix ppt pmtx
+
+foreign import ccall "cairo_pattern_get_matrix" c_cairo_pattern_get_matrix ::
+	Ptr (CairoPatternT s) -> Ptr (CairoMatrixT s) -> IO ()

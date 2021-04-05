@@ -114,10 +114,10 @@ basic
 
 ### setting
 
-* [ ] `cairo_pattern_set_foo` and `cairo_pattern_get_foo`
+* [x] `cairo_pattern_set_foo` and `cairo_pattern_get_foo`
 	+ [x] `extend`
 	+ [x] `filter`
-	+ [ ] `matrix`
+	+ [x] `matrix`
 
 mesh pattern
 ------------
