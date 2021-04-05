@@ -40,7 +40,7 @@ todo
 * [ ] Drawing
 	+ [x] cairo\_t
 	+ [x] Paths
-	+ [ ] cairo\_pattern\_t
+	+ [x] cairo\_pattern\_t
 	+ [ ] Transformations
 * [ ] Surfaces
 	+ [ ] Image Surfaces
