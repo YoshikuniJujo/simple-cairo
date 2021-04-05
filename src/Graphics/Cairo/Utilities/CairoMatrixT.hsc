@@ -1,7 +1,17 @@
 {-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-module Graphics.Cairo.Utilities.CairoMatrixT where
+module Graphics.Cairo.Utilities.CairoMatrixT (
+	Matrix(..), IsCairoMatrixT, CairoMatrixT, CairoMatrixRegularT,
+	cairoMatrixGet,
+	cairoMatrixNew, cairoMatrixRegularNew, cairoMatrixNewIdentity,
+	cairoMatrixNewTranslate,
+	cairoMatrixNewScale, cairoMatrixRegularNewScale, cairoMatrixNewRotate,
+	cairoMatrixTranslate, cairoMatrixRotate, cairoMatrixInvert,
+	cairoMatrixMultiply,
+	Distance(..), cairoMatrixTransformDistance,
+	Point(..), cairoMatrixTransformPoint ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
@@ -9,6 +19,7 @@ import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
+import Control.Monad
 import Control.Monad.Primitive
 import Data.Word
 
@@ -16,83 +27,152 @@ import Graphics.Cairo.Exception
 
 #include <cairo.h>
 
+class IsCairoMatrixT mtx where toCairoMatrixT :: mtx s -> CairoMatrixT s
+
+withCairoMatrixT :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	mtx (PrimState m) -> (Ptr (CairoMatrixT (PrimState m)) -> IO a) -> m a
+withCairoMatrixT (toCairoMatrixT -> CairoMatrixT fmtx) = unsafeIOToPrim . withForeignPtr fmtx
+
 newtype CairoMatrixT s = CairoMatrixT (ForeignPtr (CairoMatrixT s)) deriving Show
+
+instance IsCairoMatrixT CairoMatrixT where toCairoMatrixT = id
+
+newtype CairoMatrixRegularT s = CairoMatrixRegularT (ForeignPtr (CairoMatrixT s)) deriving Show
+
+instance IsCairoMatrixT CairoMatrixRegularT where toCairoMatrixT (CairoMatrixRegularT f) = CairoMatrixT f
+
+cairoMatrixAlloca :: PrimMonad m =>
+	(Ptr (CairoMatrixT (PrimState m)) -> IO a) ->
+	m (ForeignPtr (CairoMatrixT (PrimState m)))
+cairoMatrixAlloca f = unsafeIOToPrim do
+	p <- mallocBytes #{size cairo_matrix_t}
+	(($) <$> newForeignPtr <*> free $ p) <* f p
 
 data Matrix = Matrix CDouble CDouble CDouble CDouble CDouble CDouble deriving Show
 
-cairoMatrixNew :: PrimMonad m => m (CairoMatrixT (PrimState m))
-cairoMatrixNew = (CairoMatrixT <$>) $ unsafeIOToPrim
-	$ ($) <$> newForeignPtr <*> free =<< mallocBytes #{size cairo_matrix_t}
+cairoMatrixGet :: (PrimMonad m, IsCairoMatrixT mtx) => mtx (PrimState m) -> m Matrix
+cairoMatrixGet mtx = withCairoMatrixT mtx \p -> Matrix
+	<$> #{peek cairo_matrix_t, xx} p <*> #{peek cairo_matrix_t, yx} p
+	<*> #{peek cairo_matrix_t, xy} p <*> #{peek cairo_matrix_t, yy} p
+	<*> #{peek cairo_matrix_t, x0} p <*> #{peek cairo_matrix_t, y0} p
 
-cairoMatrixGet :: PrimMonad m => CairoMatrixT (PrimState m) -> m Matrix
-cairoMatrixGet (CairoMatrixT f) =
-	unsafeIOToPrim $ withForeignPtr f \p -> Matrix
-		<$> #{peek cairo_matrix_t, xx} p <*> #{peek cairo_matrix_t, yx} p
-		<*> #{peek cairo_matrix_t, xy} p <*> #{peek cairo_matrix_t, yy} p
-		<*> #{peek cairo_matrix_t, x0} p <*> #{peek cairo_matrix_t, y0} p
+cairoMatrixNew :: PrimMonad m =>
+	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> 
+	m (CairoMatrixT (PrimState m))
+cairoMatrixNew xx yx xy yy x0 y0 = CairoMatrixT
+	<$> cairoMatrixAlloca \p -> c_cairo_matrix_init p xx yx xy yy x0 y0
 
-cairoMatrixInit :: PrimMonad m => CairoMatrixT (PrimState m) ->
-	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> m ()
-cairoMatrixInit (CairoMatrixT fmtx) xx yx xy yy x0 y0 =
-	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_init pmtx xx yx xy yy x0 y0
+cairoMatrixRegularNew :: PrimMonad m =>
+	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> 
+	m (Either (CairoMatrixT (PrimState m)) (CairoMatrixRegularT (PrimState m)))
+cairoMatrixRegularNew xx yx xy yy x0 y0 = mk
+	<$> cairoMatrixAlloca \p -> c_cairo_matrix_init p xx yx xy yy x0 y0
+	where mk = case xx * yy - yx * xy of
+		0 -> Left . CairoMatrixT; _ -> Right . CairoMatrixRegularT
 
 foreign import ccall "cairo_matrix_init" c_cairo_matrix_init ::
 	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
-cairoMatrixInitIdentity :: PrimMonad m => CairoMatrixT (PrimState m) -> m ()
-cairoMatrixInitIdentity (CairoMatrixT fmtx) =
-	unsafeIOToPrim $ withForeignPtr fmtx c_cairo_matrix_init_identity
+cairoMatrixNewIdentity :: PrimMonad m => m (CairoMatrixRegularT (PrimState m))
+cairoMatrixNewIdentity = CairoMatrixRegularT
+	<$> cairoMatrixAlloca c_cairo_matrix_init_identity
 
 foreign import ccall "cairo_matrix_init_identity" c_cairo_matrix_init_identity ::
 	Ptr (CairoMatrixT s) -> IO ()
 
-cairoMatrixInitTranslate :: PrimMonad m => CairoMatrixT (PrimState m) ->
-	CDouble -> CDouble -> m ()
-cairoMatrixInitTranslate (CairoMatrixT fmtx) tx ty =
-	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_init_translate pmtx tx ty
+cairoMatrixNewTranslate :: PrimMonad m =>
+	CDouble -> CDouble -> m (CairoMatrixRegularT (PrimState m))
+cairoMatrixNewTranslate tx ty = CairoMatrixRegularT
+	<$> cairoMatrixAlloca \p -> c_cairo_matrix_init_translate p tx ty
 
 foreign import ccall "cairo_matrix_init_translate" c_cairo_matrix_init_translate ::
 	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
 
-cairoMatrixInitScale :: PrimMonad m => CairoMatrixT (PrimState m) ->
-	CDouble -> CDouble -> m ()
-cairoMatrixInitScale (CairoMatrixT fmtx) sx sy =
-	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_init_scale pmtx sx sy
+cairoMatrixNewScale :: PrimMonad m =>
+	CDouble -> CDouble -> m (CairoMatrixT (PrimState m))
+cairoMatrixNewScale sx sy = CairoMatrixT
+	<$> cairoMatrixAlloca \p -> c_cairo_matrix_init_scale p sx sy
+
+cairoMatrixRegularNewScale :: PrimMonad m =>
+	CDouble -> CDouble ->
+	m (Either (CairoMatrixT (PrimState m)) (CairoMatrixRegularT (PrimState m)))
+cairoMatrixRegularNewScale sx sy = mk
+	<$> cairoMatrixAlloca \p -> c_cairo_matrix_init_scale p sx sy
+	where mk = case (sx, sy) of
+		(_, 0) -> Left . CairoMatrixT
+		(0, _) -> Left . CairoMatrixT
+		_ -> Right . CairoMatrixRegularT
 
 foreign import ccall "cairo_matrix_init_scale" c_cairo_matrix_init_scale ::
 	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
 
-cairoMatrixInitRotate :: PrimMonad m => CairoMatrixT (PrimState m) -> CDouble -> m ()
-cairoMatrixInitRotate (CairoMatrixT fmtx) rad =
-	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_init_rotate pmtx rad
+cairoMatrixNewRotate :: PrimMonad m =>
+	CDouble -> m (CairoMatrixRegularT (PrimState m))
+cairoMatrixNewRotate rad = CairoMatrixRegularT
+	<$> cairoMatrixAlloca \p -> c_cairo_matrix_init_rotate p rad
 
 foreign import ccall "cairo_matrix_init_rotate" c_cairo_matrix_init_rotate ::
 	Ptr (CairoMatrixT s) -> CDouble -> IO ()
 
-cairoMatrixTranslate :: PrimMonad m => CairoMatrixT (PrimState m) ->
-	CDouble -> CDouble -> m ()
-cairoMatrixTranslate (CairoMatrixT fmtx) tx ty =
-	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_translate pmtx tx ty
+cairoMatrixTranslate :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	mtx (PrimState m) -> CDouble -> CDouble -> m ()
+cairoMatrixTranslate mtx tx ty =
+	withCairoMatrixT mtx \p -> c_cairo_matrix_translate p tx ty
 
 foreign import ccall "cairo_matrix_translate" c_cairo_matrix_translate ::
 	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
 
-cairoMatrixScale :: PrimMonad m => CairoMatrixT (PrimState m) ->
-	CDouble -> CDouble -> m ()
-cairoMatrixScale (CairoMatrixT fmtx) sx sy =
-	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_scale pmtx sx sy
-
-foreign import ccall "cairo_matrix_scale" c_cairo_matrix_scale ::
-	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
-
-cairoMatrixRotate :: PrimMonad m => CairoMatrixT (PrimState m) -> CDouble -> m ()
-cairoMatrixRotate (CairoMatrixT fmtx) rad =
-	unsafeIOToPrim $ withForeignPtr fmtx \pmtx -> c_cairo_matrix_rotate pmtx rad
+cairoMatrixRotate :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	mtx (PrimState m) -> CDouble -> m ()
+cairoMatrixRotate mtx rad =
+	withCairoMatrixT mtx \p -> c_cairo_matrix_rotate p rad
 
 foreign import ccall "cairo_matrix_rotate" c_cairo_matrix_rotate ::
 	Ptr (CairoMatrixT s) -> CDouble -> IO ()
 
--- cairoMatrixInvert :: PrimMonad m => CairoMatrixT (PrimState m) -> m
+cairoMatrixInvert :: PrimMonad m =>
+	CairoMatrixRegularT (PrimState m) -> m ()
+cairoMatrixInvert (CairoMatrixRegularT fmtx) =
+	unsafeIOToPrim $ withForeignPtr fmtx \pmtx ->
+		cairoStatusToThrowError =<< c_cairo_matrix_invert pmtx
 
 foreign import ccall "cairo_matrix_invert" c_cairo_matrix_invert ::
 	Ptr (CairoMatrixT s) -> IO #{type cairo_status_t}
+
+cairoMatrixMultiply :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	mtx (PrimState m) -> mtx (PrimState m) -> mtx (PrimState m) -> m ()
+cairoMatrixMultiply
+	(toCairoMatrixT -> CairoMatrixT fr)
+	(toCairoMatrixT -> CairoMatrixT fa)
+	(toCairoMatrixT -> CairoMatrixT fb) = unsafeIOToPrim
+	$ withForeignPtr fr \pr -> withForeignPtr fa \pa -> withForeignPtr fb \pb ->
+		c_cairo_matrix_multiply pr pa pb
+
+foreign import ccall "cairo_matrix_multiply" c_cairo_matrix_multiply ::
+	Ptr (CairoMatrixT s) -> Ptr (CairoMatrixT s) -> Ptr (CairoMatrixT s) -> IO ()
+
+data Distance = Distance CDouble CDouble deriving Show
+
+cairoMatrixTransformDistance :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	mtx (PrimState m) -> Distance -> m Distance
+cairoMatrixTransformDistance mtx (Distance dx dy) =
+	withCairoMatrixT mtx \pmtx -> alloca \pdx -> alloca \pdy -> do
+		zipWithM_ poke [pdx, pdy] [dx, dy]
+		c_cairo_matrix_transform_distance pmtx pdx pdy
+		Distance <$> peek pdx <*> peek pdy
+
+foreign import ccall "cairo_matrix_transform_distance" c_cairo_matrix_transform_distance ::
+	Ptr (CairoMatrixT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+data Point = Point CDouble CDouble deriving Show
+
+cairoMatrixTransformPoint :: (PrimMonad m, IsCairoMatrixT mtx) =>
+	mtx (PrimState m) -> Point -> m Point
+cairoMatrixTransformPoint mtx (Point x y) =
+	withCairoMatrixT mtx \pmtx -> alloca \px -> alloca \py -> do
+		zipWithM_ poke [px, py] [x, y]
+		c_cairo_matrix_transform_point pmtx px py
+		Point <$> peek px <*> peek py
+
+foreign import ccall "cairo_matrix_transform_point" c_cairo_matrix_transform_point ::
+	Ptr (CairoMatrixT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
