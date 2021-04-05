@@ -99,9 +99,9 @@ cairoPatternGetFilter (toCairoPatternT -> CairoPatternT fpt) =
 foreign import ccall "cairo_pattern_get_filter" c_cairo_pattern_get_filter ::
 	Ptr (CairoPatternT s) -> IO #{type cairo_filter_t}
 
-cairoPatternSetMatrix :: (PrimMonad m, IsCairoMatrixT mtx) =>
-	CairoPatternT (PrimState m) -> mtx (PrimState m) -> m ()
-cairoPatternSetMatrix (CairoPatternT fpt) (toCairoMatrixT -> CairoMatrixT fmtx) =
+cairoPatternSetMatrix :: (PrimMonad m, IsCairoPatternT pt, IsCairoMatrixT mtx) =>
+	pt (PrimState m) -> mtx (PrimState m) -> m ()
+cairoPatternSetMatrix (toCairoPatternT -> CairoPatternT fpt) (toCairoMatrixT -> CairoMatrixT fmtx) =
 	unsafeIOToPrim $ withForeignPtr fpt \ppt -> withForeignPtr fmtx \pmtx ->
 		c_cairo_pattern_set_matrix ppt pmtx
 
