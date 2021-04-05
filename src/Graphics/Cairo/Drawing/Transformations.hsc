@@ -7,8 +7,10 @@ module Graphics.Cairo.Drawing.Transformations where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Foreign.Storable
 import Foreign.C.Types
 import Foreign.Marshal
+import Control.Monad
 import Control.Monad.Primitive
 
 import Data.CairoContext
@@ -73,3 +75,14 @@ cairoIdentityMatrix (CairoT fcr) =
 	unsafeIOToPrim $ withForeignPtr fcr c_cairo_identity_matrix
 
 foreign import ccall "cairo_identity_matrix" c_cairo_identity_matrix :: Ptr (CairoT s) -> IO ()
+
+cairoUserToDevice :: PrimMonad m =>
+	CairoT (PrimState m) -> CDouble -> CDouble -> m (CDouble, CDouble)
+cairoUserToDevice (CairoT fcr) x y =
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> alloca \px -> alloca \py -> do
+		zipWithM_ poke [px, py] [x, y]
+		c_cairo_user_to_device pcr px py
+		(,) <$> peek px <*> peek py
+
+foreign import ccall "cairo_user_to_device" c_cairo_user_to_device ::
+	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
