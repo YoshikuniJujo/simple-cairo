@@ -5,13 +5,17 @@
 module Graphics.Cairo.Drawing.Transformations where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr
+import Foreign.ForeignPtr hiding (newForeignPtr)
+import Foreign.Concurrent
 import Foreign.C.Types
+import Foreign.Marshal
 import Control.Monad.Primitive
 
 import Data.CairoContext
 
 import Graphics.Cairo.Utilities.CairoMatrixT.Internal
+
+#include <cairo.h>
 
 cairoTranslate :: PrimMonad m =>
 	CairoT (PrimState m) -> CDouble -> CDouble -> m ()
@@ -51,7 +55,17 @@ cairoSetMatrix (CairoT fcr) (toCairoMatrixT -> CairoMatrixT fmtx) =
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> withForeignPtr fmtx \pmtx ->
 		c_cairo_set_matrix pcr pmtx
 
+cairoGetMatrix :: PrimMonad m => CairoT (PrimState m) -> m (CairoMatrixT (PrimState m))
+cairoGetMatrix (CairoT fcr) = unsafeIOToPrim
+	$ CairoMatrixT <$> withForeignPtr fcr \pcr -> do
+		p <- mallocBytes #{size cairo_matrix_t}
+		c_cairo_set_matrix pcr p
+		newForeignPtr p (free p)
+
 foreign import ccall "cairo_set_matrix" c_cairo_set_matrix ::
+	Ptr (CairoT s) -> Ptr (CairoMatrixT s) -> IO ()
+
+foreign import ccall "cairo_get_matrix" c_cairo_get_matrix ::
 	Ptr (CairoT s) -> Ptr (CairoMatrixT s) -> IO ()
 
 cairoIdentityMatrix :: PrimMonad m => CairoT (PrimState m) -> m ()

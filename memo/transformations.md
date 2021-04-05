@@ -24,7 +24,7 @@ todo
 * [x] `cairo_rotate`
 * [x] `cairo_transform`
 * [x] `cairo_set_matrix`
-* [ ] `cairo_get_matrix`
+* [x] `cairo_get_matrix`
 * [x] `cairo_identity_matrix`
 * [ ] `cairo_user_to_device`
 * [ ] `cairo_user_to_device_distance`
