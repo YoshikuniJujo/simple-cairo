@@ -59,7 +59,7 @@ cairoGetMatrix :: PrimMonad m => CairoT (PrimState m) -> m (CairoMatrixT (PrimSt
 cairoGetMatrix (CairoT fcr) = unsafeIOToPrim
 	$ CairoMatrixT <$> withForeignPtr fcr \pcr -> do
 		p <- mallocBytes #{size cairo_matrix_t}
-		c_cairo_set_matrix pcr p
+		c_cairo_get_matrix pcr p
 		newForeignPtr p (free p)
 
 foreign import ccall "cairo_set_matrix" c_cairo_set_matrix ::
