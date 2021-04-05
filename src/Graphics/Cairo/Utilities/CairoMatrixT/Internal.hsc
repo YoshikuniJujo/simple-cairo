@@ -9,7 +9,7 @@ module Graphics.Cairo.Utilities.CairoMatrixT.Internal (
 	cairoMatrixNew, cairoMatrixRegularNew, cairoMatrixNewIdentity,
 	cairoMatrixNewTranslate,
 	cairoMatrixNewScale, cairoMatrixRegularNewScale, cairoMatrixNewRotate,
-	cairoMatrixTranslate, cairoMatrixRotate, cairoMatrixInvert,
+	cairoMatrixTranslate, cairoMatrixScale, cairoMatrixRotate, cairoMatrixInvert,
 	cairoMatrixMultiply,
 	Distance(..), cairoMatrixTransformDistance,
 	Point(..), cairoMatrixTransformPoint ) where
@@ -121,6 +121,14 @@ cairoMatrixTranslate mtx tx ty =
 	withCairoMatrixT mtx \p -> c_cairo_matrix_translate p tx ty
 
 foreign import ccall "cairo_matrix_translate" c_cairo_matrix_translate ::
+	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
+
+cairoMatrixScale :: PrimMonad m =>
+	CairoMatrixT (PrimState m) -> CDouble -> CDouble -> m ()
+cairoMatrixScale mtx sx sy =
+	withCairoMatrixT mtx \p -> c_cairo_matrix_scale p sx sy
+
+foreign import ccall "cairo_matrix_scale" c_cairo_matrix_scale ::
 	Ptr (CairoMatrixT s) -> CDouble -> CDouble -> IO ()
 
 cairoMatrixRotate :: (PrimMonad m, IsCairoMatrixT mtx) =>
