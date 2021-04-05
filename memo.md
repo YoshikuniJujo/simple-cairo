@@ -48,8 +48,8 @@ todo
 		- [x] cairo\_svg\_surface\_create
 		- [x] cairo\_svg\_surface\_create\_for\_stream
 		- [ ] others
-* [ ] Utilities
-	+ [ ] cairo\_matrix\_t
+* [x] Utilities
+	+ [x] cairo\_matrix\_t
 * [x] move a module `Graphics.Cairo.Drawing.CairoT.Extents`
 	to `Graphics.Cairo.Drawing.Extents`
 * [ ] make new package cairo-regions
