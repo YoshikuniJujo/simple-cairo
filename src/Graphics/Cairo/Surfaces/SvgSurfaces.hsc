@@ -23,7 +23,7 @@ foreign import ccall "cairo_svg_surface_create" c_cairo_svg_surface_create ::
 cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (CairoSurfaceT RealWorld -> IO a) -> IO ()
 cairoSvgSurfaceWith fp w h f = do
 	sr@(CairoSurfaceT fsr) <- cairoSvgSurfaceCreate fp w h
-	f sr >> finalizeForeignPtr fsr
+	f sr >> cairoSurfaceFinish sr -- finalizeForeignPtr fsr
 	
 
 cairoSvgSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceT RealWorld)
