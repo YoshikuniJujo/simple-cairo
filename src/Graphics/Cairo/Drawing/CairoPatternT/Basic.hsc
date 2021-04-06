@@ -273,17 +273,17 @@ cairoPatternTSurface pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
 	_ -> Nothing
 
 cairoPatternCreateForSurface :: (PrimMonad m, IsCairoSurfaceT sr) =>
-	sr (PrimState m) -> m (CairoPatternSurfaceT (PrimState m))
+	sr s (PrimState m) -> m (CairoPatternSurfaceT (PrimState m))
 cairoPatternCreateForSurface (toCairoSurfaceT -> CairoSurfaceT fs) =
 	unsafeIOToPrim $ CairoPatternSurfaceT <$> withForeignPtr fs \ps -> do
 		p <- c_cairo_pattern_create_for_surface ps
 		newForeignPtr p $ c_cairo_pattern_destroy p
 
 foreign import ccall "cairo_pattern_create_for_surface" c_cairo_pattern_create_for_surface ::
-	Ptr (CairoSurfaceT s) -> IO (Ptr (CairoPatternT s))
+	Ptr (CairoSurfaceT s ps) -> IO (Ptr (CairoPatternT ps))
 
 cairoPatternGetSurface :: PrimMonad m =>
-	CairoPatternSurfaceT (PrimState m) -> m (CairoSurfaceT (PrimState m))
+	CairoPatternSurfaceT (PrimState m) -> m (CairoSurfaceT s (PrimState m))
 cairoPatternGetSurface (CairoPatternSurfaceT fpt) =
 	unsafeIOToPrim $ CairoSurfaceT <$> withForeignPtr fpt \ppt -> alloca \pps -> do
 		cairoStatusToThrowError =<< c_cairo_pattern_get_surface ppt pps
@@ -291,10 +291,10 @@ cairoPatternGetSurface (CairoPatternSurfaceT fpt) =
 		newForeignPtr p $ c_cairo_surface_destroy p
 
 foreign import ccall "cairo_pattern_get_surface" c_cairo_pattern_get_surface ::
-	Ptr (CairoPatternT s) -> Ptr (Ptr (CairoSurfaceT s)) -> IO #{type cairo_status_t}
+	Ptr (CairoPatternT ps) -> Ptr (Ptr (CairoSurfaceT s ps)) -> IO #{type cairo_status_t}
 
 foreign import ccall "cairo_surface_reference" c_cairo_surface_reference ::
-	Ptr (CairoSurfaceT s) -> IO (Ptr (CairoSurfaceT s))
+	Ptr (CairoSurfaceT s ps) -> IO (Ptr (CairoSurfaceT s ps))
 
 raiseIfErrorPattern :: CairoPatternT s -> IO ()
 raiseIfErrorPattern (CairoPatternT fpt) = withForeignPtr fpt \pt ->

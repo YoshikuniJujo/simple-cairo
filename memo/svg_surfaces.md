@@ -25,13 +25,15 @@ CairoSurfaceSvgT
 * [x]  define `CairoSurfaceSvgT`
 * [x] `instance IsCairoSurfaceT CairoSurfaceSvgT`
 * [x] `pattern CairoSurfaceTSvg`
-* [ ] `newtype CairoSurfaceSvgT s st`
+* [x] `newtype CairoSurfaceSvgT s st`
 
 create SVG Surfaces
 --------------------
 
-* [x] cairoSvgSurfaceWith
-* [x] cairoSvgSurfaceWithForStream
+* [ ] cairoSvgSurfaceWith
+	+ [ ] return `m a` instead of `m ()`
+* [ ] cairoSvgSurfaceWithForStream
+	+ [ ] return `m a` instead of `m ()`
 
 settings
 --------

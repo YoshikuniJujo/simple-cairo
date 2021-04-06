@@ -25,22 +25,22 @@ import Graphics.Cairo.Surfaces.SvgSurfaces.Template
 #include <cairo.h>
 #include <cairo-svg.h>
 
-newtype CairoSurfaceSvgT s ps = CairoSurfaceSvgT (ForeignPtr (CairoSurfaceT ps)) deriving Show
+newtype CairoSurfaceSvgT s ps = CairoSurfaceSvgT (ForeignPtr (CairoSurfaceT s ps)) deriving Show
 
-pattern CairoSurfaceTSvg :: CairoSurfaceSvgT s ps -> CairoSurfaceT ps
+pattern CairoSurfaceTSvg :: CairoSurfaceSvgT s ps -> CairoSurfaceT s ps
 pattern CairoSurfaceTSvg sr <- (cairoSurfaceTSvg -> Just sr) where
 	CairoSurfaceTSvg = toCairoSurfaceT
 
-cairoSurfaceTSvg :: CairoSurfaceT ps -> Maybe (CairoSurfaceSvgT s ps)
+cairoSurfaceTSvg :: CairoSurfaceT s ps -> Maybe (CairoSurfaceSvgT s ps)
 cairoSurfaceTSvg sr@(CairoSurfaceT fsr) = case cairoSurfaceGetType sr of
 	CairoSurfaceTypeSvg -> Just $ CairoSurfaceSvgT fsr
 	_ -> Nothing
 
-instance IsCairoSurfaceT (CairoSurfaceSvgT s) where
+instance IsCairoSurfaceT CairoSurfaceSvgT where
 	toCairoSurfaceT (CairoSurfaceSvgT fsr) = CairoSurfaceT fsr
 
 foreign import ccall "cairo_svg_surface_create" c_cairo_svg_surface_create ::
-	CString -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s))
+	CString -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
 
 cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (forall s . CairoSurfaceSvgT s RealWorld -> IO a) -> IO ()
 cairoSvgSurfaceWith fp w h f = do
@@ -71,7 +71,7 @@ convertCairoWriteFuncTText wf p cs ln = writeResultToCairoStatusT
 	<$> (T.peekCStringLen (cs, fromIntegral ln) >>= \t -> unsafePrimToIO $ wf p t)
 
 foreign import ccall "cairo_svg_surface_create_for_stream" c_cairo_svg_surface_create_for_stream ::
-	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) -> Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s))
+	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) -> Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
 
 cairoSvgSurfaceWithForStream :: PrimBase m => (Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
 	(forall s . CairoSurfaceSvgT s (PrimState m) -> m a) -> m ()
@@ -95,7 +95,7 @@ writeResultToCairoStatusT = \case
 	WriteFailure -> #{const CAIRO_STATUS_WRITE_ERROR}
 	WriteSuccess -> #{const CAIRO_STATUS_SUCCESS}
 
-mkCairoSurfaceSvgT :: Ptr (CairoSurfaceT ps) -> IO (CairoSurfaceSvgT s ps)
+mkCairoSurfaceSvgT :: Ptr (CairoSurfaceT s ps) -> IO (CairoSurfaceSvgT s ps)
 mkCairoSurfaceSvgT p = CairoSurfaceSvgT <$> newForeignPtr p (c_cairo_surface_destroy p)
 
 mkMember "CairoSvgUnitUser" #{const CAIRO_SVG_UNIT_USER}
@@ -115,4 +115,4 @@ cairoSvgSurfaceGetDocumentUnit (CairoSurfaceSvgT fsr) = unsafeIOToPrim
 	$ CairoSvgUnitT <$> withForeignPtr fsr c_cairo_svg_surface_get_document_unit
 
 foreign import ccall "cairo_svg_surface_get_document_unit" c_cairo_svg_surface_get_document_unit ::
-	Ptr (CairoSurfaceT s) -> IO #{type cairo_svg_unit_t}
+	Ptr (CairoSurfaceT s ps) -> IO #{type cairo_svg_unit_t}

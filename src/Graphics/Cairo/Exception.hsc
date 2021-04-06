@@ -65,12 +65,12 @@ raiseIfErrorRegion (CairoRegionT fr) = withForeignPtr fr \r -> cairoStatusToThro
 foreign import ccall "cairo_region_status" c_cairo_region_status ::
 	Ptr (CairoRegionT s) -> IO #type cairo_status_t
 
-foreign import ccall "cairo_surface_status" c_cairo_surface_status :: Ptr (CairoSurfaceT s) -> IO #type cairo_status_t
+foreign import ccall "cairo_surface_status" c_cairo_surface_status :: Ptr (CairoSurfaceT s ps) -> IO #type cairo_status_t
 
-raiseIfErrorSurface :: CairoSurfaceT s -> IO ()
+raiseIfErrorSurface :: CairoSurfaceT s ps -> IO ()
 raiseIfErrorSurface (CairoSurfaceT fsr) = withForeignPtr fsr \sr -> cairoStatusToThrowError =<< c_cairo_surface_status sr
 
-raiseIfErrorPtrSurface :: Ptr (CairoSurfaceT s) -> IO ()
+raiseIfErrorPtrSurface :: Ptr (CairoSurfaceT s ps) -> IO ()
 raiseIfErrorPtrSurface sr = cairoStatusToThrowError =<< c_cairo_surface_status sr
 
 cairoStatusToThrowError :: #{type cairo_status_t} -> IO ()
