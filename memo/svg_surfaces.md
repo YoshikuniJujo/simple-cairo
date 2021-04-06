@@ -25,6 +25,7 @@ CairoSurfaceSvgT
 * [x]  define `CairoSurfaceSvgT`
 * [x] `instance IsCairoSurfaceT CairoSurfaceSvgT`
 * [x] `pattern CairoSurfaceTSvg`
+* [ ] `newtype CairoSurfaceSvgT s st`
 
 create SVG Surfaces
 --------------------
@@ -36,7 +37,7 @@ settings
 --------
 
 * [x] CairoSvgUnitT
-* [ ] cairoSvgSurfaceGetDocumentUnit
+* [x] cairoSvgSurfaceGetDocumentUnit
 * [ ] cairoSvgSurfaceSetDocumentUnit
 
 version

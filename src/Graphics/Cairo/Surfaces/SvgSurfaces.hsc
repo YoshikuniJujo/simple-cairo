@@ -106,3 +106,11 @@ mkMember "CairoSvgUnitMm" #{const CAIRO_SVG_UNIT_MM}
 mkMember "CairoSvgUnitPt" #{const CAIRO_SVG_UNIT_PT}
 mkMember "CairoSvgUnitPc" #{const CAIRO_SVG_UNIT_PC}
 mkMember "CAiroSvgUnitPercent" #{const CAIRO_SVG_UNIT_PERCENT}
+
+cairoSvgSurfaceGetDocumentUnit :: PrimMonad m =>
+	CairoSurfaceSvgT (PrimState m) -> m CairoSvgUnitT
+cairoSvgSurfaceGetDocumentUnit (CairoSurfaceSvgT fsr) = unsafeIOToPrim
+	$ CairoSvgUnitT <$> withForeignPtr fsr c_cairo_svg_surface_get_document_unit
+
+foreign import ccall "cairo_svg_surface_get_document_unit" c_cairo_svg_surface_get_document_unit ::
+	Ptr (CairoSurfaceT s) -> IO #{type cairo_svg_unit_t}
