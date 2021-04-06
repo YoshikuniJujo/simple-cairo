@@ -19,7 +19,7 @@ import Data.Color
 import System.IO.Unsafe
 
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Surfaces.CairoSurfaceT
+import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 
 #include <cairo.h>
 

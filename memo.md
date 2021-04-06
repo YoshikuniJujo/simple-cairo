@@ -18,7 +18,7 @@ Cairo structure
 	+ cairo\_device\_t
 	+ cairo\_surface\_t
 	+ Image Surfaces (will implement soone)
-	+ PDF Surfaces
+	+ PDF Surfaces (will implement)
 	+ PNG Surfaces (toy API)
 	+ Recording Surfaces (will implement in the distant future)
 	+ Win32 Surfaces (won't implement)
@@ -43,6 +43,7 @@ todo
 	+ [x] cairo\_pattern\_t
 	+ [x] Transformations
 * [ ] Surfaces
+	+ [ ] cairo\_surface\_ t
 	+ [ ] Image Surfaces
 	+ [ ] SVG Surfaces
 		- [x] cairo\_svg\_surface\_create

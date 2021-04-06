@@ -14,7 +14,7 @@ import Graphics.Cairo.Types
 
 import Data.CairoContext
 
-import Graphics.Cairo.Surfaces.CairoSurfaceT
+import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 
 #include <cairo.h>
 

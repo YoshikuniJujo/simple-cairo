@@ -23,7 +23,7 @@ import Foreign.C.Types
 import Control.Monad.Primitive
 import Data.Int
 
-import Graphics.Cairo.Surfaces.CairoSurfaceT
+import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Exception
 import Graphics.Cairo.Drawing.Extents
 

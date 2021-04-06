@@ -23,7 +23,7 @@ import Control.Monad.Primitive
 import Data.Word
 import Data.Int
 
-import Graphics.Cairo.Surfaces.CairoSurfaceT
+import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Values
 
 import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)

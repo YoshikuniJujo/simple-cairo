@@ -9,7 +9,7 @@ import Foreign.C.String
 import Control.Monad.Primitive
 import Data.Word
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Surfaces.CairoSurfaceT
+import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 
 import qualified Data.Text as T
 import qualified Data.Text.Foreign as T
