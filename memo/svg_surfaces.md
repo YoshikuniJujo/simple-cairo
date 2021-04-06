@@ -22,9 +22,9 @@ types and values
 CairoSurfaceSvgT
 ----------------
 
-* [ ]  define `CairoSurfaceSvgT`
-* [ ] `instance IsCairoSurfaceT CairoSurfaceSvgT`
-* [ ] `pattern CairoSurfaceTSvg`
+* [x]  define `CairoSurfaceSvgT`
+* [x] `instance IsCairoSurfaceT CairoSurfaceSvgT`
+* [x] `pattern CairoSurfaceTSvg`
 
 create SVG Surfaces
 --------------------

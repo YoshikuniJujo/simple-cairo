@@ -70,6 +70,9 @@ foreign import ccall "cairo_surface_status" c_cairo_surface_status :: Ptr (Cairo
 raiseIfErrorSurface :: CairoSurfaceT s -> IO ()
 raiseIfErrorSurface (CairoSurfaceT fsr) = withForeignPtr fsr \sr -> cairoStatusToThrowError =<< c_cairo_surface_status sr
 
+raiseIfErrorPtrSurface :: Ptr (CairoSurfaceT s) -> IO ()
+raiseIfErrorPtrSurface sr = cairoStatusToThrowError =<< c_cairo_surface_status sr
+
 cairoStatusToThrowError :: #{type cairo_status_t} -> IO ()
 cairoStatusToThrowError = \case
 	#{const CAIRO_STATUS_SUCCESS} -> pure ()
