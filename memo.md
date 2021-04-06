@@ -43,8 +43,8 @@ todo
 	+ [x] cairo\_pattern\_t
 	+ [x] Transformations
 * [ ] Surfaces
-	+ [ ] cairo\_surface\_ t
-	+ [ ] Image Surfaces
+	+ [x] cairo\_surface\_t
+	+ [x] Image Surfaces
 	+ [ ] SVG Surfaces
 		- [x] cairo\_svg\_surface\_create
 		- [x] cairo\_svg\_surface\_create\_for\_stream

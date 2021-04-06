@@ -5,13 +5,12 @@
 
 module Graphics.Cairo.Surfaces.ImageSurfaces (
 	cairoImageSurfaceCreate,
-	cairoImageSurfaceGetFormat,
-	cairoImageSurfaceGetStride,
-	cairoImageSurfaceGetCairoImage,
-	cairoImageSurfaceGetCairoImageMut,
 
 	cairoImageSurfaceCreateForCairoImage,
 	cairoImageSurfaceCreateForCairoImageMut,
+
+	cairoImageSurfaceGetCairoImage,
+	cairoImageSurfaceGetCairoImageMut,
 	) where
 
 import Foreign.Ptr
@@ -40,14 +39,8 @@ cairoImageSurfaceCreate (CairoFormatT f) w h =
 foreign import ccall "cairo_image_surface_get_format" c_cairo_image_surface_get_format ::
 	Ptr (CairoSurfaceT s) -> IO #type cairo_format_t
 
-cairoImageSurfaceGetFormat :: PrimMonad m => CairoSurfaceT (PrimState m) -> m CairoFormatT
-cairoImageSurfaceGetFormat s = CairoFormatT <$> argCairoSurfaceT c_cairo_image_surface_get_format s
-
 foreign import ccall "cairo_image_surface_get_stride" c_cairo_image_surface_get_stride ::
 	Ptr (CairoSurfaceT s) -> IO #type int
-
-cairoImageSurfaceGetStride :: PrimMonad m => CairoSurfaceT (PrimState m) -> m #type int
-cairoImageSurfaceGetStride = argCairoSurfaceT c_cairo_image_surface_get_stride
 
 foreign import ccall "cairo_image_surface_get_width" c_cairo_image_surface_get_width ::
 	Ptr (CairoSurfaceT s) -> IO #type int
