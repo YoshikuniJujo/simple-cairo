@@ -50,3 +50,6 @@ newtype CairoContentT = CairoContentT #{type cairo_content_t} deriving Show
 mkMemberGen ''CairoContentT 'CairoContentT "CairoContentColor" #{const CAIRO_CONTENT_COLOR}
 mkMemberGen ''CairoContentT 'CairoContentT "CairoContentAlpha" #{const CAIRO_CONTENT_ALPHA}
 mkMemberGen ''CairoContentT 'CairoContentT "CairoContentColorAlpha" #{const CAIRO_CONTENT_COLOR_ALPHA}
+
+class IsCairoSurfaceT sr where
+	toCairoSurfaceT :: sr s -> CairoSurfaceT s
