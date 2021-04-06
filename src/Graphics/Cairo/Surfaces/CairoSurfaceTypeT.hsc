@@ -3,7 +3,7 @@
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Surfaces.CairoSurfaceTypeT (
-	CairoSurfaceTypeT,
+	CairoSurfaceTypeT(..),
 	module Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 	) where
 

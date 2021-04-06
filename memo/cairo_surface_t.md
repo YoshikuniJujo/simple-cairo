@@ -45,6 +45,6 @@ todo
 * [x] `cairo_surface_finish`
 	+ [x] remove `cairoSurfaceFinish`
 * [x] remove `cairo_surface_flush`
-* [ ] `cairo_surface_get_type`
+* [x] `cairo_surface_get_type`
 * [ ] `cairo_surface_status`
 * [ ] `cairo_surface_get_content`
