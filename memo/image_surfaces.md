@@ -16,5 +16,5 @@ functions
 todo
 ----
 
-* [ ] type `CairoSurfaceImageT`
-* [ ] `instance IsCairoSurfaceT CairoSurfaceImageT`
+* [x] type `CairoSurfaceImageT`
+* [x] `instance IsCairoSurfaceT CairoSurfaceImageT`

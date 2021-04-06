@@ -29,12 +29,17 @@ import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
 
 #include <cairo.h>
 
-foreign import ccall "cairo_image_surface_create" c_cairo_image_surface_create ::
-	#{type cairo_format_t} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
+newtype CairoSurfaceImageT s = CairoSurfaceImageT (ForeignPtr (CairoSurfaceT s)) deriving Show
 
-cairoImageSurfaceCreate :: PrimMonad m => CairoFormatT -> #{type int} -> #{type int} -> m (CairoSurfaceT (PrimState m))
+instance IsCairoSurfaceT CairoSurfaceImageT where
+	toCairoSurfaceT (CairoSurfaceImageT fsr) = CairoSurfaceT fsr
+
+cairoImageSurfaceCreate :: PrimMonad m => CairoFormatT -> #{type int} -> #{type int} -> m (CairoSurfaceImageT (PrimState m))
 cairoImageSurfaceCreate (CairoFormatT f) w h =
 	returnCairoSurfaceT $ c_cairo_image_surface_create f w h
+
+foreign import ccall "cairo_image_surface_create" c_cairo_image_surface_create ::
+	#{type cairo_format_t} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
 
 foreign import ccall "cairo_image_surface_get_format" c_cairo_image_surface_get_format ::
 	Ptr (CairoSurfaceT s) -> IO #type cairo_format_t
@@ -48,10 +53,7 @@ foreign import ccall "cairo_image_surface_get_width" c_cairo_image_surface_get_w
 foreign import ccall "cairo_image_surface_get_height" c_cairo_image_surface_get_height ::
 	Ptr (CairoSurfaceT s) -> IO #type int
 
--- foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_data ::
---	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})
-
-cairoImageSurfaceGetCairoImage :: PrimMonad m => CairoSurfaceT (PrimState m) -> m CairoImage
+cairoImageSurfaceGetCairoImage :: PrimMonad m => CairoSurfaceImageT (PrimState m) -> m CairoImage
 cairoImageSurfaceGetCairoImage = argCairoSurfaceT \sfc -> do
 	d <- c_cairo_image_surface_get_data sfc
 	f <- c_cairo_image_surface_get_format sfc
@@ -63,7 +65,7 @@ cairoImageSurfaceGetCairoImage = argCairoSurfaceT \sfc -> do
 	fd <- newForeignPtr (castPtr p) $ free (castPtr p)
 	pure $ CairoImage f (fromIntegral w) (fromIntegral h) (fromIntegral s) fd
 
-cairoImageSurfaceGetCairoImageMut :: PrimMonad m => CairoSurfaceT (PrimState m) -> m (CairoImageMut (PrimState m))
+cairoImageSurfaceGetCairoImageMut :: PrimMonad m => CairoSurfaceImageT (PrimState m) -> m (CairoImageMut (PrimState m))
 cairoImageSurfaceGetCairoImageMut = argCairoSurfaceT \sfc -> do
 	d <- c_cairo_image_surface_get_data sfc
 	f <- c_cairo_image_surface_get_format sfc
@@ -81,28 +83,34 @@ foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface
 	Ptr #{type unsigned char} -> #{type cairo_format_t} -> #{type int} -> #{type int} -> #{type int} -> IO (Ptr (CairoSurfaceT s))
 
 cairoImageSurfaceCreateForCairoImage ::
-	PrimMonad m => CairoImage -> m (CairoSurfaceT (PrimState m))
+	PrimMonad m => CairoImage -> m (CairoSurfaceImageT (PrimState m))
 cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unsafeIOToPrim do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
 	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
-	mkCairoSurfaceT' sp p
+	mkCairoSurfaceImageT' sp p
 	where n = fromIntegral $ s * h
 
 cairoImageSurfaceCreateForCairoImageMut ::
-	PrimMonad m => CairoImageMut (PrimState m) -> m (CairoSurfaceT (PrimState m))
+	PrimMonad m => CairoImageMut (PrimState m) -> m (CairoSurfaceImageT (PrimState m))
 cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unsafeIOToPrim do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
 	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
-	mkCairoSurfaceT' sp p
+	mkCairoSurfaceImageT' sp p
 	where n = fromIntegral $ s * h
 
 foreign import ccall "cairo_image_surface_get_data" c_cairo_image_surface_get_data ::
 	Ptr (CairoSurfaceT s) -> IO (Ptr #{type unsigned char})
 
-argCairoSurfaceT :: PrimMonad m => (Ptr (CairoSurfaceT (PrimState m)) -> IO a) -> CairoSurfaceT (PrimState m) -> m a
-argCairoSurfaceT io (CairoSurfaceT fs) = unsafeIOToPrim $ withForeignPtr fs io
+argCairoSurfaceT :: PrimMonad m => (Ptr (CairoSurfaceT (PrimState m)) -> IO a) -> CairoSurfaceImageT (PrimState m) -> m a
+argCairoSurfaceT io (CairoSurfaceImageT fs) = unsafeIOToPrim $ withForeignPtr fs io
 
-returnCairoSurfaceT :: PrimMonad m => IO (Ptr (CairoSurfaceT (PrimState m))) -> m (CairoSurfaceT (PrimState m))
-returnCairoSurfaceT io = unsafeIOToPrim $ mkCairoSurfaceT =<< io
+returnCairoSurfaceT :: PrimMonad m => IO (Ptr (CairoSurfaceT (PrimState m))) -> m (CairoSurfaceImageT (PrimState m))
+returnCairoSurfaceT io = unsafeIOToPrim $ mkCairoSurfaceImageT =<< io
+
+mkCairoSurfaceImageT :: Ptr (CairoSurfaceT s) -> IO (CairoSurfaceImageT s)
+mkCairoSurfaceImageT p = CairoSurfaceImageT <$> newForeignPtr p (c_cairo_surface_destroy p)
+
+mkCairoSurfaceImageT' :: Ptr (CairoSurfaceT s) -> Ptr a -> IO (CairoSurfaceImageT s)
+mkCairoSurfaceImageT' ps p = CairoSurfaceImageT <$> newForeignPtr ps (free p >> c_cairo_surface_destroy ps)
