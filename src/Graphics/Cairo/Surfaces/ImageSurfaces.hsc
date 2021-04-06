@@ -1,9 +1,12 @@
 {-# LANGUAGE BlockArguments, LambdaCase, TupleSections #-}
-{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Surfaces.ImageSurfaces (
+	CairoSurfaceImageT,
+	pattern CairoSurfaceTImage,
+
 	cairoImageSurfaceCreate,
 
 	cairoImageSurfaceCreateForCairoImage,
@@ -23,6 +26,7 @@ import Data.Word
 import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
+import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 import Graphics.Cairo.Values
 
 import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
@@ -30,6 +34,15 @@ import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
 #include <cairo.h>
 
 newtype CairoSurfaceImageT s = CairoSurfaceImageT (ForeignPtr (CairoSurfaceT s)) deriving Show
+
+pattern CairoSurfaceTImage :: CairoSurfaceImageT s -> CairoSurfaceT s
+pattern CairoSurfaceTImage sr <- (cairoSurfaceTImage -> Just sr) where
+	CairoSurfaceTImage = toCairoSurfaceT
+
+cairoSurfaceTImage :: CairoSurfaceT s -> Maybe (CairoSurfaceImageT s)
+cairoSurfaceTImage sr@(CairoSurfaceT fsr) = case cairoSurfaceGetType sr of
+	CairoSurfaceTypeImage -> Just $ CairoSurfaceImageT fsr
+	_ -> Nothing
 
 instance IsCairoSurfaceT CairoSurfaceImageT where
 	toCairoSurfaceT (CairoSurfaceImageT fsr) = CairoSurfaceT fsr

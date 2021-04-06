@@ -24,6 +24,7 @@ CairoSurfaceSvgT
 
 * [ ]  define `CairoSurfaceSvgT`
 * [ ] `instance IsCairoSurfaceT CairoSurfaceSvgT`
+* [ ] `pattern CairoSurfaceTSvg`
 
 create SVG Surfaces
 --------------------
