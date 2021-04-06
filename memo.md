@@ -37,11 +37,11 @@ Cairo structure
 todo
 ----
 
-* [ ] Drawing
+* [x] Drawing
 	+ [x] cairo\_t
 	+ [x] Paths
 	+ [x] cairo\_pattern\_t
-	+ [ ] Transformations
+	+ [x] Transformations
 * [ ] Surfaces
 	+ [ ] Image Surfaces
 	+ [ ] SVG Surfaces

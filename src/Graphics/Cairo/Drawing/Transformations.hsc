@@ -86,3 +86,36 @@ cairoUserToDevice (CairoT fcr) x y =
 
 foreign import ccall "cairo_user_to_device" c_cairo_user_to_device ::
 	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+cairoUserToDeviceDistance :: PrimMonad m =>
+	CairoT (PrimState m) -> CDouble -> CDouble -> m (CDouble, CDouble)
+cairoUserToDeviceDistance (CairoT fcr) dx dy =
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> alloca \px -> alloca \py -> do
+		zipWithM_ poke [px, py] [dx, dy]
+		c_cairo_user_to_device_distance pcr px py
+		(,) <$> peek px <*> peek py
+
+foreign import ccall "cairo_user_to_device_distance" c_cairo_user_to_device_distance ::
+	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+cairoDeviceToUser :: PrimMonad m =>
+	(CairoT (PrimState m)) -> CDouble -> CDouble -> m (CDouble, CDouble)
+cairoDeviceToUser (CairoT fcr) x y =
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> alloca \px -> alloca \py -> do
+		zipWithM_ poke [px, py] [x, y]
+		c_cairo_device_to_user pcr px py
+		(,) <$> peek px <*> peek py
+
+foreign import ccall "cairo_device_to_user" c_cairo_device_to_user ::
+	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+cairoDeviceToUserDistance :: PrimMonad m =>
+	(CairoT (PrimState m)) -> CDouble -> CDouble -> m (CDouble, CDouble)
+cairoDeviceToUserDistance (CairoT fcr) dx dy =
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> alloca \px -> alloca \py -> do
+		zipWithM_ poke [px, py] [dx, dy]
+		c_cairo_device_to_user_distance pcr px py
+		(,) <$> peek px <*> peek py
+
+foreign import ccall "cairo_device_to_user_distance" c_cairo_device_to_user_distance ::
+	Ptr (CairoT s) -> Ptr CDouble -> Ptr CDouble -> IO ()
