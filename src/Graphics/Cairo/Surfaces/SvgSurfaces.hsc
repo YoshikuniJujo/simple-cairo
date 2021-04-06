@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
@@ -18,7 +19,10 @@ import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 import qualified Data.Text as T
 import qualified Data.Text.Foreign as T
 
+import Graphics.Cairo.Surfaces.SvgSurfaces.Template
+
 #include <cairo.h>
+#include <cairo-svg.h>
 
 newtype CairoSurfaceSvgT s = CairoSurfaceSvgT (ForeignPtr (CairoSurfaceT s)) deriving Show
 
@@ -91,3 +95,14 @@ writeResultToCairoStatusT = \case
 
 mkCairoSurfaceSvgT :: Ptr (CairoSurfaceT s) -> IO (CairoSurfaceSvgT s)
 mkCairoSurfaceSvgT p = CairoSurfaceSvgT <$> newForeignPtr p (c_cairo_surface_destroy p)
+
+mkMember "CairoSvgUnitUser" #{const CAIRO_SVG_UNIT_USER}
+mkMember "CairoSvgUnitEm" #{const CAIRO_SVG_UNIT_EM}
+mkMember "CairoSvgUnitEx" #{const CAIRO_SVG_UNIT_EX}
+mkMember "CairoSvgUnitPx" #{const CAIRO_SVG_UNIT_PX}
+mkMember "CairoSvgUnitIn" #{const CAIRO_SVG_UNIT_IN}
+mkMember "CairoSvgUnitCm" #{const CAIRO_SVG_UNIT_CM}
+mkMember "CairoSvgUnitMm" #{const CAIRO_SVG_UNIT_MM}
+mkMember "CairoSvgUnitPt" #{const CAIRO_SVG_UNIT_PT}
+mkMember "CairoSvgUnitPc" #{const CAIRO_SVG_UNIT_PC}
+mkMember "CAiroSvgUnitPercent" #{const CAIRO_SVG_UNIT_PERCENT}

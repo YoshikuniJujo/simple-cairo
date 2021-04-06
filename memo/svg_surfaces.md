@@ -29,8 +29,20 @@ CairoSurfaceSvgT
 create SVG Surfaces
 --------------------
 
-* [ ] cairoSvgSurfaceWith
-* [ ] cairoSvgSurfaceWithForStream
+* [x] cairoSvgSurfaceWith
+* [x] cairoSvgSurfaceWithForStream
 
 settings
 --------
+
+* [x] CairoSvgUnitT
+* [ ] cairoSvgSurfaceGetDocumentUnit
+* [ ] cairoSvgSurfaceSetDocumentUnit
+
+version
+-------
+
+* [ ] CairoSvgVersionT
+* [ ] cairoSvgSurfaceRestrictToVersion
+* [ ] cairoSvgSurfaceGetVersions
+* [ ] cairoSvgVersionToString
