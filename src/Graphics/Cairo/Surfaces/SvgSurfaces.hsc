@@ -51,6 +51,13 @@ convertCairoWriteFuncTText wf p cs ln = writeResultToCairoStatusT
 foreign import ccall "cairo_svg_surface_create_for_stream" c_cairo_svg_surface_create_for_stream ::
 	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) -> Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s))
 
+cairoSvgSurfaceWithForStream :: PrimBase m => (Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
+	(CairoSurfaceT (PrimState m) -> m a) -> m ()
+cairoSvgSurfaceWithForStream wf cl w h f = do
+	sr@(CairoSurfaceT fsr) <- cairoSvgSurfaceCreateForStream wf cl w h
+	f sr >> unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_finish)
+
+
 cairoSvgSurfaceCreateForStream :: PrimBase m => (Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble -> m (CairoSurfaceT (PrimState m))
 cairoSvgSurfaceCreateForStream wf cl w h = unsafeIOToPrim do
 	sr <- mkCairoSurfaceT =<< (wrapCairoWriteFuncT wf >>= \pwf ->
