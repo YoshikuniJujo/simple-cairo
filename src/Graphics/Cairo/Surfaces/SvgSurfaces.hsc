@@ -42,10 +42,10 @@ instance IsCairoSurfaceT CairoSurfaceSvgT where
 foreign import ccall "cairo_svg_surface_create" c_cairo_svg_surface_create ::
 	CString -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
 
-cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (forall s . CairoSurfaceSvgT s RealWorld -> IO a) -> IO ()
+cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (forall s . CairoSurfaceSvgT s RealWorld -> IO a) -> IO a
 cairoSvgSurfaceWith fp w h f = do
 	sr@(CairoSurfaceSvgT fsr) <- cairoSvgSurfaceCreate fp w h
-	f sr >> withForeignPtr fsr c_cairo_surface_finish
+	f sr <* withForeignPtr fsr c_cairo_surface_finish
 	
 
 cairoSvgSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceSvgT s RealWorld)
@@ -74,10 +74,10 @@ foreign import ccall "cairo_svg_surface_create_for_stream" c_cairo_svg_surface_c
 	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) -> Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
 
 cairoSvgSurfaceWithForStream :: PrimBase m => (Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
-	(forall s . CairoSurfaceSvgT s (PrimState m) -> m a) -> m ()
+	(forall s . CairoSurfaceSvgT s (PrimState m) -> m a) -> m a
 cairoSvgSurfaceWithForStream wf cl w h f = do
 	sr@(CairoSurfaceSvgT fsr) <- cairoSvgSurfaceCreateForStream wf cl w h
-	f sr >> unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_finish)
+	f sr <* unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_finish)
 
 
 cairoSvgSurfaceCreateForStream :: PrimBase m =>

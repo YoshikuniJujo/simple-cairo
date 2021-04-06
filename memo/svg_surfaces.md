@@ -30,10 +30,10 @@ CairoSurfaceSvgT
 create SVG Surfaces
 --------------------
 
-* [ ] cairoSvgSurfaceWith
-	+ [ ] return `m a` instead of `m ()`
-* [ ] cairoSvgSurfaceWithForStream
-	+ [ ] return `m a` instead of `m ()`
+* [x] cairoSvgSurfaceWith
+	+ [x] return `m a` instead of `m ()`
+* [x] cairoSvgSurfaceWithForStream
+	+ [x] return `m a` instead of `m ()`
 
 settings
 --------
