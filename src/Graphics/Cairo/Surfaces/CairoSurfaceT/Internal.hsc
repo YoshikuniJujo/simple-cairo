@@ -49,3 +49,5 @@ mkMemberGen ''CairoContentT 'CairoContentT "CairoContentColorAlpha" #{const CAIR
 
 class IsCairoSurfaceT sr where
 	toCairoSurfaceT :: sr s -> CairoSurfaceT s
+
+instance IsCairoSurfaceT CairoSurfaceT where toCairoSurfaceT = id
