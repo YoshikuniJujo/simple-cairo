@@ -23,12 +23,12 @@ foreign import ccall "cairo_svg_surface_create" c_cairo_svg_surface_create ::
 cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (CairoSurfaceT RealWorld -> IO a) -> IO ()
 cairoSvgSurfaceWith fp w h f = do
 	sr@(CairoSurfaceT fsr) <- cairoSvgSurfaceCreate fp w h
-	f sr >> cairoSurfaceFinish sr -- finalizeForeignPtr fsr
+	f sr >> withForeignPtr fsr c_cairo_surface_finish
 	
 
 cairoSvgSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceT RealWorld)
 cairoSvgSurfaceCreate fp w h = withCString fp \cs -> do
-	sr <- makeCairoSurfaceT =<< c_cairo_svg_surface_create cs w h
+	sr <- mkCairoSurfaceT =<< c_cairo_svg_surface_create cs w h
 	sr <$ raiseIfErrorSurface sr
 
 foreign import ccall "wrapper" c_wrap_cairo_write_func_t ::
@@ -53,7 +53,7 @@ foreign import ccall "cairo_svg_surface_create_for_stream" c_cairo_svg_surface_c
 
 cairoSvgSurfaceCreateForStream :: PrimBase m => (Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble -> m (CairoSurfaceT (PrimState m))
 cairoSvgSurfaceCreateForStream wf cl w h = unsafeIOToPrim do
-	sr <- makeCairoSurfaceT =<< (wrapCairoWriteFuncT wf >>= \pwf ->
+	sr <- mkCairoSurfaceT =<< (wrapCairoWriteFuncT wf >>= \pwf ->
 		c_cairo_svg_surface_create_for_stream pwf cl w h)
 	sr <$ raiseIfErrorSurface sr
 

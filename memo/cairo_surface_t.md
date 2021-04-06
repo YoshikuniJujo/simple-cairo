@@ -39,9 +39,12 @@ todo
 ----
 
 * [x] make module `Graphics.Cairo.Surfaces.CairoSurfaceT.Internal`
-* [ ] `cairo_surface_destroy`
-* [ ] `cairo_surface_finish`
-* [ ] `cairo_surface_flush`
+* [x] `cairo_surface_destroy`
+	+ [x] rename makeCairoSurfaceT
+	+ [x] rename makeCairoSurfaceT'
+* [x] `cairo_surface_finish`
+	+ [x] remove `cairoSurfaceFinish`
+* [x] remove `cairo_surface_flush`
 * [ ] `cairo_surface_get_type`
 * [ ] `cairo_surface_status`
 * [ ] `cairo_surface_get_content`

@@ -27,4 +27,4 @@ foreign import ccall "cairo_image_surface_create_from_png" c_cairo_surface_creat
 
 cairoSurfaceCreateFromPng :: FilePath -> IO (CairoSurfaceT s)
 cairoSurfaceCreateFromPng fp = withCString fp \cs ->
-	makeCairoSurfaceT =<< c_cairo_surface_create_from_png cs
+	mkCairoSurfaceT =<< c_cairo_surface_create_from_png cs
