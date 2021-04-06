@@ -7,8 +7,8 @@ module Graphics.Cairo.Surfaces.CairoSurfaceT.Internal where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
-import Control.Monad.Primitive
 import Data.Word
+import System.IO.Unsafe
 
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 
@@ -32,15 +32,15 @@ foreign import ccall "cairo_surface_destroy" c_cairo_surface_destroy ::
 foreign import ccall "cairo_surface_finish" c_cairo_surface_finish ::
 	Ptr (CairoSurfaceT s) -> IO ()
 
-cairoSurfaceGetType :: (PrimMonad m, IsCairoSurfaceT sr) => sr (PrimState m) -> m CairoSurfaceTypeT
-cairoSurfaceGetType (toCairoSurfaceT -> CairoSurfaceT fsr) = unsafeIOToPrim
+cairoSurfaceGetType :: IsCairoSurfaceT sr => sr s -> CairoSurfaceTypeT
+cairoSurfaceGetType (toCairoSurfaceT -> CairoSurfaceT fsr) = unsafePerformIO
 	$ CairoSurfaceTypeT <$> withForeignPtr fsr c_cairo_surface_get_type
 
 foreign import ccall "cairo_surface_get_type" c_cairo_surface_get_type ::
 	Ptr (CairoSurfaceT s) -> IO #{type cairo_surface_type_t}
 
-cairoSurfaceGetContent :: (PrimMonad m, IsCairoSurfaceT sr) => sr (PrimState m) -> m CairoContentT
-cairoSurfaceGetContent (toCairoSurfaceT -> CairoSurfaceT fsr) = unsafeIOToPrim
+cairoSurfaceGetContent :: IsCairoSurfaceT sr => sr s -> CairoContentT
+cairoSurfaceGetContent (toCairoSurfaceT -> CairoSurfaceT fsr) = unsafePerformIO
 	$ CairoContentT <$> withForeignPtr fsr c_cairo_surface_get_content
 
 foreign import ccall "cairo_surface_get_content" c_cairo_surface_get_content ::
