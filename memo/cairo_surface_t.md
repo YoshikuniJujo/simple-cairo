@@ -47,4 +47,4 @@ todo
 * [x] remove `cairo_surface_flush`
 * [x] `cairo_surface_get_type`
 * [ ] `cairo_surface_status`
-* [ ] `cairo_surface_get_content`
+* [x] `cairo_surface_get_content`

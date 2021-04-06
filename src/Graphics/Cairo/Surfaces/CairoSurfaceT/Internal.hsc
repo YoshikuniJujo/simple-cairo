@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Surfaces.CairoSurfaceT.Internal where
@@ -10,6 +12,8 @@ import Control.Monad.Primitive
 import Data.Word
 
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
+
+import Graphics.Cairo.Template
 
 #include <cairo.h>
 
@@ -33,3 +37,16 @@ cairoSurfaceGetType (CairoSurfaceT fsr) = unsafeIOToPrim
 
 foreign import ccall "cairo_surface_get_type" c_cairo_surface_get_type ::
 	Ptr (CairoSurfaceT s) -> IO #{type cairo_surface_type_t}
+
+cairoSurfaceGetContent :: PrimMonad m => CairoSurfaceT (PrimState m) -> m CairoContentT
+cairoSurfaceGetContent (CairoSurfaceT fsr) = unsafeIOToPrim
+	$ CairoContentT <$> withForeignPtr fsr c_cairo_surface_get_content
+
+foreign import ccall "cairo_surface_get_content" c_cairo_surface_get_content ::
+	Ptr (CairoSurfaceT s) -> IO #{type cairo_content_t}
+
+newtype CairoContentT = CairoContentT #{type cairo_content_t} deriving Show
+
+mkMemberGen ''CairoContentT 'CairoContentT "CairoContentColor" #{const CAIRO_CONTENT_COLOR}
+mkMemberGen ''CairoContentT 'CairoContentT "CairoContentAlpha" #{const CAIRO_CONTENT_ALPHA}
+mkMemberGen ''CairoContentT 'CairoContentT "CairoContentColorAlpha" #{const CAIRO_CONTENT_COLOR_ALPHA}
