@@ -4,6 +4,7 @@
 module Graphics.Cairo.Surfaces.SvgSurfaces where
 
 import Foreign.Ptr
+import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.C.String
 import Control.Monad.Primitive
@@ -18,6 +19,12 @@ import qualified Data.Text.Foreign as T
 
 foreign import ccall "cairo_svg_surface_create" c_cairo_svg_surface_create ::
 	CString -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s))
+
+cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (CairoSurfaceT RealWorld -> IO a) -> IO ()
+cairoSvgSurfaceWith fp w h f = do
+	sr@(CairoSurfaceT fsr) <- cairoSvgSurfaceCreate fp w h
+	f sr >> finalizeForeignPtr fsr
+	
 
 cairoSvgSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceT RealWorld)
 cairoSvgSurfaceCreate fp w h = withCString fp \cs -> do
