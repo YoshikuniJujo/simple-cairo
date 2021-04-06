@@ -34,9 +34,9 @@ import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 #include <cairo.h>
 
-cairoCreate :: PrimMonad m =>
-	CairoSurfaceT (PrimState m) -> m (CairoT (PrimState m))
-cairoCreate (CairoSurfaceT sr) = unsafeIOToPrim do
+cairoCreate :: (PrimMonad m, IsCairoSurfaceT sr) =>
+	sr (PrimState m) -> m (CairoT (PrimState m))
+cairoCreate (toCairoSurfaceT -> CairoSurfaceT sr) = unsafeIOToPrim do
 	cr <- withForeignPtr sr c_cairo_create >>= \pcr ->
 		CairoT <$> newForeignPtr pcr (c_cairo_destroy pcr)
 	cr <$ raiseIfError cr
@@ -66,8 +66,9 @@ cairoSetSource cr@(CairoT fcr) (toCairoPatternT -> CairoPatternT fpt) = unsafeIO
 foreign import ccall "cairo_set_source" c_cairo_set_source ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
 
-cairoSetSourceSurface :: PrimMonad m => CairoT s -> CairoSurfaceT s -> CDouble -> CDouble -> m ()
-cairoSetSourceSurface (CairoT fcr) (CairoSurfaceT fsr) x y = unsafeIOToPrim
+cairoSetSourceSurface :: (PrimMonad m, IsCairoSurfaceT sr) =>
+	CairoT s -> sr s -> CDouble -> CDouble -> m ()
+cairoSetSourceSurface (CairoT fcr) (toCairoSurfaceT -> CairoSurfaceT fsr) x y = unsafeIOToPrim
 	$ withForeignPtr fcr \cr -> withForeignPtr fsr \sr -> c_cairo_set_source_surface cr sr x y
 
 foreign import ccall "cairo_set_source_surface" c_cairo_set_source_surface ::
@@ -139,8 +140,8 @@ cairoMask cr@(CairoT fcr) (toCairoPatternT -> CairoPatternT fpt) = unsafeIOToPri
 foreign import ccall "cairo_mask" c_cairo_mask ::
 	Ptr (CairoT s) -> Ptr (CairoPatternT s) -> IO ()
 
-cairoMaskSurface :: PrimMonad m => CairoT s -> CairoSurfaceT s -> CDouble -> CDouble -> m ()
-cairoMaskSurface (CairoT fcr) (CairoSurfaceT fsr) x y = unsafeIOToPrim
+cairoMaskSurface :: (PrimMonad m, IsCairoSurfaceT sr) => CairoT s -> sr s -> CDouble -> CDouble -> m ()
+cairoMaskSurface (CairoT fcr) (toCairoSurfaceT -> CairoSurfaceT fsr) x y = unsafeIOToPrim
 	$ withForeignPtr fcr \cr -> withForeignPtr fsr \sr -> c_cairo_mask_surface cr sr x y
 
 foreign import ccall "cairo_mask_surface" c_cairo_mask_surface ::

@@ -49,4 +49,4 @@ todo
 * [x] `cairo_surface_status`
 * [x] `cairo_surface_get_content`
 * [x] `class IsCairoSurfaceT`
-* [ ] use `IsCairoSurfaceT sr => sr` in many functions
+* [x] use `IsCairoSurfaceT sr => sr` in many functions
