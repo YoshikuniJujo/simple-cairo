@@ -1,6 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
+{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Surfaces.SvgSurfaces where
@@ -24,30 +25,30 @@ import Graphics.Cairo.Surfaces.SvgSurfaces.Template
 #include <cairo.h>
 #include <cairo-svg.h>
 
-newtype CairoSurfaceSvgT s = CairoSurfaceSvgT (ForeignPtr (CairoSurfaceT s)) deriving Show
+newtype CairoSurfaceSvgT s ps = CairoSurfaceSvgT (ForeignPtr (CairoSurfaceT ps)) deriving Show
 
-pattern CairoSurfaceTSvg :: CairoSurfaceSvgT s -> CairoSurfaceT s
+pattern CairoSurfaceTSvg :: CairoSurfaceSvgT s ps -> CairoSurfaceT ps
 pattern CairoSurfaceTSvg sr <- (cairoSurfaceTSvg -> Just sr) where
 	CairoSurfaceTSvg = toCairoSurfaceT
 
-cairoSurfaceTSvg :: CairoSurfaceT s -> Maybe (CairoSurfaceSvgT s)
+cairoSurfaceTSvg :: CairoSurfaceT ps -> Maybe (CairoSurfaceSvgT s ps)
 cairoSurfaceTSvg sr@(CairoSurfaceT fsr) = case cairoSurfaceGetType sr of
 	CairoSurfaceTypeSvg -> Just $ CairoSurfaceSvgT fsr
 	_ -> Nothing
 
-instance IsCairoSurfaceT CairoSurfaceSvgT where
+instance IsCairoSurfaceT (CairoSurfaceSvgT s) where
 	toCairoSurfaceT (CairoSurfaceSvgT fsr) = CairoSurfaceT fsr
 
 foreign import ccall "cairo_svg_surface_create" c_cairo_svg_surface_create ::
 	CString -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s))
 
-cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (CairoSurfaceSvgT RealWorld -> IO a) -> IO ()
+cairoSvgSurfaceWith :: FilePath -> CDouble -> CDouble -> (forall s . CairoSurfaceSvgT s RealWorld -> IO a) -> IO ()
 cairoSvgSurfaceWith fp w h f = do
 	sr@(CairoSurfaceSvgT fsr) <- cairoSvgSurfaceCreate fp w h
 	f sr >> withForeignPtr fsr c_cairo_surface_finish
 	
 
-cairoSvgSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceSvgT RealWorld)
+cairoSvgSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceSvgT s RealWorld)
 cairoSvgSurfaceCreate fp w h = withCString fp \cs -> do
 	p <- c_cairo_svg_surface_create cs w h
 	mkCairoSurfaceSvgT p <* raiseIfErrorPtrSurface p
@@ -73,13 +74,14 @@ foreign import ccall "cairo_svg_surface_create_for_stream" c_cairo_svg_surface_c
 	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) -> Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s))
 
 cairoSvgSurfaceWithForStream :: PrimBase m => (Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
-	(CairoSurfaceSvgT (PrimState m) -> m a) -> m ()
+	(forall s . CairoSurfaceSvgT s (PrimState m) -> m a) -> m ()
 cairoSvgSurfaceWithForStream wf cl w h f = do
 	sr@(CairoSurfaceSvgT fsr) <- cairoSvgSurfaceCreateForStream wf cl w h
 	f sr >> unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_finish)
 
 
-cairoSvgSurfaceCreateForStream :: PrimBase m => (Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble -> m (CairoSurfaceSvgT (PrimState m))
+cairoSvgSurfaceCreateForStream :: PrimBase m =>
+	(Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble -> m (CairoSurfaceSvgT s (PrimState m))
 cairoSvgSurfaceCreateForStream wf cl w h = unsafeIOToPrim do
 	p <- (wrapCairoWriteFuncT wf >>= \pwf ->
 		c_cairo_svg_surface_create_for_stream pwf cl w h)
@@ -93,7 +95,7 @@ writeResultToCairoStatusT = \case
 	WriteFailure -> #{const CAIRO_STATUS_WRITE_ERROR}
 	WriteSuccess -> #{const CAIRO_STATUS_SUCCESS}
 
-mkCairoSurfaceSvgT :: Ptr (CairoSurfaceT s) -> IO (CairoSurfaceSvgT s)
+mkCairoSurfaceSvgT :: Ptr (CairoSurfaceT ps) -> IO (CairoSurfaceSvgT s ps)
 mkCairoSurfaceSvgT p = CairoSurfaceSvgT <$> newForeignPtr p (c_cairo_surface_destroy p)
 
 mkMember "CairoSvgUnitUser" #{const CAIRO_SVG_UNIT_USER}
@@ -108,7 +110,7 @@ mkMember "CairoSvgUnitPc" #{const CAIRO_SVG_UNIT_PC}
 mkMember "CAiroSvgUnitPercent" #{const CAIRO_SVG_UNIT_PERCENT}
 
 cairoSvgSurfaceGetDocumentUnit :: PrimMonad m =>
-	CairoSurfaceSvgT (PrimState m) -> m CairoSvgUnitT
+	CairoSurfaceSvgT s (PrimState m) -> m CairoSvgUnitT
 cairoSvgSurfaceGetDocumentUnit (CairoSurfaceSvgT fsr) = unsafeIOToPrim
 	$ CairoSvgUnitT <$> withForeignPtr fsr c_cairo_svg_surface_get_document_unit
 
