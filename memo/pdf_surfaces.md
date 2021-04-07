@@ -29,11 +29,11 @@ create
 		- [x] add exception
 		- [x] use CairoSurfacePdfT
 	+ [x] define `cairoPdfSurfaceWith`
-* [ ] make module `Graphics.Cairo.Surfaces.Data`
-	+ [ ] move `WriteResult` from `Graphics.Cairo.Surfaces.SvgSurfaces`
-* [ ] `cairoPdfSurfaceWithForStream`
-	+ [ ] `cairoPdfSurfaceCreateForStream`
-	+ [ ] define `cairoPdfSurfaceWithForStream`
+* [x] make module `Graphics.Cairo.Surfaces.WriteFunc`
+	+ [x] move `WriteResult` from `Graphics.Cairo.Surfaces.SvgSurfaces`
+* [x] `cairoPdfSurfaceWithForStream`
+	+ [x] `cairoPdfSurfaceCreateForStream`
+	+ [x] define `cairoPdfSurfaceWithForStream`
 
 outline
 -------

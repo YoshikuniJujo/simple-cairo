@@ -10,11 +10,17 @@ import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
 import Foreign.C.Types
 import Foreign.C.String
-import Control.Monad.ST
+import Control.Monad.Primitive
+import Data.Word
 
+import Graphics.Cairo.Exception
+import Graphics.Cairo.Surfaces.CairoWriteFuncT
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
-import Graphics.Cairo.Exception
+
+import qualified Data.ByteString as BS
+
+#include <cairo.h>
 
 newtype CairoSurfacePdfT s ps = CairoSurfacePdfT (ForeignPtr (CairoSurfaceT s ps)) deriving Show
 
@@ -47,3 +53,23 @@ foreign import ccall "cairo_pdf_surface_create" c_cairo_pdf_surface_create ::
 unsafeCairoSurfaceFinish :: CairoSurfaceT s RealWorld -> IO ()
 unsafeCairoSurfaceFinish (CairoSurfaceT fsr) =
 	withForeignPtr fsr c_cairo_surface_finish
+
+cairoPdfSurfaceWithForStream :: PrimBase m =>
+	(Ptr a -> BS.ByteString -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
+	(forall s . CairoSurfacePdfT s (PrimState m) -> m a) -> m a
+cairoPdfSurfaceWithForStream wf cl w h f = do
+	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreateForStream wf cl w h
+	f sr <* unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_finish)
+
+cairoPdfSurfaceCreateForStream :: PrimBase m =>
+	(Ptr a -> BS.ByteString -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
+	m (CairoSurfacePdfT s (PrimState m))
+cairoPdfSurfaceCreateForStream wf cl w h = CairoSurfacePdfT <$> unsafeIOToPrim do
+	p <- (wrapCairoWriteFuncTByteString wf >>= \pwf ->
+		c_cairo_pdf_surface_create_for_stream pwf cl w h)
+	newForeignPtr p (c_cairo_surface_destroy p) <* raiseIfErrorPtrSurface p
+
+foreign import ccall "cairo_pdf_surface_create_for_stream"
+	c_cairo_pdf_surface_create_for_stream ::
+	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) ->
+	Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
