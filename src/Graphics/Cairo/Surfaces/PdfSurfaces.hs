@@ -1,4 +1,5 @@
 {-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Surfaces.PdfSurfaces where
@@ -11,8 +12,21 @@ import Foreign.C.String
 import Control.Monad.ST
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
+import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 
 newtype CairoSurfacePdfT s ps = CairoSurfacePdfT (ForeignPtr (CairoSurfaceT s ps)) deriving Show
+
+pattern CairoSurfaceTPdf :: CairoSurfacePdfT s ps -> CairoSurfaceT s ps
+pattern CairoSurfaceTPdf sr <- (cairoSurfaceTPdf -> Just sr) where
+	CairoSurfaceTPdf = toCairoSurfaceT
+
+cairoSurfaceTPdf :: CairoSurfaceT s ps -> Maybe (CairoSurfacePdfT s ps)
+cairoSurfaceTPdf sr@(CairoSurfaceT fsr) = case cairoSurfaceGetType sr of
+	CairoSurfaceTypePdf -> Just $ CairoSurfacePdfT fsr
+	_ -> Nothing
+
+instance IsCairoSurfaceT CairoSurfacePdfT where
+	toCairoSurfaceT (CairoSurfacePdfT fsr) = CairoSurfaceT fsr
 
 cairoPdfSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceT s RealWorld)
 cairoPdfSurfaceCreate fp w h = CairoSurfaceT <$> withCString fp \cstr -> do

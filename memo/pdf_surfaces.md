@@ -18,13 +18,12 @@ functions
 create
 ------
 
-* [ ] define `CairoSurfacePdfT`
+* [x] define `CairoSurfacePdfT`
 	+ [x] define ADT
-	+ [ ] `instance IsCairoSurfaceT CairoSurfacePdfT`
-	+ [ ] `pattern CairoSurfaceTPdf`
-		- [ ] `cairoSurfaceTPdf :: CairoSurfaceT s ps -> Maybe (CairoSurfacePdfT s ps)`
-		- [ ] `pattern CairoSurfaceTPdf`
-	+ [ ] others
+	+ [x] `instance IsCairoSurfaceT CairoSurfacePdfT`
+	+ [x] `pattern CairoSurfaceTPdf`
+		- [x] `cairoSurfaceTPdf :: CairoSurfaceT s ps -> Maybe (CairoSurfacePdfT s ps)`
+		- [x] `pattern CairoSurfaceTPdf`
 * [ ] `cairoPdfSurfaceWith`
 	+ [ ] `cairoPdfSurfaceCreate`
 		- [ ] add exception
