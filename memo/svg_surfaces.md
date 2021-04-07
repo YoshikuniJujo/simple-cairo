@@ -45,7 +45,7 @@ settings
 version
 -------
 
-* [ ] CairoSvgVersionT
-* [ ] cairoSvgSurfaceRestrictToVersion
+* [x] CairoSvgVersionT
+* [x] cairoSvgSurfaceRestrictToVersion
 * [ ] cairoSvgSurfaceGetVersions
 * [ ] cairoSvgVersionToString

@@ -11,5 +11,11 @@ import Graphics.Cairo.Template
 
 newtype CairoSvgUnitT = CairoSvgUnitT #{type cairo_svg_unit_t} deriving Show
 
-mkMember :: String -> Integer -> DecsQ
-mkMember = mkMemberGen ''CairoSvgUnitT 'CairoSvgUnitT
+mkUnitMember :: String -> Integer -> DecsQ
+mkUnitMember = mkMemberGen ''CairoSvgUnitT 'CairoSvgUnitT
+
+newtype CairoSvgVersionT = CairoSvgVersionT #{type cairo_svg_version_t}
+	deriving Show
+
+mkVersionMember :: String -> Integer -> DecsQ
+mkVersionMember = mkMemberGen ''CairoSvgVersionT 'CairoSvgVersionT

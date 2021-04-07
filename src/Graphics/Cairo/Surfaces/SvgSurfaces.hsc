@@ -98,16 +98,16 @@ writeResultToCairoStatusT = \case
 mkCairoSurfaceSvgT :: Ptr (CairoSurfaceT s ps) -> IO (CairoSurfaceSvgT s ps)
 mkCairoSurfaceSvgT p = CairoSurfaceSvgT <$> newForeignPtr p (c_cairo_surface_destroy p)
 
-mkMember "CairoSvgUnitUser" #{const CAIRO_SVG_UNIT_USER}
-mkMember "CairoSvgUnitEm" #{const CAIRO_SVG_UNIT_EM}
-mkMember "CairoSvgUnitEx" #{const CAIRO_SVG_UNIT_EX}
-mkMember "CairoSvgUnitPx" #{const CAIRO_SVG_UNIT_PX}
-mkMember "CairoSvgUnitIn" #{const CAIRO_SVG_UNIT_IN}
-mkMember "CairoSvgUnitCm" #{const CAIRO_SVG_UNIT_CM}
-mkMember "CairoSvgUnitMm" #{const CAIRO_SVG_UNIT_MM}
-mkMember "CairoSvgUnitPt" #{const CAIRO_SVG_UNIT_PT}
-mkMember "CairoSvgUnitPc" #{const CAIRO_SVG_UNIT_PC}
-mkMember "CAiroSvgUnitPercent" #{const CAIRO_SVG_UNIT_PERCENT}
+mkUnitMember "CairoSvgUnitUser" #{const CAIRO_SVG_UNIT_USER}
+mkUnitMember "CairoSvgUnitEm" #{const CAIRO_SVG_UNIT_EM}
+mkUnitMember "CairoSvgUnitEx" #{const CAIRO_SVG_UNIT_EX}
+mkUnitMember "CairoSvgUnitPx" #{const CAIRO_SVG_UNIT_PX}
+mkUnitMember "CairoSvgUnitIn" #{const CAIRO_SVG_UNIT_IN}
+mkUnitMember "CairoSvgUnitCm" #{const CAIRO_SVG_UNIT_CM}
+mkUnitMember "CairoSvgUnitMm" #{const CAIRO_SVG_UNIT_MM}
+mkUnitMember "CairoSvgUnitPt" #{const CAIRO_SVG_UNIT_PT}
+mkUnitMember "CairoSvgUnitPc" #{const CAIRO_SVG_UNIT_PC}
+mkUnitMember "CAiroSvgUnitPercent" #{const CAIRO_SVG_UNIT_PERCENT}
 
 cairoSvgSurfaceGetDocumentUnit :: PrimMonad m =>
 	CairoSurfaceSvgT s (PrimState m) -> m CairoSvgUnitT
@@ -124,3 +124,14 @@ cairoSvgSurfaceSetDocumentUnit (CairoSurfaceSvgT fsr) (CairoSvgUnitT u) =
 
 foreign import ccall "cairo_svg_surface_set_document_unit" c_cairo_svg_surface_set_document_unit ::
 	Ptr (CairoSurfaceT s ps) -> #{type cairo_svg_unit_t} -> IO ()
+
+mkVersionMember "CairoSvgVersion1_1" #{const CAIRO_SVG_VERSION_1_1}
+mkVersionMember "CairoSvgVErsion1_2" #{const CAIRO_SVG_VERSION_1_2}
+
+cairoSvgSurfaceRestrictToVersion :: PrimMonad m =>
+	CairoSurfaceSvgT s (PrimState m) -> CairoSvgVersionT -> m ()
+cairoSvgSurfaceRestrictToVersion (CairoSurfaceSvgT fsr) (CairoSvgVersionT v) =
+	unsafeIOToPrim $ withForeignPtr fsr \psr -> c_cairo_svg_surface_restrict_to_version psr v
+
+foreign import ccall "cairo_svg_surface_restrict_to_version" c_cairo_svg_surface_restrict_to_version ::
+	Ptr (CairoSurfaceT s ps) -> #{type cairo_svg_version_t} -> IO ()
