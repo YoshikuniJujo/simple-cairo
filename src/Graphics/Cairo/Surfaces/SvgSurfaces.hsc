@@ -126,7 +126,7 @@ foreign import ccall "cairo_svg_surface_set_document_unit" c_cairo_svg_surface_s
 	Ptr (CairoSurfaceT s ps) -> #{type cairo_svg_unit_t} -> IO ()
 
 mkVersionMember "CairoSvgVersion1_1" #{const CAIRO_SVG_VERSION_1_1}
-mkVersionMember "CairoSvgVErsion1_2" #{const CAIRO_SVG_VERSION_1_2}
+mkVersionMember "CairoSvgVersion1_2" #{const CAIRO_SVG_VERSION_1_2}
 
 cairoSvgSurfaceRestrictToVersion :: PrimMonad m =>
 	CairoSurfaceSvgT s (PrimState m) -> CairoSvgVersionT -> m ()
