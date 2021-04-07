@@ -24,7 +24,7 @@ cairoTagLinkInternal (CairoT fcr) d m = do
 internalAttributes :: Either Name (Int, (Double, Double)) -> IO CString
 internalAttributes = \case
 	Left n -> newCString $ "dest='" ++ n ++ "'"
-	Right (p, (x, y)) -> newCString $ "page='" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
+	Right (p, (x, y)) -> newCString $ "page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
 
 cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
 cairoTagLinkUri (CairoT fcr) u m = do

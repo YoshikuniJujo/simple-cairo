@@ -17,6 +17,7 @@ todo
 * [ ] cairoTagLinkExternal
 * [x] cairoTagDestination
 * [ ] escape strings
+* [ ] exception
 
 Description
 -----------
