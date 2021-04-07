@@ -41,7 +41,7 @@ cairoTagDestination :: PrimMonad m => CairoT (PrimState m) -> Name -> m a -> m a
 cairoTagDestination (CairoT fcr) n m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		td <- newCString #{const_str CAIRO_TAG_DEST}
-		c_cairo_tag_begin pcr td =<< newCString ("name=" ++ n ++ "'")
+		c_cairo_tag_begin pcr td =<< newCString ("name='" ++ n ++ "'")
 	m <* unsafeIOToPrim (
 		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
 			=<< newCString #{const_str CAIRO_TAG_DEST} )
