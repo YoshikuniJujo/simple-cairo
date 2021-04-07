@@ -1,5 +1,6 @@
 {-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
+{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Surfaces.PdfSurfaces where
@@ -13,6 +14,7 @@ import Control.Monad.ST
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
+import Graphics.Cairo.Exception
 
 newtype CairoSurfacePdfT s ps = CairoSurfacePdfT (ForeignPtr (CairoSurfaceT s ps)) deriving Show
 
@@ -28,10 +30,16 @@ cairoSurfaceTPdf sr@(CairoSurfaceT fsr) = case cairoSurfaceGetType sr of
 instance IsCairoSurfaceT CairoSurfacePdfT where
 	toCairoSurfaceT (CairoSurfacePdfT fsr) = CairoSurfaceT fsr
 
-cairoPdfSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceT s RealWorld)
-cairoPdfSurfaceCreate fp w h = CairoSurfaceT <$> withCString fp \cstr -> do
+cairoPdfSurfaceWith :: FilePath -> CDouble -> CDouble ->
+	(forall s . CairoSurfacePdfT s RealWorld -> IO a) -> IO a
+cairoPdfSurfaceWith fp w h f = do
+	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreate fp w h
+	f sr <* withForeignPtr fsr c_cairo_surface_finish
+
+cairoPdfSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfacePdfT s RealWorld)
+cairoPdfSurfaceCreate fp w h = CairoSurfacePdfT <$> withCString fp \cstr -> do
 	p <- c_cairo_pdf_surface_create cstr w h
-	newForeignPtr p $ c_cairo_surface_destroy p
+	newForeignPtr p (c_cairo_surface_destroy p) <* raiseIfErrorPtrSurface p
 
 foreign import ccall "cairo_pdf_surface_create" c_cairo_pdf_surface_create ::
 	CString -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))

@@ -82,7 +82,6 @@ cairoSvgSurfaceWithForStream wf cl w h f = do
 	sr@(CairoSurfaceSvgT fsr) <- cairoSvgSurfaceCreateForStream wf cl w h
 	f sr <* unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_finish)
 
-
 cairoSvgSurfaceCreateForStream :: PrimBase m =>
 	(Ptr a -> T.Text -> m WriteResult) -> Ptr a -> CDouble -> CDouble -> m (CairoSurfaceSvgT s (PrimState m))
 cairoSvgSurfaceCreateForStream wf cl w h = unsafeIOToPrim do

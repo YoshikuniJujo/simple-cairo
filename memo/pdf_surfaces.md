@@ -24,12 +24,16 @@ create
 	+ [x] `pattern CairoSurfaceTPdf`
 		- [x] `cairoSurfaceTPdf :: CairoSurfaceT s ps -> Maybe (CairoSurfacePdfT s ps)`
 		- [x] `pattern CairoSurfaceTPdf`
-* [ ] `cairoPdfSurfaceWith`
-	+ [ ] `cairoPdfSurfaceCreate`
-		- [ ] add exception
-		- [ ] use CairoSurfacePdfT
-	+ [ ] define `cairoPdfSurfaceWith`
+* [x] `cairoPdfSurfaceWith`
+	+ [x] `cairoPdfSurfaceCreate`
+		- [x] add exception
+		- [x] use CairoSurfacePdfT
+	+ [x] define `cairoPdfSurfaceWith`
+* [ ] make module `Graphics.Cairo.Surfaces.Data`
+	+ [ ] move `WriteResult` from `Graphics.Cairo.Surfaces.SvgSurfaces`
 * [ ] `cairoPdfSurfaceWithForStream`
+	+ [ ] `cairoPdfSurfaceCreateForStream`
+	+ [ ] define `cairoPdfSurfaceWithForStream`
 
 outline
 -------
