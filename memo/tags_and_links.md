@@ -15,7 +15,7 @@ todo
 * [ ] cairoTagLinkInternal
 * [x] cairoTagLinkUri
 * [ ] cairoTagLinkExternal
-* [ ] cairoTagDestination
+* [x] cairoTagDestination
 
 Description
 -----------

@@ -9,8 +9,6 @@ import Foreign.C.String
 import Control.Monad.Primitive
 import Data.CairoContext
 
-import qualified Data.Text as T
-
 #include <cairo.h>
 
 cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
@@ -23,6 +21,17 @@ cairoTagLinkUri (CairoT fcr) u m = do
 			=<< newCString #{const_str CAIRO_TAG_LINK} )
 
 type Uri = String
+
+cairoTagDestination :: PrimMonad m => CairoT (PrimState m) -> Name -> m a -> m a
+cairoTagDestination (CairoT fcr) n m = do
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
+		td <- newCString #{const_str CAIRO_TAG_DEST}
+		c_cairo_tag_begin pcr td =<< newCString ("name=" ++ n ++ "'")
+	m <* unsafeIOToPrim (
+		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
+			=<< newCString #{const_str CAIRO_TAG_DEST} )
+
+type Name = String
 
 foreign import ccall "cairo_tag_begin" c_cairo_tag_begin ::
 	Ptr (CairoT s) -> CString -> CString -> IO ()
