@@ -45,10 +45,11 @@ todo
 * [ ] Surfaces
 	+ [x] cairo\_surface\_t
 	+ [x] Image Surfaces
-	+ [ ] SVG Surfaces
+	+ [x] SVG Surfaces
 		- [x] cairo\_svg\_surface\_create
 		- [x] cairo\_svg\_surface\_create\_for\_stream
-		- [ ] others
+		- [x] others
+	+ [ ] PDF Surfaces
 * [x] Utilities
 	+ [x] cairo\_matrix\_t
 * [x] move a module `Graphics.Cairo.Drawing.CairoT.Extents`

@@ -15,6 +15,7 @@ import Foreign.C.Types
 import Foreign.C.String
 import Control.Monad.Primitive
 import Data.Word
+import System.IO.Unsafe
 import Graphics.Cairo.Exception
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
@@ -146,3 +147,10 @@ cairoSvgGetVersions = (CairoSvgVersionT <$>) <$> alloca \pvs -> alloca \pn -> do
 
 foreign import ccall "cairo_svg_get_versions" c_cairo_svg_surface_get_versions ::
 	Ptr (Ptr #{type cairo_svg_version_t}) -> Ptr CInt -> IO ()
+
+cairoSvgVersionToString :: CairoSvgVersionT -> String
+cairoSvgVersionToString (CairoSvgVersionT v) = unsafePerformIO do
+	peekCString =<< c_cairo_svg_version_to_string v
+
+foreign import ccall "cairo_svg_version_to_string" c_cairo_svg_version_to_string ::
+	#{type  cairo_svg_version_t} -> IO CString
