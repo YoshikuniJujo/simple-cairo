@@ -12,10 +12,11 @@ todo
 
 * [x] `cairo_tag_begin`
 * [x] `cairo_tag_end`
-* [ ] cairoTagLinkInternal
+* [x] cairoTagLinkInternal
 * [x] cairoTagLinkUri
 * [ ] cairoTagLinkExternal
 * [x] cairoTagDestination
+* [ ] escape strings
 
 Description
 -----------

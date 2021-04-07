@@ -1,4 +1,4 @@
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments, LambdaCase #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
 module Graphics.Cairo.Drawing.TagsAndLinks where
@@ -10,6 +10,21 @@ import Control.Monad.Primitive
 import Data.CairoContext
 
 #include <cairo.h>
+
+cairoTagLinkInternal :: PrimMonad m => CairoT (PrimState m) ->
+	Either Name (Int, (Double, Double)) -> m a -> m a
+cairoTagLinkInternal (CairoT fcr) d m = do
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
+		tl <- newCString #{const_str CAIRO_TAG_LINK}
+		c_cairo_tag_begin pcr tl =<< internalAttributes d
+	m <* unsafeIOToPrim (
+		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
+			=<< newCString #{const_str CAIRO_TAG_LINK} )
+
+internalAttributes :: Either Name (Int, (Double, Double)) -> IO CString
+internalAttributes = \case
+	Left n -> newCString $ "dest='" ++ n ++ "'"
+	Right (p, (x, y)) -> newCString $ "page='" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
 
 cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
 cairoTagLinkUri (CairoT fcr) u m = do
