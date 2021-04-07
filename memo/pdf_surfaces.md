@@ -1,15 +1,61 @@
 PDF Surfaces memo
 =================
 
+functions
+---------
+
+* `cairo_pdf_surface_create`
+* `cairo_pdf_surface_create_for_stream`
+* `cairo_pdf_surface_restrict_to_version`
+* `cairo_pdf_get_versions`
+* `cairo_pdf_version_to_string`
+* `cairo_pdf_surface_set_size`
+* `cairo_pdf_surface_add_outline`
+* `cairo_pdf_surface_set_metadata`
+* `cairo_pdf_surface_set_page_label`
+* `cairo_pdf_surface_set_thumbnail_size`
+
+create
+------
+
+* [ ] define `CairoSurfacePdfT`
+	+ [x] define ADT
+	+ [ ] `instance IsCairoSurfaceT CairoSurfacePdfT`
+	+ [ ] `pattern CairoSurfaceTPdf`
+		- [ ] `cairoSurfaceTPdf :: CairoSurfaceT s ps -> Maybe (CairoSurfacePdfT s ps)`
+		- [ ] `pattern CairoSurfaceTPdf`
+	+ [ ] others
+* [ ] `cairoPdfSurfaceWith`
+	+ [ ] `cairoPdfSurfaceCreate`
+		- [ ] add exception
+		- [ ] use CairoSurfacePdfT
+	+ [ ] define `cairoPdfSurfaceWith`
+* [ ] `cairoPdfSurfaceWithForStream`
+
+outline
+-------
+
+* [ ] define `cairoTagBegin` and `cairoTagEnd` for `Graphics.Cairo.Drawing.CairoT.TagsAndLinks`
+* [ ] cairoPdfSurfaceAddOutline
+
+setting
+-------
+
+* [ ] `cairoPdfSurfaceSetSize`
+* [ ] `cairoPdfSurfaceSetMetadata`
+* [ ] `cairoPdfSurfaceSetPageLabel`
+* [ ] `cairoPdfSurfaceSetThumbnailSize`
+
+version
+-------
+
+* [ ] cairoPdfSurfaceRestrictToVersion
+* [ ] cairoPdfGetVersions
+* [ ] cairoPdfVersionToString
+
 todo
 ----
 
-* [ ] define `cairoPdfSurfaceCreate` for test
+* [x] define `cairoPdfSurfaceCreate` for test
 	+ use `CairoSurfaceT`
-	+ [x] define plain
-	+ [ ] add exception
-	+ [ ] use CairoSurfacePdfT
-* [ ] define `CairoSurfacePdfT`
-	+ [ ] define ADT
-	+ [ ] others
 * [x] `unsafeCairoSurfaceFinish` for test

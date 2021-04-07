@@ -12,6 +12,8 @@ import Control.Monad.ST
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 
+newtype CairoSurfacePdfT s ps = CairoSurfacePdfT (ForeignPtr (CairoSurfaceT s ps)) deriving Show
+
 cairoPdfSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfaceT s RealWorld)
 cairoPdfSurfaceCreate fp w h = CairoSurfaceT <$> withCString fp \cstr -> do
 	p <- c_cairo_pdf_surface_create cstr w h
