@@ -47,5 +47,5 @@ version
 
 * [x] CairoSvgVersionT
 * [x] cairoSvgSurfaceRestrictToVersion
-* [ ] cairoSvgSurfaceGetVersions
+* [x] cairoSvgSurfaceGetVersions
 * [ ] cairoSvgVersionToString

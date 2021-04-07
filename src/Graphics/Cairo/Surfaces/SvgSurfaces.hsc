@@ -9,6 +9,8 @@ module Graphics.Cairo.Surfaces.SvgSurfaces where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Foreign.Marshal
+import Foreign.Storable
 import Foreign.C.Types
 import Foreign.C.String
 import Control.Monad.Primitive
@@ -135,3 +137,12 @@ cairoSvgSurfaceRestrictToVersion (CairoSurfaceSvgT fsr) (CairoSvgVersionT v) =
 
 foreign import ccall "cairo_svg_surface_restrict_to_version" c_cairo_svg_surface_restrict_to_version ::
 	Ptr (CairoSurfaceT s ps) -> #{type cairo_svg_version_t} -> IO ()
+
+cairoSvgGetVersions :: IO [CairoSvgVersionT]
+cairoSvgGetVersions = (CairoSvgVersionT <$>) <$> alloca \pvs -> alloca \pn -> do
+	c_cairo_svg_surface_get_versions pvs pn
+	n <- peek pn
+	peekArray (fromIntegral n) =<< peek pvs
+
+foreign import ccall "cairo_svg_get_versions" c_cairo_svg_surface_get_versions ::
+	Ptr (Ptr #{type cairo_svg_version_t}) -> Ptr CInt -> IO ()
