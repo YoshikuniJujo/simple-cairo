@@ -116,3 +116,11 @@ cairoSvgSurfaceGetDocumentUnit (CairoSurfaceSvgT fsr) = unsafeIOToPrim
 
 foreign import ccall "cairo_svg_surface_get_document_unit" c_cairo_svg_surface_get_document_unit ::
 	Ptr (CairoSurfaceT s ps) -> IO #{type cairo_svg_unit_t}
+
+cairoSvgSurfaceSetDocumentUnit :: PrimMonad m =>
+	CairoSurfaceSvgT s (PrimState m) -> CairoSvgUnitT -> m ()
+cairoSvgSurfaceSetDocumentUnit (CairoSurfaceSvgT fsr) (CairoSvgUnitT u) =
+	unsafeIOToPrim $ withForeignPtr fsr \psr -> c_cairo_svg_surface_set_document_unit psr u
+
+foreign import ccall "cairo_svg_surface_set_document_unit" c_cairo_svg_surface_set_document_unit ::
+	Ptr (CairoSurfaceT s ps) -> #{type cairo_svg_unit_t} -> IO ()

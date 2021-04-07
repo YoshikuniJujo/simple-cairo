@@ -40,7 +40,7 @@ settings
 
 * [x] CairoSvgUnitT
 * [x] cairoSvgSurfaceGetDocumentUnit
-* [ ] cairoSvgSurfaceSetDocumentUnit
+* [x] cairoSvgSurfaceSetDocumentUnit
 
 version
 -------
