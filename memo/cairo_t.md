@@ -115,6 +115,9 @@ necessary
 	+ [x] cairo\_get\_line\_join
 	+ [x] cairo\_get\_miter\_limit
 	+ [x] cairo\_get\_operator
+* [ ] page
+	+ [ ] cairo\_copy\_page
+	+ [ ] cairo\_show\_page
 
 optional
 --------
@@ -132,8 +135,6 @@ optional
 * [ ] cairo\_get\_tolerance
 * [ ] cairo\_rectangle\_list\_destroy
 * [ ] cairo\_copy\_clip\_rectangle\_list
-* [ ] cairo\_copy\_page
-* [ ] cairo\_show\_page
 * [ ] cairo\_set\_user\_data
 * [ ] cairo\_get\_user\_data
 
