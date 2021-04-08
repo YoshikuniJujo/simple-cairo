@@ -22,16 +22,16 @@ cairoTagLinkInternalDestPage :: PrimMonad m => CairoT (PrimState m) ->
 cairoTagLinkInternalDestPage cr@(CairoT fcr) d m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		tl <- newCString #{const_str CAIRO_TAG_LINK}
-		c_cairo_tag_begin pcr tl =<< internalAttributes d
+		internalAttributes d $ c_cairo_tag_begin pcr tl
 	m <* unsafeIOToPrim do
 		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
 			=<< newCString #{const_str CAIRO_TAG_LINK}
 		raiseIfError cr
 
-internalAttributes :: Either Name (Int, (Double, Double)) -> IO CString
+internalAttributes :: Either Name (Int, (Double, Double)) -> (CString -> IO a) -> IO a
 internalAttributes = \case
-	Left n -> newCString $ "dest='" ++ escape n ++ "'"
-	Right (p, (x, y)) -> newCString $ "page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
+	Left n -> withCString $ "dest='" ++ escape n ++ "'"
+	Right (p, (x, y)) -> withCString $ "page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
 
 cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
 cairoTagLinkUri cr@(CairoT fcr) u m = do

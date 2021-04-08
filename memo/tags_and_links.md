@@ -18,7 +18,7 @@ todo
 * [x] escape strings
 * [x] exception
 * [ ] use withCString instead of newCString
-	+ [ ] internalAttributes
+	+ [x] internalAttributes
 	+ [ ] others
 
 give up
