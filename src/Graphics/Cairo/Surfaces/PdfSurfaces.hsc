@@ -17,6 +17,7 @@ import Graphics.Cairo.Exception
 import Graphics.Cairo.Surfaces.CairoWriteFuncT
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
+import Graphics.Cairo.Drawing.TagsAndLinks
 
 import qualified Data.ByteString as BS
 
@@ -74,6 +75,20 @@ foreign import ccall "cairo_pdf_surface_create_for_stream"
 	c_cairo_pdf_surface_create_for_stream ::
 	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) ->
 	Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
+
+newtype CairoPdfOutlineT = CairoPdfOutlineT CInt deriving Show
+
+pattern CairoPdfOutlineRoot :: CairoPdfOutlineT
+pattern CairoPdfOutlineRoot <- CairoPdfOutlineT #{const CAIRO_PDF_OUTLINE_ROOT} where
+	CairoPdfOutlineRoot = CairoPdfOutlineT #{const CAIRO_PDF_OUTLINE_ROOT}
+
+{-
+cairoPdfSurfaceAddOutline :: PrimMonad m =>
+	CairoSurfacePdfT s (PrimState m) ->
+	CairoPdfOutlineT -> Name -> Either Name (Int, (Double, Double)) -> m CairoPdfOutlineT
+cairoPdfSurfaceAddOutline (CairoSurfacePdfT fsr) (CairoPdfOutlineT pid) nm d = unsafeIOToPrim
+	$ withForeignPtr fsr \psr -> withCString nm \cnm ->
+	-}
 
 foreign import ccall "cairo_pdf_surface_add_outline" c_cairo_pdf_surface_add_outline ::
 	Ptr (CairoSurfaceT s ps) -> CInt -> CString -> CString -> #{type cairo_pdf_outline_flags_t} -> IO CInt

@@ -17,6 +17,9 @@ todo
 * [x] cairoTagDestination
 * [x] escape strings
 * [x] exception
+* [ ] use withCString instead of newCString
+	+ [ ] internalAttributes
+	+ [ ] others
 
 give up
 -------
