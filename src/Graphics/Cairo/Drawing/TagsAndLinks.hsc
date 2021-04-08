@@ -30,14 +30,14 @@ cairoTagLinkInternalDestPage cr@(CairoT fcr) d m = do
 
 internalAttributes :: Either Name (Int, (Double, Double)) -> IO CString
 internalAttributes = \case
-	Left n -> newCString $ "dest='" ++ n ++ "'"
+	Left n -> newCString $ "dest='" ++ escape n ++ "'"
 	Right (p, (x, y)) -> newCString $ "page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
 
 cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
 cairoTagLinkUri cr@(CairoT fcr) u m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		tl <- newCString #{const_str CAIRO_TAG_LINK}
-		c_cairo_tag_begin pcr tl =<< newCString ("uri='" ++ u ++ "'")
+		c_cairo_tag_begin pcr tl =<< newCString ("uri='" ++ escape u ++ "'")
 	m <* unsafeIOToPrim do
 		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
 			=<< newCString #{const_str CAIRO_TAG_LINK}
@@ -49,7 +49,7 @@ cairoTagDestination :: PrimMonad m => CairoT (PrimState m) -> Name -> m a -> m a
 cairoTagDestination cr@(CairoT fcr) n m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		td <- newCString #{const_str CAIRO_TAG_DEST}
-		c_cairo_tag_begin pcr td =<< newCString ("name='" ++ n ++ "'")
+		c_cairo_tag_begin pcr td =<< newCString ("name='" ++ escape n ++ "'")
 	m <* unsafeIOToPrim do
 		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
 			=<< newCString #{const_str CAIRO_TAG_DEST}
@@ -62,3 +62,10 @@ foreign import ccall "cairo_tag_begin" c_cairo_tag_begin ::
 
 foreign import ccall "cairo_tag_end" c_cairo_tag_end ::
 	Ptr (CairoT s) -> CString -> IO ()
+
+escape :: String -> String
+escape = \case
+	"" -> ""
+	'\'' : cs -> "\\'" ++ escape cs
+	'\\' : cs -> "\\\\" ++ escape cs
+	c : cs -> c : escape cs

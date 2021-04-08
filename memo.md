@@ -42,6 +42,7 @@ todo
 	+ [x] Paths
 	+ [x] cairo\_pattern\_t
 	+ [x] Transformations
+	+ [x] Tags and Links
 * [ ] Surfaces
 	+ [x] cairo\_surface\_t
 	+ [x] Image Surfaces
@@ -241,7 +242,7 @@ old
 	+ [ ] Transformations
 	+ no text
 	+ [ ] Raster Sources
-	+ [ ] Tags and Links
+	+ [x] Tags and Links
 * [ ] remove Graphics.Cairo.Drawing.Text
 	+ [ ] use pango
 * not define functions of Fonts
