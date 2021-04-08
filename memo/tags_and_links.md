@@ -16,7 +16,7 @@ todo
 * [x] cairoTagLinkUri
 * [x] cairoTagDestination
 * [ ] escape strings
-* [ ] exception
+* [x] exception
 
 give up
 -------

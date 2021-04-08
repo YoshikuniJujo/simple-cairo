@@ -9,6 +9,8 @@ import Foreign.C.String
 import Control.Monad.Primitive
 import Data.CairoContext
 
+import Graphics.Cairo.Exception
+
 #include <cairo.h>
 
 cairoTagLinkInternal :: PrimMonad m =>
@@ -17,13 +19,14 @@ cairoTagLinkInternal cr d = cairoTagLinkInternalDestPage cr $ Left d
 
 cairoTagLinkInternalDestPage :: PrimMonad m => CairoT (PrimState m) ->
 	Either Name (Int, (Double, Double)) -> m a -> m a
-cairoTagLinkInternalDestPage (CairoT fcr) d m = do
+cairoTagLinkInternalDestPage cr@(CairoT fcr) d m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		tl <- newCString #{const_str CAIRO_TAG_LINK}
 		c_cairo_tag_begin pcr tl =<< internalAttributes d
-	m <* unsafeIOToPrim (
+	m <* unsafeIOToPrim do
 		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
-			=<< newCString #{const_str CAIRO_TAG_LINK} )
+			=<< newCString #{const_str CAIRO_TAG_LINK}
+		raiseIfError cr
 
 internalAttributes :: Either Name (Int, (Double, Double)) -> IO CString
 internalAttributes = \case
@@ -31,24 +34,26 @@ internalAttributes = \case
 	Right (p, (x, y)) -> newCString $ "page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
 
 cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
-cairoTagLinkUri (CairoT fcr) u m = do
+cairoTagLinkUri cr@(CairoT fcr) u m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		tl <- newCString #{const_str CAIRO_TAG_LINK}
 		c_cairo_tag_begin pcr tl =<< newCString ("uri='" ++ u ++ "'")
-	m <* unsafeIOToPrim (
+	m <* unsafeIOToPrim do
 		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
-			=<< newCString #{const_str CAIRO_TAG_LINK} )
+			=<< newCString #{const_str CAIRO_TAG_LINK}
+		raiseIfError cr
 
 type Uri = String
 
 cairoTagDestination :: PrimMonad m => CairoT (PrimState m) -> Name -> m a -> m a
-cairoTagDestination (CairoT fcr) n m = do
+cairoTagDestination cr@(CairoT fcr) n m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		td <- newCString #{const_str CAIRO_TAG_DEST}
 		c_cairo_tag_begin pcr td =<< newCString ("name='" ++ n ++ "'")
-	m <* unsafeIOToPrim (
+	m <* unsafeIOToPrim do
 		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
-			=<< newCString #{const_str CAIRO_TAG_DEST} )
+			=<< newCString #{const_str CAIRO_TAG_DEST}
+		raiseIfError cr
 
 type Name = String
 
