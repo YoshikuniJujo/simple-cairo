@@ -14,7 +14,7 @@ todo
 * [x] `cairo_tag_end`
 * [x] cairoTagLinkInternal
 * [x] cairoTagLinkUri
-* [ ] cairoTagLinkExternal
+* [x] cairoTagLinkFile
 * [x] cairoTagDestination
 * [ ] escape strings
 * [ ] exception

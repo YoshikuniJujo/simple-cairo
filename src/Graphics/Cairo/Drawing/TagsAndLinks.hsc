@@ -30,6 +30,11 @@ internalAttributes = \case
 	Left n -> newCString $ "dest='" ++ n ++ "'"
 	Right (p, (x, y)) -> newCString $ "page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
 
+internalAttributesFile :: FilePath -> Either Name (Int, (Double, Double)) -> IO CString
+internalAttributesFile fp = \case
+	Left n -> newCString $ "file='" ++ fp ++ "' dest='" ++ n ++ "'"
+	Right (p, (x, y)) -> newCString $ "file='" ++ fp ++ "' page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
+
 cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
 cairoTagLinkUri (CairoT fcr) u m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
@@ -40,6 +45,16 @@ cairoTagLinkUri (CairoT fcr) u m = do
 			=<< newCString #{const_str CAIRO_TAG_LINK} )
 
 type Uri = String
+
+cairoTagLinkFile :: PrimMonad m => CairoT (PrimState m) ->
+	FilePath -> Either Name (Int, (Double, Double)) -> m a -> m a
+cairoTagLinkFile (CairoT fcr) fp d m = do
+	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
+		tl <- newCString #{const_str CAIRO_TAG_LINK}
+		c_cairo_tag_begin pcr tl =<< internalAttributesFile fp d
+	m <* unsafeIOToPrim (
+		withForeignPtr fcr \pcr -> c_cairo_tag_end pcr
+			=<< newCString #{const_str CAIRO_TAG_LINK} )
 
 cairoTagDestination :: PrimMonad m => CairoT (PrimState m) -> Name -> m a -> m a
 cairoTagDestination (CairoT fcr) n m = do
