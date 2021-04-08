@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE PatternSynonyms, ViewPatterns #-}
 {-# LANGUAGE RankNTypes #-}
@@ -11,6 +12,7 @@ import Foreign.Concurrent
 import Foreign.C.Types
 import Foreign.C.String
 import Control.Monad.Primitive
+import Data.Bits
 import Data.Word
 
 import Graphics.Cairo.Exception
@@ -18,6 +20,7 @@ import Graphics.Cairo.Surfaces.CairoWriteFuncT
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 import Graphics.Cairo.Drawing.TagsAndLinks
+import Graphics.Cairo.Template
 
 import qualified Data.ByteString as BS
 
@@ -82,13 +85,26 @@ pattern CairoPdfOutlineRoot :: CairoPdfOutlineT
 pattern CairoPdfOutlineRoot <- CairoPdfOutlineT #{const CAIRO_PDF_OUTLINE_ROOT} where
 	CairoPdfOutlineRoot = CairoPdfOutlineT #{const CAIRO_PDF_OUTLINE_ROOT}
 
-{-
+newtype CairoPdfOutlineFlagsT = CairoPdfOutlineFlagsT #{type cairo_pdf_outline_flags_t} deriving Show
+
+mkMemberGen ''CairoPdfOutlineFlagsT 'CairoPdfOutlineFlagsT
+	"CairoPdfOutlineFlagOpen" #{const CAIRO_PDF_OUTLINE_FLAG_OPEN}
+mkMemberGen ''CairoPdfOutlineFlagsT 'CairoPdfOutlineFlagsT
+	"CairoPdfOutlineFlagBold" #{const CAIRO_PDF_OUTLINE_FLAG_BOLD}
+mkMemberGen ''CairoPdfOutlineFlagsT 'CairoPdfOutlineFlagsT
+	"CairoPdfOutlineFlagItalic" #{const CAIRO_PDF_OUTLINE_FLAG_ITALIC}
+
+join :: CairoPdfOutlineFlagsT -> CairoPdfOutlineFlagsT -> CairoPdfOutlineFlagsT
+join (CairoPdfOutlineFlagsT f1) (CairoPdfOutlineFlagsT f2) = CairoPdfOutlineFlagsT $ f1 .|. f2
+
 cairoPdfSurfaceAddOutline :: PrimMonad m =>
-	CairoSurfacePdfT s (PrimState m) ->
-	CairoPdfOutlineT -> Name -> Either Name (Int, (Double, Double)) -> m CairoPdfOutlineT
-cairoPdfSurfaceAddOutline (CairoSurfacePdfT fsr) (CairoPdfOutlineT pid) nm d = unsafeIOToPrim
-	$ withForeignPtr fsr \psr -> withCString nm \cnm ->
-	-}
+	CairoSurfacePdfT s (PrimState m) -> CairoPdfOutlineT -> Name ->
+	Either Name (Int, (Double, Double)) -> [CairoPdfOutlineFlagsT] -> m CairoPdfOutlineT
+cairoPdfSurfaceAddOutline (CairoSurfacePdfT fsr) (CairoPdfOutlineT pid) nm d fs = unsafeIOToPrim
+	$ CairoPdfOutlineT <$> withForeignPtr fsr \psr -> withCString nm \cnm -> internalAttributes d \cd ->
+		c_cairo_pdf_surface_add_outline psr pid cnm cd f
+	where
+	CairoPdfOutlineFlagsT f = foldr join (CairoPdfOutlineFlagsT 0) fs
 
 foreign import ccall "cairo_pdf_surface_add_outline" c_cairo_pdf_surface_add_outline ::
 	Ptr (CairoSurfaceT s ps) -> CInt -> CString -> CString -> #{type cairo_pdf_outline_flags_t} -> IO CInt
