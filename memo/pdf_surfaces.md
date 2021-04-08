@@ -38,7 +38,7 @@ create
 outline
 -------
 
-* [ ] define `cairoTagBegin` and `cairoTagEnd` for `Graphics.Cairo.Drawing.CairoT.TagsAndLinks`
+* [x] define `cairoTagBegin` and `cairoTagEnd` for `Graphics.Cairo.Drawing.CairoT.TagsAndLinks`
 * [ ] cairoPdfSurfaceAddOutline
 
 setting

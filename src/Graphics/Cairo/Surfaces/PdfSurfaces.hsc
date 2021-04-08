@@ -21,6 +21,7 @@ import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 import qualified Data.ByteString as BS
 
 #include <cairo.h>
+#include <cairo-pdf.h>
 
 newtype CairoSurfacePdfT s ps = CairoSurfacePdfT (ForeignPtr (CairoSurfaceT s ps)) deriving Show
 
@@ -73,3 +74,6 @@ foreign import ccall "cairo_pdf_surface_create_for_stream"
 	c_cairo_pdf_surface_create_for_stream ::
 	FunPtr (Ptr a -> CString -> CInt -> IO #{type cairo_status_t}) ->
 	Ptr a -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
+
+foreign import ccall "cairo_pdf_surface_add_outline" c_cairo_pdf_surface_add_outline ::
+	Ptr (CairoSurfaceT s ps) -> CInt -> CString -> CString -> #{type cairo_pdf_outline_flags_t} -> IO CInt
