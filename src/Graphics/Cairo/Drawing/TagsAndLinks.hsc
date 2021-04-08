@@ -11,9 +11,13 @@ import Data.CairoContext
 
 #include <cairo.h>
 
-cairoTagLinkInternal :: PrimMonad m => CairoT (PrimState m) ->
+cairoTagLinkInternal :: PrimMonad m =>
+	CairoT (PrimState m) -> Name -> m a -> m a
+cairoTagLinkInternal cr d = cairoTagLinkInternalDestPage cr $ Left d
+
+cairoTagLinkInternalDestPage :: PrimMonad m => CairoT (PrimState m) ->
 	Either Name (Int, (Double, Double)) -> m a -> m a
-cairoTagLinkInternal (CairoT fcr) d m = do
+cairoTagLinkInternalDestPage (CairoT fcr) d m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		tl <- newCString #{const_str CAIRO_TAG_LINK}
 		c_cairo_tag_begin pcr tl =<< internalAttributes d
