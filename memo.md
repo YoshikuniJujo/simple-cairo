@@ -58,6 +58,7 @@ todo
 * [ ] make new package cairo-regions
 	+ [ ] Regions
 * [ ] rename a module `Data.Color` to `Data.CairoColor`
+* [ ] use GHC.Foreign.withCString instead of Foreign.C.String.withCString
 
 old
 ---
