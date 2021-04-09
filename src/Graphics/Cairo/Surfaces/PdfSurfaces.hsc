@@ -140,3 +140,6 @@ cairoPdfSurfaceSetPageLabel (CairoSurfacePdfT fsr) pl =
 
 foreign import ccall "cairo_pdf_surface_set_page_label" c_cairo_pdf_surface_set_page_label ::
 	Ptr (CairoSurfaceT s ps) -> CString -> IO ()
+
+mkVersion "CairoPdfVersion1_4" #{const CAIRO_PDF_VERSION_1_4}
+mkVersion "CairoPdfVersion1_5" #{const CAIRO_PDF_VERSION_1_5}

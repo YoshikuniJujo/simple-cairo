@@ -18,3 +18,8 @@ newtype CairoPdfMetadataT = CairoPdfMetadataT #{type cairo_pdf_metadata_t} deriv
 
 mkMeta :: String -> Integer -> DecsQ
 mkMeta = mkMemberGen ''CairoPdfMetadataT 'CairoPdfMetadataT
+
+newtype CairoPdfVersionT = CairoPdfVersionT #{type cairo_pdf_version_t} deriving Show
+
+mkVersion :: String -> Integer -> DecsQ
+mkVersion = mkMemberGen ''CairoPdfVersionT 'CairoPdfVersionT

@@ -54,9 +54,10 @@ setting
 version
 -------
 
-* [ ] cairoPdfSurfaceRestrictToVersion
-* [ ] cairoPdfGetVersions
-* [ ] cairoPdfVersionToString
+* [x] `CairoPdfVersionT`
+* [ ] `cairoPdfSurfaceRestrictToVersion`
+* [ ] `cairoPdfGetVersions`
+* [ ] `cairoPdfVersionToString`
 
 todo
 ----
