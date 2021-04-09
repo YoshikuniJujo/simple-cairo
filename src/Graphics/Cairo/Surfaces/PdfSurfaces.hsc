@@ -120,3 +120,12 @@ mkMeta "CairoPdfMetadataKeywords" #{const CAIRO_PDF_METADATA_KEYWORDS}
 mkMeta "CairoPdfMetadataCreator" #{const CAIRO_PDF_METADATA_CREATOR}
 mkMeta "CairoPdfMetadataCreateDate" #{const CAIRO_PDF_METADATA_CREATE_DATE}
 mkMeta "CairoPdfMetadataModDate" #{const CAIRO_PDF_METADATA_MOD_DATE}
+
+cairoPdfSurfaceSetMetadata :: PrimMonad m =>
+	CairoSurfacePdfT s (PrimState m) -> CairoPdfMetadataT -> String -> m ()
+cairoPdfSurfaceSetMetadata (CairoSurfacePdfT fsr) (CairoPdfMetadataT md) v =
+	unsafeIOToPrim $ withForeignPtr fsr \psr -> withCString v \cv ->
+		c_cairo_pdf_surface_set_metadata psr md cv
+
+foreign import ccall "cairo_pdf_surface_set_metadata" c_cairo_pdf_surface_set_metadata ::
+	Ptr (CairoSurfaceT s ps) -> #{type cairo_pdf_metadata_t} -> CString -> IO ()
