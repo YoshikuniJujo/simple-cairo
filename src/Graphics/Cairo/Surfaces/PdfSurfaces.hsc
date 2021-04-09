@@ -99,7 +99,7 @@ join (CairoPdfOutlineFlagsT f1) (CairoPdfOutlineFlagsT f2) = CairoPdfOutlineFlag
 
 cairoPdfSurfaceAddOutline :: PrimMonad m =>
 	CairoSurfacePdfT s (PrimState m) -> CairoPdfOutlineT -> Name ->
-	Either Name (Int, (Double, Double)) -> [CairoPdfOutlineFlagsT] -> m CairoPdfOutlineT
+	Either Name (Int, Maybe (Double, Double)) -> [CairoPdfOutlineFlagsT] -> m CairoPdfOutlineT
 cairoPdfSurfaceAddOutline (CairoSurfacePdfT fsr) (CairoPdfOutlineT pid) nm d fs = unsafeIOToPrim
 	$ CairoPdfOutlineT <$> withForeignPtr fsr \psr -> withCString nm \cnm -> internalAttributes d \cd ->
 		c_cairo_pdf_surface_add_outline psr pid cnm cd f
