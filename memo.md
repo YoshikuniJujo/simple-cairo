@@ -43,22 +43,28 @@ todo
 	+ [x] cairo\_pattern\_t
 	+ [x] Transformations
 	+ [x] Tags and Links
-* [ ] Surfaces
+* [x] Surfaces
 	+ [x] cairo\_surface\_t
 	+ [x] Image Surfaces
 	+ [x] SVG Surfaces
 		- [x] cairo\_svg\_surface\_create
 		- [x] cairo\_svg\_surface\_create\_for\_stream
 		- [x] others
-	+ [ ] PDF Surfaces
+	+ [x] PDF Surfaces
 * [x] Utilities
 	+ [x] cairo\_matrix\_t
 * [x] move a module `Graphics.Cairo.Drawing.CairoT.Extents`
 	to `Graphics.Cairo.Drawing.Extents`
+* [ ] separate package to export
+	+ [ ] `CairoT`
+	+ [ ] `CairoSurfaceT`
+* [ ] use package `simple-cairo` from
+	+ [ ] pango
+	+ [ ] gdk
+* [ ] use GHC.Foreign.withCString instead of Foreign.C.String.withCString
+* [ ] rename a module `Data.Color` to `Data.CairoColor`
 * [ ] make new package cairo-regions
 	+ [ ] Regions
-* [ ] rename a module `Data.Color` to `Data.CairoColor`
-* [ ] use GHC.Foreign.withCString instead of Foreign.C.String.withCString
 
 to do next
 ----------
