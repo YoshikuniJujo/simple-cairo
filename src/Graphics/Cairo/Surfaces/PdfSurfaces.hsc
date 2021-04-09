@@ -20,7 +20,8 @@ import Graphics.Cairo.Surfaces.CairoWriteFuncT
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
 import Graphics.Cairo.Drawing.TagsAndLinks
-import Graphics.Cairo.Template
+
+import Graphics.Cairo.Surfaces.PdfSurfaces.Template
 
 import qualified Data.ByteString as BS
 
@@ -85,14 +86,9 @@ pattern CairoPdfOutlineRoot :: CairoPdfOutlineT
 pattern CairoPdfOutlineRoot <- CairoPdfOutlineT #{const CAIRO_PDF_OUTLINE_ROOT} where
 	CairoPdfOutlineRoot = CairoPdfOutlineT #{const CAIRO_PDF_OUTLINE_ROOT}
 
-newtype CairoPdfOutlineFlagsT = CairoPdfOutlineFlagsT #{type cairo_pdf_outline_flags_t} deriving Show
-
-mkMemberGen ''CairoPdfOutlineFlagsT 'CairoPdfOutlineFlagsT
-	"CairoPdfOutlineFlagOpen" #{const CAIRO_PDF_OUTLINE_FLAG_OPEN}
-mkMemberGen ''CairoPdfOutlineFlagsT 'CairoPdfOutlineFlagsT
-	"CairoPdfOutlineFlagBold" #{const CAIRO_PDF_OUTLINE_FLAG_BOLD}
-mkMemberGen ''CairoPdfOutlineFlagsT 'CairoPdfOutlineFlagsT
-	"CairoPdfOutlineFlagItalic" #{const CAIRO_PDF_OUTLINE_FLAG_ITALIC}
+mkOFlag "CairoPdfOutlineFlagOpen" #{const CAIRO_PDF_OUTLINE_FLAG_OPEN}
+mkOFlag "CairoPdfOutlineFlagBold" #{const CAIRO_PDF_OUTLINE_FLAG_BOLD}
+mkOFlag "CairoPdfOutlineFlagItalic" #{const CAIRO_PDF_OUTLINE_FLAG_ITALIC}
 
 join :: CairoPdfOutlineFlagsT -> CairoPdfOutlineFlagsT -> CairoPdfOutlineFlagsT
 join (CairoPdfOutlineFlagsT f1) (CairoPdfOutlineFlagsT f2) = CairoPdfOutlineFlagsT $ f1 .|. f2
@@ -116,3 +112,11 @@ cairoPdfSurfaceSetSize (CairoSurfacePdfT fsr) w h =
 
 foreign import ccall "cairo_pdf_surface_set_size" c_cairo_pdf_surface_set_size ::
 	Ptr (CairoSurfaceT s ps) -> CDouble -> CDouble -> IO ()
+
+mkMeta "CairoPdfMetadataTitle" #{const CAIRO_PDF_METADATA_TITLE}
+mkMeta "CairoPdfMetadataAuthor" #{const CAIRO_PDF_METADATA_AUTHOR}
+mkMeta "CairoPdfMetadataSubject" #{const CAIRO_PDF_METADATA_SUBJECT}
+mkMeta "CairoPdfMetadataKeywords" #{const CAIRO_PDF_METADATA_KEYWORDS}
+mkMeta "CairoPdfMetadataCreator" #{const CAIRO_PDF_METADATA_CREATOR}
+mkMeta "CairoPdfMetadataCreateDate" #{const CAIRO_PDF_METADATA_CREATE_DATE}
+mkMeta "CairoPdfMetadataModDate" #{const CAIRO_PDF_METADATA_MOD_DATE}

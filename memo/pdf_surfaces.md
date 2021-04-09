@@ -39,15 +39,16 @@ outline
 -------
 
 * [x] define `cairoTagBegin` and `cairoTagEnd` for `Graphics.Cairo.Drawing.CairoT.TagsAndLinks`
-* [ ] cairoPdfSurfaceAddOutline
+* [x] cairoPdfSurfaceAddOutline
 	+ [x] use Maybe Pos instead of Pos
-	+ [ ] use CairoPdfDestinationT
 
 setting
 -------
 
 * [x] `cairoPdfSurfaceSetSize`
 * [ ] `cairoPdfSurfaceSetMetadata`
+	+ [x] define `CairoPdfMetadataT`
+	+ [ ] define `cairoPdfSurfaceSetMetadata`
 * [ ] `cairoPdfSurfaceSetPageLabel`
 * [ ] `cairoPdfSurfaceSetThumbnailSize`
 
