@@ -108,3 +108,11 @@ cairoPdfSurfaceAddOutline (CairoSurfacePdfT fsr) (CairoPdfOutlineT pid) nm d fs 
 
 foreign import ccall "cairo_pdf_surface_add_outline" c_cairo_pdf_surface_add_outline ::
 	Ptr (CairoSurfaceT s ps) -> CInt -> CString -> CString -> #{type cairo_pdf_outline_flags_t} -> IO CInt
+
+cairoPdfSurfaceSetSize :: PrimMonad m =>
+	CairoSurfacePdfT s (PrimState m) -> CDouble -> CDouble -> m ()
+cairoPdfSurfaceSetSize (CairoSurfacePdfT fsr) w h =
+	unsafeIOToPrim $ withForeignPtr fsr \psr -> c_cairo_pdf_surface_set_size psr w h
+
+foreign import ccall "cairo_pdf_surface_set_size" c_cairo_pdf_surface_set_size ::
+	Ptr (CairoSurfaceT s ps) -> CDouble -> CDouble -> IO ()
