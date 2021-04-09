@@ -60,6 +60,12 @@ todo
 * [ ] rename a module `Data.Color` to `Data.CairoColor`
 * [ ] use GHC.Foreign.withCString instead of Foreign.C.String.withCString
 
+to do next
+----------
+
+* [ ] Recording Surfaces
+* [ ] Script Surfaces
+
 old
 ---
 

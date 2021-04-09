@@ -6,10 +6,12 @@
 
 module Graphics.Cairo.Surfaces.PdfSurfaces where
 
-import GHC.Foreign
+import GHC.Foreign hiding (peekCString)
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Foreign.Marshal
+import Foreign.Storable
 import Foreign.C.Types
 import Foreign.C.String hiding (withCString)
 import Control.Monad.Primitive
@@ -152,3 +154,18 @@ cairoPdfSurfaceRestrictToVersion (CairoSurfacePdfT fsr) (CairoPdfVersionT v) =
 
 foreign import ccall "cairo_pdf_surface_restrict_to_version" c_cairo_pdf_surface_restrict_to_version ::
 	Ptr (CairoSurfaceT s ps) -> #{type cairo_pdf_version_t} -> IO ()
+
+cairoPdfGetVersions :: IO [CairoPdfVersionT]
+cairoPdfGetVersions = (CairoPdfVersionT <$>) <$> alloca \ppv -> alloca \pn -> do
+	c_cairo_pdf_get_versions ppv pn
+	n <- peek pn
+	peekArray (fromIntegral n) =<< peek ppv
+
+foreign import ccall "cairo_pdf_get_versions" c_cairo_pdf_get_versions ::
+	Ptr (Ptr #{type cairo_pdf_version_t}) -> Ptr CInt -> IO ()
+
+cairoPdfVersionToString :: CairoPdfVersionT -> IO String
+cairoPdfVersionToString (CairoPdfVersionT v) = peekCString =<< c_cairo_pdf_version_to_string v
+
+foreign import ccall "cairo_pdf_version_to_string" c_cairo_pdf_version_to_string ::
+	#{type cairo_pdf_version_t} -> IO CString
