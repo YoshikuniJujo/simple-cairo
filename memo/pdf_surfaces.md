@@ -55,7 +55,7 @@ version
 -------
 
 * [x] `CairoPdfVersionT`
-* [ ] `cairoPdfSurfaceRestrictToVersion`
+* [x] `cairoPdfSurfaceRestrictToVersion`
 * [ ] `cairoPdfGetVersions`
 * [ ] `cairoPdfVersionToString`
 

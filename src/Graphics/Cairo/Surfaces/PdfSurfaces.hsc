@@ -143,3 +143,12 @@ foreign import ccall "cairo_pdf_surface_set_page_label" c_cairo_pdf_surface_set_
 
 mkVersion "CairoPdfVersion1_4" #{const CAIRO_PDF_VERSION_1_4}
 mkVersion "CairoPdfVersion1_5" #{const CAIRO_PDF_VERSION_1_5}
+
+cairoPdfSurfaceRestrictToVersion :: PrimMonad m =>
+	CairoSurfacePdfT s (PrimState m) -> CairoPdfVersionT -> m ()
+cairoPdfSurfaceRestrictToVersion (CairoSurfacePdfT fsr) (CairoPdfVersionT v) =
+	unsafeIOToPrim $ withForeignPtr fsr \psr ->
+		c_cairo_pdf_surface_restrict_to_version psr v
+
+foreign import ccall "cairo_pdf_surface_restrict_to_version" c_cairo_pdf_surface_restrict_to_version ::
+	Ptr (CairoSurfaceT s ps) -> #{type cairo_pdf_version_t} -> IO ()
