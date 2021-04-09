@@ -140,11 +140,3 @@ cairoPdfSurfaceSetPageLabel (CairoSurfacePdfT fsr) pl =
 
 foreign import ccall "cairo_pdf_surface_set_page_label" c_cairo_pdf_surface_set_page_label ::
 	Ptr (CairoSurfaceT s ps) -> CString -> IO ()
-
-cairoPdfSurfaceSetThumbnailSize :: PrimMonad m =>
-	CairoSurfacePdfT s (PrimState m) -> CInt -> CInt -> m ()
-cairoPdfSurfaceSetThumbnailSize (CairoSurfacePdfT fsr) w h =
-	unsafeIOToPrim $ withForeignPtr fsr \psr -> c_cairo_pdf_surface_set_thumbnail_size psr w h
-
-foreign import ccall "cairo_pdf_surface_set_thumbnail_size" c_cairo_pdf_surface_set_thumbnail_size ::
-	Ptr (CairoSurfaceT s ps) -> CInt -> CInt -> IO ()

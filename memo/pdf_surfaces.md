@@ -50,7 +50,6 @@ setting
 	+ [x] define `CairoPdfMetadataT`
 	+ [x] define `cairoPdfSurfaceSetMetadata`
 * [x] `cairoPdfSurfaceSetPageLabel`
-* [x] `cairoPdfSurfaceSetThumbnailSize`
 
 version
 -------
@@ -65,3 +64,8 @@ todo
 * [x] define `cairoPdfSurfaceCreate` for test
 	+ use `CairoSurfaceT`
 * [x] `unsafeCairoSurfaceFinish` for test
+
+no intention of implementing
+----------------------------
+
+* `cairoPdfSurfaceSetThumbnailSize`
