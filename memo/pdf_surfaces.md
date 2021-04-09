@@ -49,7 +49,7 @@ setting
 * [x] `cairoPdfSurfaceSetMetadata`
 	+ [x] define `CairoPdfMetadataT`
 	+ [x] define `cairoPdfSurfaceSetMetadata`
-* [ ] `cairoPdfSurfaceSetPageLabel`
+* [x] `cairoPdfSurfaceSetPageLabel`
 * [ ] `cairoPdfSurfaceSetThumbnailSize`
 
 version

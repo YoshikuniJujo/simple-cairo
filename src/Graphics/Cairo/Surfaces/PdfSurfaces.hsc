@@ -129,3 +129,12 @@ cairoPdfSurfaceSetMetadata (CairoSurfacePdfT fsr) (CairoPdfMetadataT md) v =
 
 foreign import ccall "cairo_pdf_surface_set_metadata" c_cairo_pdf_surface_set_metadata ::
 	Ptr (CairoSurfaceT s ps) -> #{type cairo_pdf_metadata_t} -> CString -> IO ()
+
+cairoPdfSurfaceSetPageLabel :: PrimMonad m =>
+	CairoSurfacePdfT s (PrimState m) -> String -> m ()
+cairoPdfSurfaceSetPageLabel (CairoSurfacePdfT fsr) pl =
+	unsafeIOToPrim $ withForeignPtr fsr \psr -> withCString pl \cpl ->
+		c_cairo_pdf_surface_set_page_label psr cpl
+
+foreign import ccall "cairo_pdf_surface_set_page_label" c_cairo_pdf_surface_set_page_label ::
+	Ptr (CairoSurfaceT s ps) -> CString -> IO ()
