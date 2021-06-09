@@ -8,5 +8,7 @@ import Control.Monad.Primitive
 
 newtype CairoT s = CairoT (ForeignPtr (CairoT s)) deriving Show
 
+type CairoTIO = CairoT RealWorld
+
 withCairoT :: PrimMonad m => CairoT (PrimState m) -> (Ptr (CairoT (PrimState m)) -> IO a) -> m a
 withCairoT (CairoT fcr) = unsafeIOToPrim . withForeignPtr fcr
