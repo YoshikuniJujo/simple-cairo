@@ -38,7 +38,7 @@ cairoCreate :: (PrimMonad m, IsCairoSurfaceT sr) =>
 	sr s (PrimState m) -> m (CairoT (PrimState m))
 cairoCreate (toCairoSurfaceT -> CairoSurfaceT sr) = unsafeIOToPrim do
 	cr <- withForeignPtr sr c_cairo_create >>= \pcr ->
-		CairoT <$> newForeignPtr pcr (c_cairo_destroy pcr >> touchForeignPtr sr)
+		CairoT <$> newForeignPtr pcr (c_cairo_destroy pcr)
 	cr <$ raiseIfError cr
 
 foreign import ccall "cairo_create"
