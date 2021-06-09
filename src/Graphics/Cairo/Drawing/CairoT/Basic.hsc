@@ -15,7 +15,7 @@ module Graphics.Cairo.Drawing.CairoT.Basic (
 	) where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr hiding (newForeignPtr)
+import Foreign.ForeignPtr hiding (newForeignPtr, addForeignPtrFinalizer)
 import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
@@ -37,8 +37,10 @@ import Graphics.Cairo.Drawing.CairoPatternT.Basic
 cairoCreate :: (PrimMonad m, IsCairoSurfaceT sr) =>
 	sr s (PrimState m) -> m (CairoT (PrimState m))
 cairoCreate (toCairoSurfaceT -> CairoSurfaceT sr) = unsafeIOToPrim do
-	cr <- withForeignPtr sr c_cairo_create >>= \pcr ->
-		CairoT <$> newForeignPtr pcr (c_cairo_destroy pcr >> touchForeignPtr sr)
+	cr <- withForeignPtr sr c_cairo_create >>= \pcr -> do
+		fcr <- newForeignPtr pcr (c_cairo_destroy pcr)
+		addForeignPtrFinalizer sr $ touchForeignPtr fcr
+		pure $ CairoT fcr
 	cr <$ raiseIfError cr
 
 foreign import ccall "cairo_create"
