@@ -4,13 +4,14 @@ Windows memo
 Function
 --------
 
+### not deprecated
+
 * `gdk_window_new`
 * `gdk_window_destroy`
 * `gdk_window_get_window_type`
 * `gdk_window_get_display`
 * `gdk_window_get_screen`
 * `gdk_window_get_visual`
-* `gdk_window_at_pointer`
 * `gdk_window_show`
 * `gdk_window_show_unraised`
 * `gdk_window_hide`
@@ -35,8 +36,6 @@ Function
 * `gdk_window_set_keep_above`
 * `gdk_window_set_keep_below`
 * `gdk_window_set_opacity`
-* `gdk_window_set_composited`
-* `gdk_window_get_compisited`
 * `gdk_window_set_pass_through`
 * `gdk_window_get_pass_through`
 * `gdk_window_move`
@@ -45,7 +44,6 @@ Function
 * `gdk_window_scroll`
 * `gdk_window_move_to_rect`
 * `gdk_window_move_region`
-* `gdk_window_flush`
 * `gdk_window_has_native`
 * `gdk_window_ensure_native`
 * `gdk_window_reparent`
@@ -66,8 +64,6 @@ Function
 * `gdk_window_create_gl_context`
 * `gdk_window_mark_paint_from_clip`
 * `gdk_window_get_clip_region`
-* `gdk_window_begin_paint_rect`
-* `gdk_window_end_paint`
 * `gdk_window_begin_draw_frame`
 * `gdk_window_end_draw_frame`
 * `gdk_window_get_visible_region`
@@ -78,11 +74,6 @@ Function
 * `gdk_window_get_update_area`
 * `gdk_window_freeze_updates`
 * `gdk_window_thaw_updates`
-* `gdk_window_process_all_updates`
-* `gdk_window_process_updates`
-* `gdk_window_set_debug_updates`
-* `gdk_window_enable_synchronized_configure`
-* `gdk_window_configure_finished`
 * `gdk_window_get_frame_clock`
 * `gdk_window_set_user_data`
 * `gdk_window_set_override_redirect`
@@ -95,12 +86,10 @@ Function
 * `gdk_window_shape_combine_region`
 * `gdk_window_set_child_shapes`
 * `gdk_window_merge_child_shapes`
-* `gdk_window_set_static_gravities`
+* `gdk_window_input_shape_combine_region`
+* `gdk_window_set_child_input_shapes`
+* `gdk_window_merge_child_input_shapes`
 * `gdk_window_set_title`
-* `gdk_window_set_background`
-* `gdk_window_set_background_rgba`
-* `gdk_window_set_background_pattern`
-* `gdk_window_get_background_pattern`
 * `gdk_window_set_cursor`
 * `gdk_window_get_cursor`
 * `gdk_window_get_user_data`
@@ -122,7 +111,6 @@ Function
 * `gdk_window_get_frame_extents`
 * `gdk_window_get_origin`
 * `gdk_window_get_root_coords`
-* `gdk_window_get_pointer`
 * `gdk_window_get_device_position`
 * `gdk_window_get_device_posittion_double`
 * `gdk_window_get_parent`
@@ -159,3 +147,24 @@ Function
 * `gdk_window_get_effective_parent`
 * `gdk_window_get_effective_toplevel`
 * `gdk_window_set_device_cursor`
+
+### deprecated
+
+* `gdk_window_at_pointer`
+* `gdk_window_set_composited`
+* `gdk_window_get_compisited`
+* `gdk_window_flush`
+* `gdk_window_begin_paint_rect`
+* `gdk_window_begin_paint_region`
+* `gdk_window_end_paint`
+* `gdk_window_process_all_updates`
+* `gdk_window_process_updates`
+* `gdk_window_set_debug_updates`
+* `gdk_window_enable_synchronized_configure`
+* `gdk_window_configure_finished`
+* `gdk_window_set_static_gravities`
+* `gdk_window_set_background`
+* `gdk_window_set_background_rgba`
+* `gdk_window_set_background_pattern`
+* `gdk_window_get_background_pattern`
+* `gdk_window_get_pointer`
