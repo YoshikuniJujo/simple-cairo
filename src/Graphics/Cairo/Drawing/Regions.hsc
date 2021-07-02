@@ -11,7 +11,7 @@ import Foreign.Storable
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Exception
-import Graphics.Cairo.Types
+import Graphics.Cairo.Utilities.Types
 
 #include <cairo.h>
 
