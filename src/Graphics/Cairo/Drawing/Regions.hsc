@@ -6,8 +6,6 @@ module Graphics.Cairo.Drawing.Regions where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
-import Foreign.Marshal
-import Foreign.Storable
 import Control.Monad.Primitive
 
 import Graphics.Cairo.Exception
@@ -34,7 +32,6 @@ foreign import ccall "cairo_region_create_rectangle" c_cairo_region_create_recta
 	Ptr CairoRectangleIntT -> IO (Ptr (CairoRegionT s))
 
 cairoRegionCreateRectangle :: PrimMonad m => CairoRectangleIntT -> m (CairoRegionT (PrimState m))
-cairoRegionCreateRectangle rct = unsafeIOToPrim $ alloca \prct -> do
-	poke prct rct
+cairoRegionCreateRectangle (CairoRectangleIntT_ fr) = unsafeIOToPrim $ withForeignPtr fr \prct -> do
 	r <- makeCairoRegionT =<< c_cairo_region_create_rectangle prct
 	r <$ raiseIfErrorRegion r
