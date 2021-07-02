@@ -4,6 +4,8 @@
 module Graphics.Cairo.Drawing.Regions where
 
 import Foreign.Ptr
+import Foreign.ForeignPtr hiding (newForeignPtr)
+import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
 import Control.Monad.Primitive
@@ -12,6 +14,14 @@ import Graphics.Cairo.Exception
 import Graphics.Cairo.Types
 
 #include <cairo.h>
+
+newtype CairoRegionT s = CairoRegionT (ForeignPtr (CairoRegionT s)) deriving Show
+
+makeCairoRegionT :: Ptr (CairoRegionT s) -> IO (CairoRegionT s)
+makeCairoRegionT p = CairoRegionT <$> newForeignPtr p (c_cairo_region_destroy p)
+
+foreign import ccall "cairo_region_destroy" c_cairo_region_destroy ::
+	Ptr (CairoRegionT s) -> IO ()
 
 foreign import ccall "cairo_region_create" c_cairo_region_create :: IO (Ptr (CairoRegionT s))
 
