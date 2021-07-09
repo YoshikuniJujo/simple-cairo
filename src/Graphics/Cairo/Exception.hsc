@@ -10,10 +10,10 @@ import Foreign.ForeignPtr
 import Control.Exception
 import Control.Exception.Hierarchy
 import Data.Word
-import Graphics.Cairo.Types
 
 import Data.CairoContext
 
+import {-# SOURCE #-} Graphics.Cairo.Drawing.Regions
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 
 #include <cairo.h>

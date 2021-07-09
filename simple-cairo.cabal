@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 07b76872c92eda6b40cbce10c2494c1c7a7bfc6eb84ed13c2321a9b89b4407f6
+-- hash: 4291395ab8ddf54682db1da2dd983e334a10641a354f6c9d99b31d2ecf7b9b85
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -69,6 +69,7 @@ library
       Graphics.Cairo.Types
       Graphics.Cairo.Utilities.CairoMatrixT
       Graphics.Cairo.Utilities.CairoMatrixT.Internal
+      Graphics.Cairo.Utilities.Types
       Graphics.Cairo.Values
   other-modules:
       Paths_simple_cairo
@@ -79,6 +80,7 @@ library
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , c-struct
     , cairo-image
     , exception-hierarchy
     , primitive
@@ -99,6 +101,7 @@ test-suite cairo-image-test
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , c-struct
     , cairo-image
     , exception-hierarchy
     , primitive
@@ -120,6 +123,7 @@ test-suite exception-test
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , c-struct
     , cairo-image
     , exception-hierarchy
     , primitive
@@ -141,6 +145,7 @@ test-suite test-rotate
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , c-struct
     , cairo-image
     , exception-hierarchy
     , primitive

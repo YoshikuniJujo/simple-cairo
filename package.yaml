@@ -27,6 +27,7 @@ dependencies:
 - text
 - vector
 - exception-hierarchy
+- c-struct
 - cairo-image
 
 library:
