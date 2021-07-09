@@ -29,19 +29,19 @@ import Data.CairoContext
 import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 foreign import ccall "cairo_push_group" c_cairo_push_group ::
-	Ptr (CairoT s) -> IO ()
+	Ptr (CairoT r s) -> IO ()
 
-cairoPushGroup :: PrimMonad m => CairoT (PrimState m) -> m ()
+cairoPushGroup :: PrimMonad m => CairoT r (PrimState m) -> m ()
 cairoPushGroup = (`withCairoT` c_cairo_push_group)
 
 foreign import ccall "cairo_pop_group_to_source" c_cairo_pop_group_to_source ::
-	Ptr (CairoT s) -> IO ()
+	Ptr (CairoT r s) -> IO ()
 
-cairoPopGroupToSource :: PrimMonad m => CairoT (PrimState m) -> m ()
+cairoPopGroupToSource :: PrimMonad m => CairoT r (PrimState m) -> m ()
 cairoPopGroupToSource cr@(CairoT fcr) = unsafeIOToPrim $ withForeignPtr fcr c_cairo_pop_group_to_source <* raiseIfError cr
 
 foreign import ccall "cairo_pop_group" c_cairo_pop_group ::
-	Ptr (CairoT s) -> IO (Ptr (CairoPatternT s))
+	Ptr (CairoT r s) -> IO (Ptr (CairoPatternT s))
 
-cairoPopGroup :: PrimMonad m => CairoT s -> m (CairoPatternT s)
+cairoPopGroup :: PrimMonad m => CairoT r s -> m (CairoPatternT s)
 cairoPopGroup (CairoT fcr) = unsafeIOToPrim $ makeCairoPatternT =<< withForeignPtr fcr c_cairo_pop_group

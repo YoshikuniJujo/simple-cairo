@@ -55,6 +55,9 @@ todo
 	+ [x] cairo\_matrix\_t
 * [x] move a module `Graphics.Cairo.Drawing.CairoT.Extents`
 	to `Graphics.Cairo.Drawing.Extents`
+* [x] add one more variable to `CairoT`
+* [ ] repair simple-pango
+* [ ] repair try-gdk
 * [ ] separate package to export
 	+ [ ] `CairoT`
 	+ [ ] `CairoSurfaceT`

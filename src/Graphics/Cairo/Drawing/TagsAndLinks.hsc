@@ -14,10 +14,10 @@ import Graphics.Cairo.Exception
 #include <cairo.h>
 
 cairoTagLinkInternal :: PrimMonad m =>
-	CairoT (PrimState m) -> Name -> m a -> m a
+	CairoT r (PrimState m) -> Name -> m a -> m a
 cairoTagLinkInternal cr d = cairoTagLinkInternalDestPage cr $ Left d
 
-cairoTagLinkInternalDestPage :: PrimMonad m => CairoT (PrimState m) ->
+cairoTagLinkInternalDestPage :: PrimMonad m => CairoT r (PrimState m) ->
 	Either Name (Int, Maybe (Double, Double)) -> m a -> m a
 cairoTagLinkInternalDestPage cr@(CairoT fcr) d m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
@@ -34,7 +34,7 @@ internalAttributes = \case
 	Right (p, Nothing) -> withCString $ "page=" ++ show p
 	Right (p, Just (x, y)) -> withCString $ "page=" ++ show p ++ " pos=[" ++ show x ++ " " ++ show y ++ "]"
 
-cairoTagLinkUri :: PrimMonad m => CairoT (PrimState m) -> Uri -> m a -> m a
+cairoTagLinkUri :: PrimMonad m => CairoT r (PrimState m) -> Uri -> m a -> m a
 cairoTagLinkUri cr@(CairoT fcr) u m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		tl <- newCString #{const_str CAIRO_TAG_LINK}
@@ -46,7 +46,7 @@ cairoTagLinkUri cr@(CairoT fcr) u m = do
 
 type Uri = String
 
-cairoTagDestination :: PrimMonad m => CairoT (PrimState m) -> Name -> m a -> m a
+cairoTagDestination :: PrimMonad m => CairoT r (PrimState m) -> Name -> m a -> m a
 cairoTagDestination cr@(CairoT fcr) n m = do
 	unsafeIOToPrim $ withForeignPtr fcr \pcr -> do
 		td <- newCString #{const_str CAIRO_TAG_DEST}
@@ -59,10 +59,10 @@ cairoTagDestination cr@(CairoT fcr) n m = do
 type Name = String
 
 foreign import ccall "cairo_tag_begin" c_cairo_tag_begin ::
-	Ptr (CairoT s) -> CString -> CString -> IO ()
+	Ptr (CairoT r s) -> CString -> CString -> IO ()
 
 foreign import ccall "cairo_tag_end" c_cairo_tag_end ::
-	Ptr (CairoT s) -> CString -> IO ()
+	Ptr (CairoT r s) -> CString -> IO ()
 
 escape :: String -> String
 escape = \case

@@ -54,9 +54,9 @@ exceptionHierarchy Nothing $ ExNode "CairoStatus" [
 
 newtype CairoStatusT = CairoStatusT #{type cairo_status_t} deriving (Show, Eq)
 
-foreign import ccall "cairo_status" c_cairo_status :: Ptr (CairoT s) -> IO #type cairo_status_t
+foreign import ccall "cairo_status" c_cairo_status :: Ptr (CairoT r s) -> IO #type cairo_status_t
 
-raiseIfError :: CairoT s -> IO ()
+raiseIfError :: CairoT r s -> IO ()
 raiseIfError (CairoT fcr) = withForeignPtr fcr \pcr -> cairoStatusToThrowError =<< c_cairo_status pcr
 
 raiseIfErrorRegion :: CairoRegionT s -> IO ()
