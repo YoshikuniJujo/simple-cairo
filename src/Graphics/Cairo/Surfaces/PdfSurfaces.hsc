@@ -46,6 +46,7 @@ cairoSurfaceTPdf sr@(CairoSurfaceT fsr) = case cairoSurfaceGetType sr of
 
 instance IsCairoSurfaceT CairoSurfacePdfT where
 	toCairoSurfaceT (CairoSurfacePdfT fsr _) = CairoSurfaceT fsr
+	cairoSurfaceTFinishChecker (CairoSurfacePdfT _ ck) = ck
 
 cairoPdfSurfaceWith :: FilePath -> CDouble -> CDouble ->
 	(forall s . CairoSurfacePdfT s RealWorld -> IO a) -> IO a
