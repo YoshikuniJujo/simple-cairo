@@ -50,7 +50,8 @@ cairoPdfSurfaceWith :: FilePath -> CDouble -> CDouble ->
 	(forall s . CairoSurfacePdfT s RealWorld -> IO a) -> IO a
 cairoPdfSurfaceWith fp w h f = do
 	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreateNoGC fp w h
-	f sr <* withForeignPtr fsr c_cairo_surface_destroy
+	f sr <* withForeignPtr fsr
+		(\psr -> c_cairo_surface_finish psr >> c_cairo_surface_destroy psr)
 
 cairoPdfSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfacePdfT s RealWorld)
 cairoPdfSurfaceCreate fp w h = CairoSurfacePdfT <$> withCString utf8 fp \cstr -> do
@@ -74,7 +75,8 @@ cairoPdfSurfaceWithForStream :: PrimBase m =>
 	(forall s . CairoSurfacePdfT s (PrimState m) -> m a) -> m a
 cairoPdfSurfaceWithForStream wf cl w h f = do
 	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreateForStreamNoGC wf cl w h
-	f sr <* unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_destroy)
+	f sr <* unsafeIOToPrim (withForeignPtr fsr $
+		\psr -> c_cairo_surface_finish psr >> c_cairo_surface_destroy psr)
 
 cairoPdfSurfaceCreateForStream :: PrimBase m =>
 	(Ptr a -> BS.ByteString -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
