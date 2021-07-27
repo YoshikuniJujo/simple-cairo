@@ -54,7 +54,12 @@ cairoPdfSurfaceWith fp w h f = do
 	sr@(CairoSurfacePdfT fsr mck) <- cairoPdfSurfaceCreateNoGC fp w h
 	ck <- atomically mck
 	f sr <* withForeignPtr fsr
-		(\psr -> c_cairo_surface_finish psr >> atomically (writeTChan ck ()) >> c_cairo_surface_destroy psr)
+		(\psr -> do
+			c_cairo_surface_finish psr
+			c_cairo_surface_destroy psr
+			putStrLn "PDF Surface destroyed"
+			atomically (writeTChan ck ())
+			putStrLn "writeTChan ck () finished")
 
 cairoPdfSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfacePdfT s RealWorld)
 cairoPdfSurfaceCreate fp w h = do

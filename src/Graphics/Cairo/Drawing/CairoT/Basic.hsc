@@ -39,8 +39,11 @@ cairoCreate :: (PrimMonad m, IsCairoSurfaceT sr) =>
 	sr s (PrimState m) -> m (CairoT r (PrimState m))
 cairoCreate sr_ = unsafeIOToPrim do
 	cr <- withForeignPtr sr c_cairo_create >>= \pcr ->
-		CairoT <$> newForeignPtr pcr
-			(atomically (readTChan =<< ck) >> c_cairo_destroy pcr)
+		CairoT <$> newForeignPtr pcr (do
+			atomically (readTChan =<< ck)
+			putStrLn "begin CairoT destroy"
+			c_cairo_destroy pcr
+			putStrLn "end CairoT destroy")
 	cr <$ raiseIfError cr
 	where
 	CairoSurfaceT sr = toCairoSurfaceT sr_
