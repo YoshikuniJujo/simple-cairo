@@ -1,6 +1,12 @@
 cairo\_t memo
 =============
 
+todo new
+--------
+
+* [x] add TChan to SurfaceT
+* [x] use TChan for CairoT GC to wait SurphaceT GC
+
 functions
 ---------
 

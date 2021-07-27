@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4291395ab8ddf54682db1da2dd983e334a10641a354f6c9d99b31d2ecf7b9b85
+-- hash: fe9290b9a57ba03dd456da133eba5ec4241d69994a0e68641429f012c4e08778
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -84,6 +84,7 @@ library
     , cairo-image
     , exception-hierarchy
     , primitive
+    , stm
     , template-haskell
     , text
     , vector
@@ -106,6 +107,7 @@ test-suite cairo-image-test
     , exception-hierarchy
     , primitive
     , simple-cairo
+    , stm
     , template-haskell
     , text
     , vector
@@ -128,6 +130,7 @@ test-suite exception-test
     , exception-hierarchy
     , primitive
     , simple-cairo
+    , stm
     , template-haskell
     , text
     , vector
@@ -150,6 +153,7 @@ test-suite test-rotate
     , exception-hierarchy
     , primitive
     , simple-cairo
+    , stm
     , template-haskell
     , text
     , vector

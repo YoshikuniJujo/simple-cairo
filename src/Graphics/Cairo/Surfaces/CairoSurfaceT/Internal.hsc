@@ -7,6 +7,7 @@ module Graphics.Cairo.Surfaces.CairoSurfaceT.Internal where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Control.Concurrent.STM
 import Data.Word
 import System.IO.Unsafe
 
@@ -18,6 +19,9 @@ import Graphics.Cairo.Template
 
 class IsCairoSurfaceT sr where
 	toCairoSurfaceT :: sr s ps -> CairoSurfaceT s ps
+	cairoSurfaceTFinishChecker :: sr s ps -> STM (TChan ())
+
+	cairoSurfaceTFinishChecker _ = newTChan >>= \c -> c <$ writeTChan c ()
 
 instance IsCairoSurfaceT CairoSurfaceT where toCairoSurfaceT = id
 

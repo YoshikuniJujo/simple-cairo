@@ -21,6 +21,7 @@ import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Control.Concurrent.STM
 import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
@@ -36,10 +37,14 @@ import Graphics.Cairo.Drawing.CairoPatternT.Basic
 
 cairoCreate :: (PrimMonad m, IsCairoSurfaceT sr) =>
 	sr s (PrimState m) -> m (CairoT r (PrimState m))
-cairoCreate (toCairoSurfaceT -> CairoSurfaceT sr) = unsafeIOToPrim do
+cairoCreate sr_ = unsafeIOToPrim do
 	cr <- withForeignPtr sr c_cairo_create >>= \pcr ->
-		CairoT <$> newForeignPtr pcr (c_cairo_destroy pcr)
+		CairoT <$> newForeignPtr pcr
+			(atomically (readTChan =<< ck) >> c_cairo_destroy pcr)
 	cr <$ raiseIfError cr
+	where
+	CairoSurfaceT sr = toCairoSurfaceT sr_
+	ck = cairoSurfaceTFinishChecker sr_
 
 foreign import ccall "cairo_create"
 	c_cairo_create :: Ptr (CairoSurfaceT s ps) -> IO (Ptr (CairoT r ps))
