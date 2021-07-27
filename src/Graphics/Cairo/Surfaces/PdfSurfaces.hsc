@@ -49,13 +49,18 @@ instance IsCairoSurfaceT CairoSurfacePdfT where
 cairoPdfSurfaceWith :: FilePath -> CDouble -> CDouble ->
 	(forall s . CairoSurfacePdfT s RealWorld -> IO a) -> IO a
 cairoPdfSurfaceWith fp w h f = do
-	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreate fp w h
-	f sr <* withForeignPtr fsr c_cairo_surface_finish
+	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreateNoGC fp w h
+	f sr <* withForeignPtr fsr c_cairo_surface_destroy
 
 cairoPdfSurfaceCreate :: FilePath -> CDouble -> CDouble -> IO (CairoSurfacePdfT s RealWorld)
 cairoPdfSurfaceCreate fp w h = CairoSurfacePdfT <$> withCString utf8 fp \cstr -> do
 	p <- c_cairo_pdf_surface_create cstr w h
 	newForeignPtr p (c_cairo_surface_destroy p) <* raiseIfErrorPtrSurface p
+
+cairoPdfSurfaceCreateNoGC :: FilePath -> CDouble -> CDouble -> IO (CairoSurfacePdfT s RealWorld)
+cairoPdfSurfaceCreateNoGC fp w h = CairoSurfacePdfT <$> withCString utf8 fp \cstr -> do
+	p <- c_cairo_pdf_surface_create cstr w h
+	newForeignPtr p (pure ()) <* raiseIfErrorPtrSurface p
 
 foreign import ccall "cairo_pdf_surface_create" c_cairo_pdf_surface_create ::
 	CString -> CDouble -> CDouble -> IO (Ptr (CairoSurfaceT s ps))
@@ -68,8 +73,8 @@ cairoPdfSurfaceWithForStream :: PrimBase m =>
 	(Ptr a -> BS.ByteString -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
 	(forall s . CairoSurfacePdfT s (PrimState m) -> m a) -> m a
 cairoPdfSurfaceWithForStream wf cl w h f = do
-	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreateForStream wf cl w h
-	f sr <* unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_finish)
+	sr@(CairoSurfacePdfT fsr) <- cairoPdfSurfaceCreateForStreamNoGC wf cl w h
+	f sr <* unsafeIOToPrim (withForeignPtr fsr c_cairo_surface_destroy)
 
 cairoPdfSurfaceCreateForStream :: PrimBase m =>
 	(Ptr a -> BS.ByteString -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
@@ -78,6 +83,14 @@ cairoPdfSurfaceCreateForStream wf cl w h = CairoSurfacePdfT <$> unsafeIOToPrim d
 	p <- (wrapCairoWriteFuncTByteString wf >>= \pwf ->
 		c_cairo_pdf_surface_create_for_stream pwf cl w h)
 	newForeignPtr p (c_cairo_surface_destroy p) <* raiseIfErrorPtrSurface p
+
+cairoPdfSurfaceCreateForStreamNoGC :: PrimBase m =>
+	(Ptr a -> BS.ByteString -> m WriteResult) -> Ptr a -> CDouble -> CDouble ->
+	m (CairoSurfacePdfT s (PrimState m))
+cairoPdfSurfaceCreateForStreamNoGC wf cl w h = CairoSurfacePdfT <$> unsafeIOToPrim do
+	p <- (wrapCairoWriteFuncTByteString wf >>= \pwf ->
+		c_cairo_pdf_surface_create_for_stream pwf cl w h)
+	newForeignPtr p (pure ()) <* raiseIfErrorPtrSurface p
 
 foreign import ccall "cairo_pdf_surface_create_for_stream"
 	c_cairo_pdf_surface_create_for_stream ::
