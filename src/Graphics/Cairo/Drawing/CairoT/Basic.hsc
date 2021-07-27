@@ -15,7 +15,7 @@ module Graphics.Cairo.Drawing.CairoT.Basic (
 	) where
 
 import Foreign.Ptr
-import Foreign.ForeignPtr hiding (newForeignPtr)
+import Foreign.ForeignPtr hiding (newForeignPtr, addForeignPtrFinalizer)
 import Foreign.Concurrent
 import Foreign.Marshal
 import Foreign.Storable
@@ -68,8 +68,9 @@ foreign import ccall "cairo_set_source_rgba" c_cairo_set_source_rgba ::
 	Ptr (CairoT r s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
 cairoSetSource :: (PrimMonad m, IsCairoPatternT pt) => CairoT r s -> pt s -> m ()
-cairoSetSource cr@(CairoT fcr) (toCairoPatternT -> CairoPatternT fpt) = unsafeIOToPrim
-	$ withForeignPtr fcr \pcr -> withForeignPtr fpt \ppt -> c_cairo_set_source pcr ppt >> raiseIfError cr
+cairoSetSource cr@(CairoT fcr) (toCairoPatternT -> CairoPatternT fpt) = unsafeIOToPrim do
+	withForeignPtr fcr \pcr -> withForeignPtr fpt \ppt -> c_cairo_set_source pcr ppt >> raiseIfError cr
+	addForeignPtrFinalizer fcr $ touchForeignPtr fpt
 
 foreign import ccall "cairo_set_source" c_cairo_set_source ::
 	Ptr (CairoT r s) -> Ptr (CairoPatternT s) -> IO ()
