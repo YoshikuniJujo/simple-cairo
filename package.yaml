@@ -29,6 +29,7 @@ dependencies:
 - vector
 - exception-hierarchy
 - c-struct
+- union-angle
 - cairo-image
 
 library:

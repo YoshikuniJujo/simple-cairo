@@ -8,6 +8,7 @@ import Foreign.Marshal
 import Foreign.Storable
 import Foreign.C.Types
 import Control.Monad.Primitive
+import Data.Angle
 import Data.CairoContext
 
 import Graphics.Cairo.Drawing.Extents
@@ -54,16 +55,16 @@ foreign import ccall "cairo_rectangle" c_cairo_rectangle ::
 	Ptr (CairoT r s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
 cairoArc :: PrimMonad m => CairoT r (PrimState m) -> CDouble -> CDouble ->
-	CDouble -> CDouble -> CDouble -> m ()
-cairoArc cr xc yc r a1 a2 =
+	CDouble -> Angle CDouble -> Angle CDouble -> m ()
+cairoArc cr xc yc r (Radian a1) (Radian a2) =
 	withCairoT cr \pcr -> c_cairo_arc pcr xc yc r a1 a2
 
 foreign import ccall "cairo_arc" c_cairo_arc :: Ptr (CairoT r s) ->
 	CDouble -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
 cairoArcNegative :: PrimMonad m => CairoT r (PrimState m) -> CDouble -> CDouble ->
-	CDouble -> CDouble -> CDouble -> m ()
-cairoArcNegative cr xc yc r a1 a2 =
+	CDouble -> Angle CDouble -> Angle CDouble -> m ()
+cairoArcNegative cr xc yc r (Radian a1) (Radian a2) =
 	withCairoT cr \pcr -> c_cairo_arc_negative pcr xc yc r a1 a2
 
 foreign import ccall "cairo_arc_negative" c_cairo_arc_negative ::
