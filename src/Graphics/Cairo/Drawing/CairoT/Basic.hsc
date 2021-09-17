@@ -53,14 +53,14 @@ foreign import ccall "cairo_create"
 	c_cairo_create :: Ptr (CairoSurfaceT s ps) -> IO (Ptr (CairoT r ps))
 foreign import ccall "cairo_destroy" c_cairo_destroy :: Ptr (CairoT r s) -> IO ()
 
-cairoSetSourceRgb :: PrimMonad m => CairoT r (PrimState m) -> Rgb -> m ()
+cairoSetSourceRgb :: PrimMonad m => CairoT r (PrimState m) -> Rgb CDouble -> m ()
 cairoSetSourceRgb cr (RgbDouble r g b) =
 	withCairoT cr \pcr -> c_cairo_set_source_rgb pcr r g b
 
 foreign import ccall "cairo_set_source_rgb" c_cairo_set_source_rgb ::
 	Ptr (CairoT r s) -> CDouble -> CDouble -> CDouble -> IO ()
 
-cairoSetSourceRgba :: PrimMonad m => CairoT r (PrimState m) -> Rgba -> m ()
+cairoSetSourceRgba :: PrimMonad m => CairoT r (PrimState m) -> Rgba CDouble -> m ()
 cairoSetSourceRgba cr (RgbaDouble r g b a) =
 	withCairoT cr \pcr -> c_cairo_set_source_rgba pcr r g b a
 

@@ -45,7 +45,7 @@ cairoPatternCreateMesh = unsafeIOToPrim do
 foreign import ccall "cairo_pattern_create_mesh" c_cairo_pattern_create_mesh ::
 	IO (Ptr (CairoPatternT s))
 
-data Color = ColorRgb Rgb | ColorRgba Rgba deriving Show
+data Color = ColorRgb (Rgb CDouble) | ColorRgba (Rgba CDouble) deriving Show
 
 data Point = Point CDouble CDouble deriving Show
 
@@ -182,7 +182,7 @@ foreign import ccall "cairo_mesh_pattern_get_control_point" c_cairo_mesh_pattern
 	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
 cairoMeshPatternGetCornerColorRgba :: PrimMonad m =>
-	CairoPatternMeshT (PrimState m) -> CUInt -> CUInt -> m Rgba
+	CairoPatternMeshT (PrimState m) -> CUInt -> CUInt -> m (Rgba CDouble)
 cairoMeshPatternGetCornerColorRgba (CairoPatternMeshT fpt) i j =
 	unsafeIOToPrim $ withForeignPtr fpt \ppt -> alloca \r -> alloca \g -> alloca \b -> alloca \a -> do
 		cairoStatusToThrowError =<< c_cairo_mesh_pattern_get_corner_color_rgba ppt i j r g b a
@@ -192,7 +192,7 @@ foreign import ccall "cairo_mesh_pattern_get_corner_color_rgba" c_cairo_mesh_pat
 	Ptr (CairoPatternT s) -> CUInt -> CUInt -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
 cairoMeshPatternGetPatch1 :: PrimBase m => CairoPatternMeshT (PrimState m) -> CUInt ->
-	m (CairoPatchPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))
+	m (CairoPatchPathT, (Rgba CDouble, Rgba CDouble, Rgba CDouble, Rgba CDouble), (Point, Point, Point, Point))
 cairoMeshPatternGetPatch1 pt i = do
 	pth <- unsafeInterleave $ cairoMeshPatternGetPath pt i
 	(unsafeInterleave . cairoMeshPatternGetCornerColorRgba pt i) `mapM` [0, 1, 2, 3] >>= \case
@@ -210,7 +210,7 @@ mapMLazy :: PrimBase m => (a -> m b) -> [a] -> m [b]
 mapMLazy = flip forLazy
 
 cairoMeshPatternGetPatchList :: PrimBase m => CairoPatternMeshT (PrimState m) ->
-	m [(CairoPatchPathT, (Rgba, Rgba, Rgba, Rgba), (Point, Point, Point, Point))]
+	m [(CairoPatchPathT, (Rgba CDouble, Rgba CDouble, Rgba CDouble, Rgba CDouble), (Point, Point, Point, Point))]
 cairoMeshPatternGetPatchList pt = do
 	n <- cairoMeshPatternGetPatchCount pt
 	forLazy [0 .. n - 1] $ unsafeInterleave . cairoMeshPatternGetPatch1 pt

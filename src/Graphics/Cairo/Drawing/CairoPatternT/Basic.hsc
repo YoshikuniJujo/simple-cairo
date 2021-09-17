@@ -84,7 +84,7 @@ cairoPatternSolidT pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
 	CairoPatternTypeSolid -> Just $ CairoPatternSolidT fpt
 	_ -> Nothing
 
-cairoPatternCreateRgb :: PrimMonad m => Rgb -> m (CairoPatternSolidT (PrimState m))
+cairoPatternCreateRgb :: PrimMonad m => Rgb CDouble -> m (CairoPatternSolidT (PrimState m))
 cairoPatternCreateRgb (RgbDouble r g b) = unsafeIOToPrim do
 	ppt <- c_cairo_pattern_create_rgb r g b
 	pt <- CairoPatternSolidT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
@@ -93,7 +93,7 @@ cairoPatternCreateRgb (RgbDouble r g b) = unsafeIOToPrim do
 foreign import ccall "cairo_pattern_create_rgb" c_cairo_pattern_create_rgb ::
 	CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
-cairoPatternCreateRgba :: PrimMonad m => Rgba -> m (CairoPatternSolidT (PrimState m))
+cairoPatternCreateRgba :: PrimMonad m => Rgba CDouble -> m (CairoPatternSolidT (PrimState m))
 cairoPatternCreateRgba (RgbaDouble r g b a) = unsafeIOToPrim do
 	ppt <- c_cairo_pattern_create_rgba r g b a
 	pt <- CairoPatternSolidT <$> newForeignPtr ppt (c_cairo_pattern_destroy ppt)
@@ -102,7 +102,7 @@ cairoPatternCreateRgba (RgbaDouble r g b a) = unsafeIOToPrim do
 foreign import ccall "cairo_pattern_create_rgba" c_cairo_pattern_create_rgba ::
 	CDouble -> CDouble -> CDouble -> CDouble -> IO (Ptr (CairoPatternT s))
 
-cairoPatternGetRgba :: PrimMonad m => CairoPatternSolidT (PrimState m) -> m Rgba
+cairoPatternGetRgba :: PrimMonad m => CairoPatternSolidT (PrimState m) -> m (Rgba CDouble)
 cairoPatternGetRgba (CairoPatternSolidT fpts) = unsafeIOToPrim $ withForeignPtr fpts \pts ->
 	alloca \r -> alloca \g -> alloca \b -> alloca \a -> do
 		cairoStatusToThrowError =<< c_cairo_pattern_get_rgba pts r g b a
@@ -137,7 +137,7 @@ cairoPatternGradientT pt@(CairoPatternT fpt) = case cairoPatternGetType pt of
 	_ -> Nothing
 
 cairoPatternAddColorStopRgb :: (PrimMonad m, IsCairoPatternGradientT pt) =>
-	pt (PrimState m) -> CDouble -> Rgb -> m ()
+	pt (PrimState m) -> CDouble -> Rgb CDouble -> m ()
 cairoPatternAddColorStopRgb (toCairoPatternGradientT -> CairoPatternGradientT fpt) os (RgbDouble r g b) =
 	unsafeIOToPrim $ withForeignPtr fpt \ppt -> c_cairo_pattern_add_color_stop_rgb ppt os r g b
 
@@ -145,7 +145,7 @@ foreign import ccall "cairo_pattern_add_color_stop_rgb" c_cairo_pattern_add_colo
 	Ptr (CairoPatternT s) -> CDouble -> CDouble -> CDouble -> CDouble -> IO ()
 
 cairoPatternAddColorStopRgba :: (PrimMonad m, IsCairoPatternGradientT pt) =>
-	pt (PrimState m) -> CDouble -> Rgba -> m ()
+	pt (PrimState m) -> CDouble -> Rgba CDouble -> m ()
 cairoPatternAddColorStopRgba (toCairoPatternGradientT -> CairoPatternGradientT fpt) os (RgbaDouble r g b a) =
 	unsafeIOToPrim $ withForeignPtr fpt \ppt -> c_cairo_pattern_add_color_stop_rgba ppt os r g b a
 
@@ -191,7 +191,7 @@ foreign import ccall "cairo_pattern_get_linear_points" c_cairo_pattern_get_linea
 	Ptr (CairoPatternT s) -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> Ptr CDouble -> IO #{type cairo_status_t}
 
 cairoPatternGetColorStopRgbaList :: (PrimMonad m, IsCairoPatternGradientT pt) =>
-	pt (PrimState m) -> m [(CDouble, Rgba)]
+	pt (PrimState m) -> m [(CDouble, Rgba CDouble)]
 cairoPatternGetColorStopRgbaList pt = cairoPatternGetColorStopCount pt >>= \n ->
 	for [0 .. n - 1] \i -> cairoPatternGetColorStopRgba pt i
 
@@ -207,7 +207,7 @@ foreign import ccall "cairo_pattern_get_color_stop_count" c_cairo_pattern_get_co
 	Ptr (CairoPatternT s) -> Ptr CInt -> IO #{type cairo_status_t}
 
 cairoPatternGetColorStopRgba :: (PrimMonad m, IsCairoPatternGradientT pt) =>
-	pt (PrimState m) -> CInt -> m (CDouble, Rgba)
+	pt (PrimState m) -> CInt -> m (CDouble, Rgba CDouble)
 cairoPatternGetColorStopRgba (toCairoPatternGradientT -> CairoPatternGradientT fpt) i = unsafeIOToPrim
 	$ withForeignPtr fpt \ppt -> alloca \os -> alloca \rd -> alloca \gr -> alloca \bl -> alloca \al -> do
 		cs <- c_cairo_pattern_get_color_stop_rgba ppt i os rd gr bl al

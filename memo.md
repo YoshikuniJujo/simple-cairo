@@ -37,9 +37,9 @@ Cairo structure
 todo
 ----
 
-* [ ] improve Data.Color.Color
+* [x] improve Data.Color.Color
 	+ [x] add Word16
-	+ [ ] add other Double like numbers
+	+ [x] add other Double like numbers
 * [x] Drawing
 	+ [x] cairo\_t
 	+ [x] Paths
