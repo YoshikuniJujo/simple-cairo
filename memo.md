@@ -37,6 +37,10 @@ Cairo structure
 todo
 ----
 
+* [ ] make an independent package `union-color`
+	+ [ ] use from `simple-pango`
+	+ [ ] use from `cairo-image`
+		- [ ] add a premultiplied color
 * [x] improve Data.Color.Color
 	+ [x] add Word16
 	+ [x] add other Double like numbers
