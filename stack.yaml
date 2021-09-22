@@ -41,6 +41,8 @@ packages:
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
 extra-deps:
+- git: https://github.com/YoshikuniJujo/union-color.git
+  commit: 12bfdb3d8e34dd993f5691717e48c6e743aab9e2
 - git: https://github.com/YoshikuniJujo/cairo-image.git
   commit: 905c6bf5edf2cee7be806ac5112f53d54012d5ce
 

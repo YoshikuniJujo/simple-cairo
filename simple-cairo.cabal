@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8ba838e2b88af06725f7be1f47952ea2543adadeea3d1a774b04ba455884eb59
+-- hash: 512de696188e17832dbb04339b0f675b3b20004ef7998226273d712ec7d34438
 
 name:           simple-cairo
 version:        0.1.0.0
@@ -31,7 +31,6 @@ source-repository head
 library
   exposed-modules:
       Data.CairoContext
-      Data.Color
       Graphics.Cairo.Drawing.CairoPatternT
       Graphics.Cairo.Drawing.CairoPatternT.Basic
       Graphics.Cairo.Drawing.CairoPatternT.Mesh
@@ -88,6 +87,7 @@ library
     , template-haskell
     , text
     , union-angle
+    , union-color
     , vector
   default-language: Haskell2010
 
@@ -112,6 +112,7 @@ test-suite cairo-image-test
     , template-haskell
     , text
     , union-angle
+    , union-color
     , vector
   default-language: Haskell2010
 
@@ -136,6 +137,7 @@ test-suite exception-test
     , template-haskell
     , text
     , union-angle
+    , union-color
     , vector
   default-language: Haskell2010
 
@@ -160,5 +162,6 @@ test-suite test-rotate
     , template-haskell
     , text
     , union-angle
+    , union-color
     , vector
   default-language: Haskell2010

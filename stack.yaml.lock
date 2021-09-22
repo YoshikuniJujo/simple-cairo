@@ -5,6 +5,17 @@
 
 packages:
 - completed:
+    name: union-color
+    version: 0.1.0.0
+    git: https://github.com/YoshikuniJujo/union-color.git
+    pantry-tree:
+      size: 619
+      sha256: fbbb36c16226f3e9fda7c0dbb4ffcd76df44dc4957d6682fd1cbca4ce1f8cc98
+    commit: 12bfdb3d8e34dd993f5691717e48c6e743aab9e2
+  original:
+    git: https://github.com/YoshikuniJujo/union-color.git
+    commit: 12bfdb3d8e34dd993f5691717e48c6e743aab9e2
+- completed:
     name: cairo-image
     version: 0.1.0.0
     git: https://github.com/YoshikuniJujo/cairo-image.git
