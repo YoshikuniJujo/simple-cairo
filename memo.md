@@ -37,10 +37,13 @@ Cairo structure
 todo
 ----
 
+* [ ] `Data.Color`: add a premultiplied color
+	+ [x] RgbaPremultipliedWord8
+	+ [ ] RgbaPremultipliedWord16
+	+ [ ] RgbaPremultipliedDouble
 * [ ] make an independent package `union-color`
 	+ [ ] use from `simple-pango`
 	+ [ ] use from `cairo-image`
-		- [ ] add a premultiplied color
 * [x] improve Data.Color.Color
 	+ [x] add Word16
 	+ [x] add other Double like numbers
