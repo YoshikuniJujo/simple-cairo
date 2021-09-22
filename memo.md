@@ -39,7 +39,7 @@ todo
 
 * [ ] `Data.Color`: add a premultiplied color
 	+ [x] RgbaPremultipliedWord8
-	+ [ ] RgbaPremultipliedWord16
+	+ [x] RgbaPremultipliedWord16
 	+ [ ] RgbaPremultipliedDouble
 * [ ] make an independent package `union-color`
 	+ [ ] use from `simple-pango`

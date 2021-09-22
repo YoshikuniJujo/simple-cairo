@@ -12,6 +12,7 @@ module Data.Color (
 	rgbaDouble,
 	-- ** Premultiplied
 	pattern RgbaPremultipliedWord8, rgbaPremultipliedWord8,
+	pattern RgbaPremultipliedWord16, rgbaPremultipliedWord16,
 	-- ** Convert Fractional
 	rgbaRealToFrac ) where
 
@@ -84,6 +85,7 @@ data Rgba d
 	| RgbaWord16_ Word16 Word16 Word16 Word16
 	| RgbaDouble_ d d d d
 	| RgbaPremultipliedWord8_ Word8 Word8 Word8 Word8
+	| RgbaPremultipliedWord16_ Word16 Word16 Word16 Word16
 	deriving Show
 
 {-# COMPLETE RgbaWord8 #-}
@@ -104,6 +106,13 @@ fromRgbaWord8 = \case
 		where [r', g', b', a'] = cDoubleToWord8 <$> [r, g, b, a]
 	RgbaPremultipliedWord8_ r g b a -> (r', g', b', a')
 		where [r', g', b', a'] = unPremultipliedWord8 (r, g, b, a)
+	RgbaPremultipliedWord16_ r g b a -> (
+		fromIntegral $ r' `shiftR` 8,
+		fromIntegral $ g' `shiftR` 8,
+		fromIntegral $ b' `shiftR` 8,
+		fromIntegral $ a' `shiftR` 8 )
+		where [r', g', b', a'] = unPremultipliedWord16 (r, g, b, a)
+
 
 {-# COMPLETE RgbaWord16 #-}
 
@@ -126,6 +135,8 @@ fromRgbaWord16 = \case
 		b' `shiftL` 8 .|. b', a' `shiftL` 8 .|. a')
 		where [r', g', b', a'] =
 			fromIntegral <$> unPremultipliedWord8 (r, g, b, a)
+	RgbaPremultipliedWord16_ r g b a -> (r', g', b', a')
+		where [r', g', b', a'] = unPremultipliedWord16 (r, g, b, a)
 
 {-# COMPLETE RgbaDouble #-}
 
@@ -142,6 +153,9 @@ fromRgbaDouble = \case
 	RgbaPremultipliedWord8_ r g b a -> (r', g', b', a')
 		where [r', g', b', a'] =
 			word8ToCDouble <$> unPremultipliedWord8 (r, g, b, a)
+	RgbaPremultipliedWord16_ r g b a -> (r', g', b', a')
+		where [r', g', b', a'] =
+			word16ToCDouble <$> unPremultipliedWord16 (r, g, b, a)
 
 rgbaDouble :: (Ord d, Num d) => d -> d -> d -> d -> Maybe (Rgba d)
 rgbaDouble r g b a
@@ -156,6 +170,7 @@ rgbaRealToFrac = \case
 	RgbaDouble_ r g b a -> RgbaDouble_ r' g' b' a'
 		where [r', g', b', a'] = realToFrac <$> [r, g, b, a]
 	RgbaPremultipliedWord8_ r g b a -> RgbaPremultipliedWord8_ r g b a
+	RgbaPremultipliedWord16_ r g b a -> RgbaPremultipliedWord16_ r g b a
 
 cDoubleToWord8 :: RealFrac d => d -> Word8
 cDoubleToWord8 = round . (* 0xff)
@@ -197,10 +212,42 @@ toPremultipliedWord8 (
 		r * a `div` 0xff, g * a `div` 0xff, b * a `div` 0xff,
 		a :: Word16 ]
 
-unPremultipliedWord8 ::
-	(Word8, Word8, Word8, Word8) -> [Word8]
+unPremultipliedWord8 :: (Word8, Word8, Word8, Word8) -> [Word8]
 unPremultipliedWord8 (
 	fromIntegral -> r, fromIntegral -> g,
 	fromIntegral -> b, fromIntegral -> a ) = fromIntegral <$> [
 		r * 0xff `div` a, g * 0xff `div` a, b * 0xff `div` a,
 		a :: Word16 ]
+
+{-# COMPLETE RgbaPremultipliedWord16 #-}
+
+pattern RgbaPremultipliedWord16 ::
+	RealFrac d => Word16 -> Word16 -> Word16 -> Word16 -> Rgba d
+pattern RgbaPremultipliedWord16 r g b a <-
+	(fromRgbaPremultipliedWord16 -> (r, g, b, a))
+
+rgbaPremultipliedWord16 :: Word16 -> Word16 -> Word16 -> Word16 -> Maybe (Rgba d)
+rgbaPremultipliedWord16 r g b a
+	| r <= a && g <= a && b <= a = Just $ RgbaPremultipliedWord16_ r g b a
+	| otherwise = Nothing
+
+fromRgbaPremultipliedWord16 ::
+	RealFrac d => Rgba d -> (Word16, Word16, Word16, Word16)
+fromRgbaPremultipliedWord16 = toPremultipliedWord16 . fromRgbaWord16
+
+toPremultipliedWord16 ::
+	(Word16, Word16, Word16, Word16) -> (Word16, Word16, Word16, Word16)
+toPremultipliedWord16 (
+	fromIntegral -> r, fromIntegral -> g,
+	fromIntegral -> b, fromIntegral -> a ) = (r', g', b', a')
+	where
+	[r', g', b', a'] = fromIntegral <$> [
+		r * a `div` 0xffff, g * a `div` 0xffff, b * a `div` 0xffff,
+		a :: Word32 ]
+
+unPremultipliedWord16 :: (Word16, Word16, Word16, Word16) -> [Word16]
+unPremultipliedWord16 (
+	fromIntegral -> r, fromIntegral -> g,
+	fromIntegral -> b, fromIntegral -> a ) = fromIntegral <$> [
+		r * 0xffff `div` a, g * 0xffff `div` a, b * 0xff `div` a,
+		a :: Word32 ]
