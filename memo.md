@@ -37,10 +37,10 @@ Cairo structure
 todo
 ----
 
-* [ ] `Data.Color`: add a premultiplied color
+* [x] `Data.Color`: add a premultiplied color
 	+ [x] RgbaPremultipliedWord8
 	+ [x] RgbaPremultipliedWord16
-	+ [ ] RgbaPremultipliedDouble
+	+ [x] RgbaPremultipliedDouble
 * [ ] make an independent package `union-color`
 	+ [ ] use from `simple-pango`
 	+ [ ] use from `cairo-image`
