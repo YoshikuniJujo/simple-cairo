@@ -9,12 +9,12 @@ packages:
     version: 0.1.0.0
     git: https://github.com/YoshikuniJujo/union-color.git
     pantry-tree:
-      size: 619
-      sha256: fbbb36c16226f3e9fda7c0dbb4ffcd76df44dc4957d6682fd1cbca4ce1f8cc98
-    commit: 12bfdb3d8e34dd993f5691717e48c6e743aab9e2
+      size: 570
+      sha256: b608ba38bce880cf7e5a5c46f1e7ac2d72444cbf601f548a5776ef1039b95a07
+    commit: 54d19480822bb877c40aec622b3df685571539ba
   original:
     git: https://github.com/YoshikuniJujo/union-color.git
-    commit: 12bfdb3d8e34dd993f5691717e48c6e743aab9e2
+    commit: 54d19480822bb877c40aec622b3df685571539ba
 - completed:
     name: cairo-image
     version: 0.1.0.0
