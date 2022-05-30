@@ -16,6 +16,7 @@ import Control.Monad.Primitive
 #include <cairo.h>
 
 struct "CairoRectangleIntT" #{size cairo_rectangle_int_t}
+		#{alignment cairo_rectangle_int_t}
 	[	("x", ''CInt, [| #{peek cairo_rectangle_int_t, x} |],
 			[| #{poke cairo_rectangle_int_t, x} |]),
 		("y", ''CInt, [| #{peek cairo_rectangle_int_t, y} |],

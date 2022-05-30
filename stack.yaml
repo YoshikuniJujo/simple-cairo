@@ -18,7 +18,7 @@
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
 # resolver: nightly-2021-02-25
-resolver: lts-18.10
+resolver: nightly-2022-05-29
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -42,9 +42,9 @@ packages:
 #
 extra-deps:
 - git: https://github.com/YoshikuniJujo/union-color.git
-  commit: 54d19480822bb877c40aec622b3df685571539ba
+  commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
 - git: https://github.com/YoshikuniJujo/cairo-image.git
-  commit: 905c6bf5edf2cee7be806ac5112f53d54012d5ce
+  commit: 59dfe9365c64f03daadfe83e06af841c000ef0e6
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

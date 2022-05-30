@@ -27,7 +27,7 @@ import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
-import Graphics.Cairo.Values
+import Graphics.Cairo.Values hiding (CairoFormatT)
 
 import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
 
@@ -76,7 +76,7 @@ cairoImageSurfaceGetCairoImage = argCairoSurfaceT \sfc -> do
 	p <- mallocBytes . fromIntegral $ s * h
 	copyBytes p d . fromIntegral $ s * h
 	fd <- newForeignPtr (castPtr p) $ free (castPtr p)
-	pure $ CairoImage f (fromIntegral w) (fromIntegral h) (fromIntegral s) fd
+	pure $ CairoImage (CairoFormatT f) (fromIntegral w) (fromIntegral h) (fromIntegral s) fd
 
 cairoImageSurfaceGetCairoImageMut :: PrimMonad m => CairoSurfaceImageT s (PrimState m) -> m (CairoImageMut (PrimState m))
 cairoImageSurfaceGetCairoImageMut = argCairoSurfaceT \sfc -> do
@@ -88,7 +88,7 @@ cairoImageSurfaceGetCairoImageMut = argCairoSurfaceT \sfc -> do
 	p <- mallocBytes . fromIntegral $ s * h
 	copyBytes p d . fromIntegral $ s * h
 	fd <- newForeignPtr (castPtr p) $ free (castPtr p)
-	pure $ CairoImageMut f (fromIntegral w) (fromIntegral h) (fromIntegral s) fd
+	pure $ CairoImageMut (CairoFormatT f) (fromIntegral w) (fromIntegral h) (fromIntegral s) fd
 
 newtype Argb32 = Argb32 Word32 deriving (Show, Storable)
 
@@ -97,7 +97,7 @@ foreign import ccall "cairo_image_surface_create_for_data" c_cairo_image_surface
 
 cairoImageSurfaceCreateForCairoImage ::
 	PrimMonad m => CairoImage -> m (CairoSurfaceImageT s (PrimState m))
-cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unsafeIOToPrim do
+cairoImageSurfaceCreateForCairoImage (CairoImage (CairoFormatT f) w h s d) = unsafeIOToPrim do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
 	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
@@ -106,7 +106,7 @@ cairoImageSurfaceCreateForCairoImage (CairoImage f w h s d) = unsafeIOToPrim do
 
 cairoImageSurfaceCreateForCairoImageMut ::
 	PrimMonad m => CairoImageMut (PrimState m) -> m (CairoSurfaceImageT s (PrimState m))
-cairoImageSurfaceCreateForCairoImageMut (CairoImageMut f w h s d) = unsafeIOToPrim do
+cairoImageSurfaceCreateForCairoImageMut (CairoImageMut (CairoFormatT f) w h s d) = unsafeIOToPrim do
 	p <- mallocBytes n
 	withForeignPtr d \pd -> copyBytes p pd n
 	sp <- c_cairo_image_surface_create_for_data (castPtr p) f (fromIntegral w) (fromIntegral h) (fromIntegral s)
