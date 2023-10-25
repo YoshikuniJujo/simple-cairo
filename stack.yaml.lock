@@ -5,30 +5,30 @@
 
 packages:
 - completed:
+    commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
+    git: https://github.com/YoshikuniJujo/union-color.git
     name: union-color
-    version: 0.1.2.0
-    git: https://github.com/YoshikuniJujo/union-color.git
     pantry-tree:
-      size: 637
       sha256: b3edab388c6b1bd8298171b9d8c86da664c530ea673d7f7d69c58fb99318bbcc
-    commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
+      size: 637
+    version: 0.1.2.0
   original:
+    commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
     git: https://github.com/YoshikuniJujo/union-color.git
-    commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
 - completed:
+    commit: 59dfe9365c64f03daadfe83e06af841c000ef0e6
+    git: https://github.com/YoshikuniJujo/cairo-image.git
     name: cairo-image
-    version: 0.1.0.0
-    git: https://github.com/YoshikuniJujo/cairo-image.git
     pantry-tree:
-      size: 887
       sha256: dc856bf5e758ccec698dbb3a37c0b84108804a6eb590e6001fd5c2c4ce4154ba
-    commit: 59dfe9365c64f03daadfe83e06af841c000ef0e6
+      size: 887
+    version: 0.1.0.0
   original:
-    git: https://github.com/YoshikuniJujo/cairo-image.git
     commit: 59dfe9365c64f03daadfe83e06af841c000ef0e6
+    git: https://github.com/YoshikuniJujo/cairo-image.git
 snapshots:
 - completed:
-    size: 590822
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/29.yaml
-    sha256: a7d2c450e7578825f80601b9d244f2107d9cc708430e070d2978e15a97b5c6dc
-  original: nightly-2022-05-29
+    sha256: 85d2382958c178491d3fe50d770a624621f5ab456beef7d31ac7521f780c9bc7
+    size: 640042
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/21/17.yaml
+  original: lts-21.17
