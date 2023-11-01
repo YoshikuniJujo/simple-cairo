@@ -1,13 +1,13 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 512de696188e17832dbb04339b0f675b3b20004ef7998226273d712ec7d34438
+-- hash: eb1ec51745a0011a11fff5225cedbc58b8d43f899c4739f1023c88ffd5313e5b
 
 name:           simple-cairo
-version:        0.1.0.0
+version:        0.1.0.1
 description:    Please see the README on GitHub at <https://github.com/YoshikuniJujo/simple-cairo#readme>
 homepage:       https://github.com/YoshikuniJujo/simple-cairo#readme
 bug-reports:    https://github.com/YoshikuniJujo/simple-cairo/issues

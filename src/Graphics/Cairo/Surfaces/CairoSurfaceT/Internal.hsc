@@ -7,6 +7,7 @@ module Graphics.Cairo.Surfaces.CairoSurfaceT.Internal where
 import Foreign.Ptr
 import Foreign.ForeignPtr hiding (newForeignPtr)
 import Foreign.Concurrent
+import Control.Monad.Primitive
 import Control.Concurrent.STM
 import Data.Word
 import System.IO.Unsafe
@@ -34,6 +35,13 @@ foreign import ccall "cairo_surface_destroy" c_cairo_surface_destroy ::
 	Ptr (CairoSurfaceT s ps) -> IO ()
 
 foreign import ccall "cairo_surface_finish" c_cairo_surface_finish ::
+	Ptr (CairoSurfaceT s ps) -> IO ()
+
+cairoSurfaceFlush :: (IsCairoSurfaceT sr, PrimMonad m) => sr s (PrimState m) -> m ()
+cairoSurfaceFlush (toCairoSurfaceT -> CairoSurfaceT fsr) = unsafeIOToPrim
+	$ withForeignPtr fsr c_cairo_surface_flush
+
+foreign import ccall "cairo_surface_flush" c_cairo_surface_flush ::
 	Ptr (CairoSurfaceT s ps) -> IO ()
 
 cairoSurfaceGetType :: IsCairoSurfaceT sr => sr s ps -> CairoSurfaceTypeT
