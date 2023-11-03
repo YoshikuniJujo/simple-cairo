@@ -14,6 +14,10 @@ module Graphics.Cairo.Surfaces.ImageSurfaces (
 
 	cairoImageSurfaceGetCairoImage,
 	cairoImageSurfaceGetCairoImageMut,
+
+	cairoImageSurfaceGetWidth,
+	cairoImageSurfaceGetHeight,
+	cairoImageSurfaceGetStride
 	) where
 
 import Foreign.Ptr
@@ -27,7 +31,6 @@ import Data.Int
 
 import Graphics.Cairo.Surfaces.CairoSurfaceT.Internal
 import Graphics.Cairo.Surfaces.CairoSurfaceTypeT
-import Graphics.Cairo.Values hiding (CairoFormatT)
 
 import Data.CairoImage.Internal hiding (Argb32, pixelAt, Image, Pixel)
 
@@ -127,3 +130,18 @@ mkCairoSurfaceImageT p = CairoSurfaceImageT <$> newForeignPtr p (c_cairo_surface
 
 mkCairoSurfaceImageT' :: Ptr (CairoSurfaceT s ps) -> Ptr a -> IO (CairoSurfaceImageT s ps)
 mkCairoSurfaceImageT' ps p = CairoSurfaceImageT <$> newForeignPtr ps (free p >> c_cairo_surface_destroy ps)
+
+cairoImageSurfaceGetWidth :: PrimMonad m =>
+	CairoSurfaceImageT s (PrimState m) -> m #{type int}
+cairoImageSurfaceGetWidth = argCairoSurfaceT \sfc ->
+	c_cairo_image_surface_get_width sfc
+
+cairoImageSurfaceGetHeight :: PrimMonad m =>
+	CairoSurfaceImageT s (PrimState m) -> m #{type int}
+cairoImageSurfaceGetHeight = argCairoSurfaceT \sfc ->
+	c_cairo_image_surface_get_height sfc
+
+cairoImageSurfaceGetStride :: PrimMonad m =>
+	CairoSurfaceImageT s (PrimState m) -> m #{type int}
+cairoImageSurfaceGetStride = argCairoSurfaceT \sfc ->
+	c_cairo_image_surface_get_stride sfc
