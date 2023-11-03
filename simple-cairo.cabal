@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: eb1ec51745a0011a11fff5225cedbc58b8d43f899c4739f1023c88ffd5313e5b
+-- hash: c523ff24671ae23f927f36650abc5c3ef930fac923f8877f92fd28a3c2c67389
 
 name:           simple-cairo
-version:        0.1.0.1
+version:        0.1.0.2
 description:    Please see the README on GitHub at <https://github.com/YoshikuniJujo/simple-cairo#readme>
 homepage:       https://github.com/YoshikuniJujo/simple-cairo#readme
 bug-reports:    https://github.com/YoshikuniJujo/simple-cairo/issues
