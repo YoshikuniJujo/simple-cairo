@@ -11,6 +11,7 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Marshal.Utils
 import Foreign.C
+import Control.Monad.Primitive
 import Control.Concurrent.STM
 import Data.Word
 import Data.ByteString qualified as BS
@@ -35,8 +36,9 @@ cairoSurfaceCreateFromPng :: FilePath -> IO (CairoSurfaceT s ps)
 cairoSurfaceCreateFromPng fp = withCString fp \cs ->
 	mkCairoSurfaceT =<< c_cairo_surface_create_from_png cs
 
-cairoSurfaceCreateFromPngByteString :: BS.ByteString -> IO (CairoSurfaceT s ps)
-cairoSurfaceCreateFromPngByteString bs = do
+cairoSurfaceCreateFromPngByteString :: PrimMonad m =>
+	BS.ByteString -> m (CairoSurfaceT s (PrimState m))
+cairoSurfaceCreateFromPngByteString bs = unsafeIOToPrim do
 	tbs <- atomically $ newTVar bs
 	fn <- c_cairo_read_func_t $ byteStringToCCairoReadFunc tbs
 	mkCairoSurfaceT
