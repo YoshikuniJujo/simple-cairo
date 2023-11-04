@@ -17,7 +17,9 @@ module Graphics.Cairo.Surfaces.ImageSurfaces (
 
 	cairoImageSurfaceGetWidth,
 	cairoImageSurfaceGetHeight,
-	cairoImageSurfaceGetStride
+	cairoImageSurfaceGetStride,
+
+	mkCairoSurfaceImageT
 	) where
 
 import Foreign.Ptr
