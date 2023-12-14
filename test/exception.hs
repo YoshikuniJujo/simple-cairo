@@ -1,18 +1,26 @@
+{-# LANGUAGE TypeApplications #-}
 {-# OPTIONS_GHC -Wall -fno-warn-tabs #-}
 
-import Graphics.Cairo.Values
+import Control.Exception
+
 import Graphics.Cairo.Drawing.CairoT
 import Graphics.Cairo.Drawing.Paths
 import Graphics.Cairo.Surfaces.ImageSurfaces
-import Graphics.Cairo.Monad
+
+import Graphics.Cairo.Exception
+
+import Data.CairoImage.Internal
 
 main :: IO ()
-main = do
-	s <- cairoImageSurfaceCreate cairoFormatArgb32 500 500
+main = mainGen `catch` (print @CairoStatus)
+
+mainGen :: IO ()
+mainGen = do
+	s <- cairoImageSurfaceCreate CairoFormatArgb32 500 500
 	cr <- cairoCreate s
 	cairoLineTo cr 100 100
 	cairoNewPath cr
 	cairoLineTo cr 0 0
 	cairoStroke cr
 	cairoPopGroupToSource cr
-	print =<< cairoImageSurfaceGetData s
+	print =<< cairoImageSurfaceGetCairoImage s

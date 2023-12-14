@@ -3,11 +3,9 @@ cabal-version: 1.12
 -- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
---
--- hash: 7c3e571101f6a187c78f2a538fd77a1ce529acc5dc775036e798b6c186a1c8bc
 
 name:           simple-cairo
-version:        0.1.0.5
+version:        0.1.0.6
 synopsis:       Binding to Cairo library
 description:    Please see the README on GitHub at <https://github.com/YoshikuniJujo/simple-cairo#readme>
 category:       Graphics
