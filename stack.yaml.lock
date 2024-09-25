@@ -28,7 +28,7 @@ packages:
     git: https://github.com/YoshikuniJujo/cairo-image.git
 snapshots:
 - completed:
-    sha256: 77e07d47807e1909c9d36a36815e690d2c30a87e38689961478fec853eb82a42
-    size: 653568
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2024/8/26.yaml
-  original: nightly-2024-08-26
+    sha256: c4c6a70cdb42524cffb951301b8e1e95233cd53bd88deca2c8aedb959550ff14
+    size: 664619
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2024/9/25.yaml
+  original: nightly-2024-09-25
