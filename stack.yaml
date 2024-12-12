@@ -19,7 +19,7 @@
 # resolver: https://example.com/snapshots/2018-01-01.yaml
 # resolver: nightly-2021-02-25
 
-resolver: nightly-2024-12-09
+resolver: nightly-2024-12-11
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -41,7 +41,9 @@ packages:
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
-extra-deps: []
+extra-deps:
+    - cairo-image-0.1.0.4
+    - exception-hierarchy-0.1.0.12
 
   # - git: https://github.com/YoshikuniJujo/union-color.git
   # commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
