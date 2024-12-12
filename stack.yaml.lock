@@ -3,32 +3,10 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages:
-- completed:
-    commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
-    git: https://github.com/YoshikuniJujo/union-color.git
-    name: union-color
-    pantry-tree:
-      sha256: b3edab388c6b1bd8298171b9d8c86da664c530ea673d7f7d69c58fb99318bbcc
-      size: 637
-    version: 0.1.2.0
-  original:
-    commit: 5657d3a8d4d4fcd92f36493b4649824af1ded9fd
-    git: https://github.com/YoshikuniJujo/union-color.git
-- completed:
-    commit: 59dfe9365c64f03daadfe83e06af841c000ef0e6
-    git: https://github.com/YoshikuniJujo/cairo-image.git
-    name: cairo-image
-    pantry-tree:
-      sha256: dc856bf5e758ccec698dbb3a37c0b84108804a6eb590e6001fd5c2c4ce4154ba
-      size: 887
-    version: 0.1.0.0
-  original:
-    commit: 59dfe9365c64f03daadfe83e06af841c000ef0e6
-    git: https://github.com/YoshikuniJujo/cairo-image.git
+packages: []
 snapshots:
 - completed:
-    sha256: c4c6a70cdb42524cffb951301b8e1e95233cd53bd88deca2c8aedb959550ff14
-    size: 664619
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2024/9/25.yaml
-  original: nightly-2024-09-25
+    sha256: cbae768d7cd535b298ba827c2d90f3ac11fa2e907ee7d30fd02d1f7b893f3b28
+    size: 678857
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2024/12/9.yaml
+  original: nightly-2024-12-09
